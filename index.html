@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,165 +11,206 @@
     <title>SC Hurricanes</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
-      <link href="vendor/jquery/jquery-ui.min.css" rel="stylesheet"/>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="vendor/jquery/jquery-ui.min.css" rel="stylesheet" />
 
     <!-- Custom styles for this template -->
     <link href="css/business-frontpage.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="" /> 
-      
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.css"/>  
-      
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/solid.css" integrity="sha384-HTDlLIcgXajNzMJv5hiW5s2fwegQng6Hi+fN6t5VAcwO/9qbg2YEANIyKBlqLsiT" crossorigin="anonymous">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/fontawesome.css" integrity="sha384-8WwquHbb2jqa7gKWSoAwbJBV2Q+/rQRss9UXL5wlvXOZfSodONmVnifo/+5xJIWX" crossorigin="anonymous">  
-      
-      
-  </head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="" />
 
-  <body>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.css" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/solid.css" integrity="sha384-HTDlLIcgXajNzMJv5hiW5s2fwegQng6Hi+fN6t5VAcwO/9qbg2YEANIyKBlqLsiT" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/fontawesome.css" integrity="sha384-8WwquHbb2jqa7gKWSoAwbJBV2Q+/rQRss9UXL5wlvXOZfSodONmVnifo/+5xJIWX" crossorigin="anonymous">
+
+
+</head>
+
+<body>
 
     <!-- Header with Background Image -->
     <header class="header">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12 bg-image">
-            <h1 class="display-4 text-center text-white mt-4">South Carolina Hurricanes and Tropical Storms</h1>
-          </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 bg-image">
+                    <h1 class="display-4 text-center text-white mt-4">South Carolina Hurricanes and Tropical Storms</h1>
+                </div>
+            </div>
         </div>
-      </div>
     </header>
 
-    <div class="container-fluid mt-2">
+    <div class="container-fluid py-2">
         <div id="map">
-            <button type="button" id="toggle-filters" class="btn btn-info d-inline align-top" data-toggle="button" aria-pressed="false" autocomplete="off">Filter Storms <i class="fas fa-filter"></i></button>
+            <button type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">Filter Storms<i id="filter-icon" class="fas fa-filter ml-2"></i></button>
+            
+            <button type="button" id="back-to-tracks" class="btn btn-primary map-btn d-none">Back to All Storms <i class="fas fa-undo-alt ml-2"></i></button>
         </div>
-    </div>  
-      
-    <!--<div class="container my-2">
-        <h3>Storm Details</h3>
-        <p class="d-inline">Storm Name</p>  
-        <p class="d-inline">Formation Date</p>  
-        <p class="d-inline">Dates Affecting SC</p>  
-        <p class="d-inline">Max Category</p>  
-        <p class="d-inline">Max Wind</p>  
-        <p class="d-inline">Min Pressure</p>  
-    </div> --> 
-      
-    <!-- Page Content -->
-    <div class="container pt-3" id="storm-search">
-      <div class="row border" >
-        <div class="col-md-3 px-4 border-right">
-            <h4>Hurricane Year</h4>
-            <p>Filter between the years:</p>
-            <div id="storm-years">
-                <form class="form-inline">
-                            <div class="form-group m-1">
-                                <label for="startdate" class="mr-2">Start Year</label>
-                                <input type="number" class="form-control" id="startyear" min="1871" max="2017" maxlength="4" value="1871">
-                            </div>
-                            <div class="form-group m-1">
-                                <label for="enddate" class="mr-3">End Year</label>
-                                <input type="number" class="form-control" id="endyear" min="1871" max="2017" maxlength="4" value="2017">
-                            </div>
-                </form>
-                <button id="reset" type="button" class="btn btn-outline-primary m-2 btn-sm">All Years <i class="fas fa-calendar-alt"></i></button>
-            </div>    
-          </div>
-          
-         <div class="col-md-3 px-4 border-right"> 
-            <h4>Storm Category</h4>
-            <form id="cat-form">    
-                <div class="form-group" id="storm-cat-group">
-                    <label class="checkbox-inline mx-1"><input type="checkbox" checked value="">TS</label>
-                    <label class="checkbox-inline mx-1 "><input class="hu" type="checkbox" checked value="1"> Cat 1</label>
-                    <label class="checkbox-inline mx-1 "><input class="hu" type="checkbox" checked value="2"> Cat 2</label>
-                    <label class="checkbox-inline mx-1 "><input class="hu" type="checkbox" checked value="3"> Cat 3</label>
-                    <label class="checkbox-inline mx-1 "><input class="hu" type="checkbox" checked value="4"> Cat 4</label>
-                    <label class="checkbox-inline mx-1 "><input class="hu" type="checkbox" checked value="5"> Cat 5</label>
-                </div>
-            </form>
-             <button id="check-all" class="btn btn-outline-primary m-2 btn-sm">Check All <i class="fas fa-check"></i></button>
-             <button id="uncheck-all" class="btn btn-outline-primary m-2 btn-sm">Uncheck All <i class="fas fa-minus"></i></button>
-            </div>
-          <div class="col-md-4 px-4 border-right">
-            <h4>Other Filters</h4>
-            <form id="others-form"> 
-                <label class="checkbox-inline mx-1"><input type="checkbox" value="LFSC">Landfall in SC</label>
-            </form>
-            <form id="wind-form" class="form-inline my-2">
-                <label class="mr-2" for="wind-group">Max Wind Speed</label>
-                <div class="form-group" id="wind-group">            
-                    <input class="form-control" id="startw" size="4" maxlength="3">
-                    <span class="mx-2">to</span>
-                    <input class="form-control" id="endw" size="4" maxlength="3">
-                </div>        
-            </form>
-            <form id="pressure-form" class="form-inline my-2">
-                <label class="mr-2" for="pressure-group">Min Pressure</label>
-                <div class="form-group" id="pressure-group">            
-                    <input class="form-control" id="startp" size="4" maxlength="3">
-                    <span class="mx-2">to</span>
-                    <input class="form-control" id="endp" size="4" maxlength="3">
-                </div>        
-            </form>
-              
-          </div>
-          <div class="col-md-2 px-4">
-            <button id="apply-filter" class="btn btn-outline-success m-2">Apply Filters <i class="fas fa-check-circle"></i></button>
-            <button id="clear-filter" class="btn btn-outline-danger m-2">Clear Filters <i class="fas fa-times-circle"></i></button>  
-          </div>
-        </div>
-        
-      </div>
-    <!-- /.container -->
-        
-      <div class="container table-container my-3">
-          <div class="row">
-              <h4 class="d-inline mr-1">Selected Storm: </h4>
-              <button id="storm-track-btn" class="btn btn-sm btn-outline-primary d-inline align-top mx-2 disabled" title="Choose a storm below.">View Track <i class="fas fa-globe"></i></button>
-              <button id="storm-details-btn" class="btn btn-sm btn-outline-primary d-inline align-top mx-1 disabled" title="Choose a storm below.">Storm Details <i class="fas fa-info-circle"></i></button>
-              <button id="storm-details-btn" class="btn btn-sm btn-outline-primary d-inline align-top mx-1 disabled" title="Choose a storm below.">Reset <i class="fas fa-sync-alt"></i></button>
-          </div>
-          
-        <div class="row mt-2">
-        <table class="table table-striped" id="results-table">
-         <thead>
-            <tr>
-                <th >Name</th>
-                <th >Year</th>
-                <th >Max Status</th>
-                <th >Max Cat</th>
-                <th >Max Wind</th>
-                <th >Min Pressure</th>     
-            </tr>   
-         </thead>
-         <tbody></tbody>
-        </table> 
-        </div>      
-    </div> 
+    </div>
     
+    <!-- Page Content -->
+    <div class="container" id="storm-search">
+        <div class="row">
+            <div class="col-md-3 m-2 py-2 filter-col">
+                <h4>Hurricane Year</h4>
+                <p>Filter between the years:</p>
+                <div id="storm-years">
+                    <form class="form-inline">
+                        <div class="form-group m-1">
+                            <label for="startdate" class="mr-2">Start Year</label>
+                            <input type="number" class="form-control" id="startyear" min="1871" max="2017" maxlength="4" value="1871">
+                        </div>
+                        <div class="form-group m-1">
+                            <label for="enddate" class="mr-3">End Year</label>
+                            <input type="number" class="form-control" id="endyear" min="1871" max="2017" maxlength="4" value="2017">
+                        </div>
+                    </form>
+                    <button id="reset" type="button" class="btn btn-outline-primary m-2 btn-sm">All Years <i class="fas fa-calendar-alt"></i></button>
+                </div>
+            </div>
+
+            <div class="col-md-3 m-2 py-2 filter-col">
+                <h4>Storm Category</h4>
+                <form id="cat-form">
+                    <div class="form-group" id="storm-cat-group">
+                        <label class="checkbox-inline mx-1">
+                            <input type="checkbox" checked value="">TS</label>
+                        <label class="checkbox-inline mx-1 ">
+                            <input class="hu" type="checkbox" checked value="1"> Cat 1</label>
+                        <label class="checkbox-inline mx-1 ">
+                            <input class="hu" type="checkbox" checked value="2"> Cat 2</label>
+                        <label class="checkbox-inline mx-1 ">
+                            <input class="hu" type="checkbox" checked value="3"> Cat 3</label>
+                        <label class="checkbox-inline mx-1 ">
+                            <input class="hu" type="checkbox" checked value="4"> Cat 4</label>
+                        <label class="checkbox-inline mx-1 ">
+                            <input class="hu" type="checkbox" checked value="5"> Cat 5</label>
+                    </div>
+                </form>
+                <button id="check-all" class="btn btn-outline-primary m-2 btn-sm">Check All <i class="fas fa-check"></i></button>
+                <button id="uncheck-all" class="btn btn-outline-primary m-2 btn-sm">Uncheck All <i class="fas fa-minus"></i></button>
+            </div>
+            <div class="col-md-5 m-2 py-2 filter-col">
+                <h4>Other Filters</h4>
+                <form id="others-form">
+                    <label class="checkbox-inline mx-1">
+                        <input type="checkbox" value="LFSC">Landfall in SC</label>
+                </form>
+                <form id="wind-form" class="form-inline my-2">
+                    <label class="mr-2" for="wind-group">Max Wind Speed</label>
+                    <div class="form-group" id="wind-group">
+                        <input class="form-control" id="startw" size="4" maxlength="3">
+                        <span class="mx-2">to</span>
+                        <input class="form-control" id="endw" size="4" maxlength="3">
+                    </div>
+                </form>
+                <form id="pressure-form" class="form-inline my-2">
+                    <label class="mr-2" for="pressure-group">Min Pressure</label>
+                    <div class="form-group" id="pressure-group">
+                        <input class="form-control" id="startp" size="4" maxlength="3">
+                        <span class="mx-2">to</span>
+                        <input class="form-control" id="endp" size="4" maxlength="3">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-md-12 m-2">
+                <button id="apply-filter" class="btn btn-outline-success m-2">Apply Filters <i class="fas fa-check-circle"></i></button>
+                <button id="clear-filter" class="btn btn-outline-danger m-2">Clear Filters <i class="fas fa-times-circle"></i></button>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container -->
+    
+    <div class="container" id="storm-details-overview">
+        <div class="row">
+            <div class="col">
+                <h3>Storm Details for <span id="storm-name"></span> - <span id="storm-year"></span></h3>
+                <p >Formation Date: <span id="form-date"></span></p>  
+                <p >Dates Affecting SC: <span id="sc-dates"></span></p>  
+                <p >Max Category: <span id="max-cat"></span></p>  
+                <p >Max Wind: <span id="max-wind"></span></p>  
+                <p >Min Pressure: <span id="min-pres"></span></p>
+                <p >Comments: <span id="comments"></span></p>
+            </div>    
+        </div>
+    </div>
+
+    <div id="table-container" class="container my-3">
+        <div class="row" id="storm-select-row">
+            <div class="col-sm-6">
+                <h4 class="m-0">Select a Storm</h4>
+                <p class="m-0">from the table below or by clicking a track on the map.</p>
+            </div>
+            <div class="col-sm-6 text-sm-right">
+                <button id="storm-track-btn" class="btn btn-outline-primary align-top m-1 storm-select-btn" title="Choose a storm below." disabled>Highlight on Map <i class="fas fa-globe"></i></button>
+                <button id="storm-details-btn" class="btn btn-outline-primary align-top m-1 storm-select-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i class="fas fa-info-circle"></i></button>
+            </div>
+        </div>
+
+        <div class="row mt-2" id="rt-row">
+            <table class="table table-striped" id="results-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Year</th>
+                        <th>Max Status</th>
+                        <th>Max Cat</th>
+                        <th>Max Wind</th>
+                        <th>Min Pressure</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            </div>
+            <div class="row d-none" id="dt-row">
+            <table class="table table-striped" id="details-table">
+                <thead>
+                    <tr>
+                        <th>Date &amp; Time</th>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Wind</th>
+                        <th>Pressure</th>
+                        <th>Record</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        
+        </div>
+    </div>
+    
+    <div id="mobile-icon-bar" class="fixed-bottom text-center border-top d-sm-none">
+        <a href="#map"><i class="fas fa-map fa-2x"></i></a>
+        <a href="#table-container"><i class="fas fa-table fa-2x"></i></a>
+        <a href="#storm-search"><i class="fas fa-filter fa-2x"></i></a>
+    </div>
+
     <!-- Footer -->
     <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
-      </div>
-      <!-- /.container -->
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+        </div>
+        <!-- /.container -->
     </footer>
 
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery/jquery-ui.min.js"></script>
-      
+
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
     <script src="https://unpkg.com/esri-leaflet@2.0.4/dist/esri-leaflet.js"></script>
-      
-      <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
-      
-      <script src="js/stormmap.js"></script>
-      
 
-  </body>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
+
+    <script src="js/stormmap.js"></script>
+
+
+</body>
 
 </html>

@@ -37,12 +37,63 @@
     padding:0.2em 0 0.2em 0.5em;;
 }
 
-#toggle-filters {
+.map-btn {
     position: absolute;
     bottom: 20px;
-    left: 20px;
+    left: 10px;
     z-index: 1000;
 }
 #storm-search {
     display:none;
+}
+#storm-details-overview{
+    display:none;
+}
+
+#results-table_filter{
+    text-align: left;
+}
+#results-table_info{
+    text-align: right;
+}
+.filter-col {
+    background: linear-gradient(to bottom,transparent,#eee);
+}
+#t-search {
+    background-color:#2e445b;
+    color:white;
+    padding-top:0.7em;
+    border-radius:3px;
+}
+#t-details {
+    background-color:#2e445b;
+    color:white;
+    border-radius:3px;
+    font-weight: bold;
+}
+
+#popup{
+    font-size: 1.2em;
+    line-height:1.6em;
+}
+#name {
+    border-bottom:1px solid gray;
+}
+
+#mobile-icon-bar {
+    width: 100%; /* Full-width */
+    background-color: white; /* Dark-grey background */
+    overflow: auto; /* Overflow due to float */
+    box-shadow: 0 -2px 3px rgba(0,0,0,0.2);
+}
+
+#mobile-icon-bar a {
+    float: left; /* Float links side by side */
+    width: 33.33%; /* Equal width (5 icons with 20% width each = 100%) */
+    padding: 12px 0; /* Some top and bottom padding */
+    transition: all 0.3s ease; /* Add transition for hover effects */
+}
+
+#mobile-icon-bar a:hover {
+    color: #2e445b; /* Add a hover color */
 }
