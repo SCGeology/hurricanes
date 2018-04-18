@@ -58,6 +58,7 @@
 }
 .filter-col {
     background: linear-gradient(to bottom,transparent,#eee);
+    background: -webkit-linear-gradient(top, transparent, #eee);
 }
 #t-search {
     background-color:#2e445b;

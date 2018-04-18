@@ -15,13 +15,10 @@ download data
 other filters
 
 */
-
 var map = L.map('map', {
     doubleClickZoom:'center',
-    wheelPxPerZoomLevel:100,
-    zoom: 4,
-    center: [30.7,-70]
-});
+    wheelPxPerZoomLevel:100
+}).fitBounds([[21, -90],[52,-13]]);
 
 var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
@@ -89,9 +86,11 @@ var query = L.esri.query({
 var makeResultTable = function(){
     rt = $('#results-table').DataTable({
         language:{
-            search:"Search Storms:",
+            search:"Search",
             searchPlaceholder:"Storm name, description",
-            info:"Loaded _TOTAL_ storms."
+            info:"_TOTAL_ storms",
+            infoFiltered: " of _MAX_ total",
+            infoEmpty: "_TOTAL_ storms"
         },
         select:'single',
         data: tableData,
@@ -245,6 +244,7 @@ $("#storm-track-btn").on('click', function(){
     stormTracks.setStyle({
         opacity:0.05
     });
+    $("#to-map").trigger('click');
 });
 
 var pointRad = function(cat) {
@@ -372,6 +372,7 @@ $("#storm-details-btn, #popup-details").on('click',function(){
             });
         }
         makeDetailsTable(pointTableData);
+        location.href = "#map";
     });
 });
 
@@ -390,3 +391,15 @@ $("#storm-details-btn, #popup-details").on('click',function(){
     // clear storm details table so it's not in back ground
     // 
 
+$('a[href^="#"]').on('click',function (e) {
+	    e.preventDefault();
+
+	    var target = this.hash;
+	    var $target = $(target);
+
+	    $('html, body').stop().animate({
+	        'scrollTop': $target.offset().top
+	    }, 900, 'swing', function () {
+	        window.location.hash = target;
+	    });
+	});  

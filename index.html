@@ -93,26 +93,33 @@
             <div class="col-md-5 m-2 py-2 filter-col">
                 <h4>Other Filters</h4>
                 <form id="others-form">
-                    <label class="checkbox-inline mx-1">
-                        <input type="checkbox" value="LFSC">Landfall in SC</label>
+                    <div class="form-check">
+                    <input class="checkbox mx-1" type="checkbox" value="" id="lfsc-check">  
+                        <label for="lfsc-check">Landfall in SC</label>
+                    </div>
                 </form>
-                <form id="wind-form" class="form-inline my-2">
+                
+                    <div>    
                     <label class="mr-2" for="wind-group">Max Wind Speed</label>
+                    <form class="form-inline">
                     <div class="form-group" id="wind-group">
                         <input class="form-control" id="startw" size="4" maxlength="3">
                         <span class="mx-2">to</span>
                         <input class="form-control" id="endw" size="4" maxlength="3">
                     </div>
-                </form>
-                <form id="pressure-form" class="form-inline my-2">
+                    </form>    
+                    </div>    
+                    
+                    <div>
                     <label class="mr-2" for="pressure-group">Min Pressure</label>
+                    <form class="form-inline">    
                     <div class="form-group" id="pressure-group">
                         <input class="form-control" id="startp" size="4" maxlength="3">
                         <span class="mx-2">to</span>
                         <input class="form-control" id="endp" size="4" maxlength="3">
                     </div>
-                </form>
-
+                        </form>
+                    </div>   
             </div>
         </div>
         <div class="row border-bottom">
@@ -146,8 +153,8 @@
                 <p class="m-0">from the table below or by clicking a track on the map.</p>
             </div>
             <div class="col-sm-6 text-sm-right">
-                <button id="storm-track-btn" class="btn btn-outline-primary align-top m-1 storm-select-btn" title="Choose a storm below." disabled>Highlight on Map <i class="fas fa-globe"></i></button>
-                <button id="storm-details-btn" class="btn btn-outline-primary align-top m-1 storm-select-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i class="fas fa-info-circle"></i></button>
+                <button id="storm-track-btn" class="btn btn-primary btn-lg align-top m-1 storm-select-btn" title="Choose a storm below." disabled>Highlight on Map <i class="fas fa-globe"></i></button>
+                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-select-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i class="fas fa-info-circle"></i></button>
             </div>
         </div>
 
@@ -185,7 +192,7 @@
     </div>
     
     <div id="mobile-icon-bar" class="fixed-bottom text-center border-top d-sm-none">
-        <a href="#map"><i class="fas fa-map fa-2x"></i></a>
+        <a href="#map" id="to-map"><i class="fas fa-map fa-2x"></i></a>
         <a href="#table-container"><i class="fas fa-table fa-2x"></i></a>
         <a href="#storm-search"><i class="fas fa-filter fa-2x"></i></a>
     </div>
