@@ -74,7 +74,7 @@
                 <form id="cat-form">
                     <div class="form-group" id="storm-cat-group">
                         <label class="checkbox-inline mx-1">
-                            <input type="checkbox" checked value="">TS</label>
+                            <input type="checkbox" checked value=""> TS</label>
                         <label class="checkbox-inline mx-1 ">
                             <input class="hu" type="checkbox" checked value="1"> Cat 1</label>
                         <label class="checkbox-inline mx-1 ">
@@ -135,12 +135,25 @@
         <div class="row">
             <div class="col">
                 <h3>Storm Details for <span id="storm-name"></span> - <span id="storm-year"></span></h3>
-                <p >Formation Date: <span id="form-date"></span></p>  
-                <p >Dates Affecting SC: <span id="sc-dates"></span></p>  
-                <p >Max Category: <span id="max-cat"></span></p>  
-                <p >Max Wind: <span id="max-wind"></span></p>  
-                <p >Min Pressure: <span id="min-pres"></span></p>
-                <p >Comments: <span id="comments"></span></p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 m-2 p-2 filter-col">
+                <h5 class="detail-header">Formation Date:</h5> <span id="form-date"></span>  
+                <h5 class="detail-header">Dates Affecting SC:</h5> <span id="sc-dates"></span> 
+                <h5 class="detail-header">Landfall Location:</h5> <span id="lf-loc"></span>
+            </div>
+            <div class="col-md-5 m-2 p-2 filter-col">
+                <h5 class="detail-header">Max Category:</h5> <span id="max-cat"></span> 
+                <h5 class="detail-header">Max Wind:</h5> <span id="max-wind"></span>  
+                <h5 class="detail-header">Min Pressure:</h5> <span id="min-pres"></span>
+            </div>
+        </div>    
+        <div class="row">    
+            <div class="col-md-11 m-2 p-2 filter-col">  
+                <p class="detail-header"><span id="comments"></span></p>
+                <h5 class="detail-header">Link to Report:</h5> <span id="report"></span>
+                <h5 class="detail-header">Link to Damage Report:</h5> <span id="damage"></span>
             </div>    
         </div>
     </div>
@@ -163,22 +176,21 @@
                     <tr>
                         <th>Name</th>
                         <th>Year</th>
-                        <th>Max Status</th>
-                        <th>Max Cat</th>
-                        <th>Max Wind</th>
-                        <th>Min Pressure</th>
+                        <th>Max Category</th>
+                        <th>Comments</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
             </div>
             <div class="row d-none" id="dt-row">
+                <h4>Storm Advisories</h4>
             <table class="table table-striped" id="details-table">
                 <thead>
                     <tr>
                         <th>Date &amp; Time</th>
                         <th>Status</th>
-                        <th>Category</th>
+                        <th>Hur Cat</th>
                         <th>Wind</th>
                         <th>Pressure</th>
                         <th>Record</th>
@@ -192,8 +204,8 @@
     
     <div id="mobile-icon-bar" class="fixed-bottom text-center border-top d-sm-none">
         <a href="#map" id="to-map"><i class="fas fa-map fa-2x"></i></a>
-        <a href="#table-container"><i class="fas fa-table fa-2x"></i></a>
-        <a href="#storm-search"><i class="fas fa-filter fa-2x"></i></a>
+        <a href="#table-container" id="to-table"><i class="fas fa-table fa-2x"></i></a>
+        <a href="#storm-search" id="to-filter"><i class="fas fa-filter fa-2x"></i></a>
     </div>
 
     <!-- Footer -->

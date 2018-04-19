@@ -3,17 +3,18 @@ TO DO
 -----
 clear filters button
 back to storms button
-link to reports
 need to get ID from selected line so that the details btn works
-make icons for landfalls or records
-colors for points need to be better
+make icons for landfalls or records, highlight on map?
 need to clean up and combine things, make things more efficient
-fix TS filter
+validate filter fields
+add legends
+get rid of null in popups
+make storm details look nicer
+
 
 TO BE DISCUSSED
 ---------------
 download data
-other filters
 
 */
 var map = L.map('map', {
@@ -23,6 +24,7 @@ var map = L.map('map', {
 
 var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    noWrap: true
 }).addTo(map);
 
 var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/sc_tropical_storms/FeatureServer/0"
@@ -35,10 +37,8 @@ var oef = function(feature,layer){
             "KEY":feature.properties.KEY_,
             "NAME":feature.properties.NAME,
             "YEAR":feature.properties.YEAR,
-            "MAXSTAT":feature.properties.MAXSTAT,
             "HURCAT":feature.properties.HURCAT,
-            "MAXWIND":feature.properties.MAXWIND,
-            "MINPRES":feature.properties.MINPRES            
+            "COMMENTS":feature.properties.COMMENTS
         });
 }
 
@@ -47,7 +47,7 @@ var c1 = "#feb24c",
     c3 = "#fc4e2a",
     c4 = "#e31a1c",
     c5 = "#b10026",
-    ct = "#41b6c4"
+    ct = "#76e2ce"
 
 var trackStyle = function(feature){
       var c,w, d = false
@@ -105,10 +105,8 @@ var makeResultTable = function(){
         columns:[
             {data: 'NAME'},
             {data: 'YEAR'},
-            {data: 'MAXSTAT'},
             {data: 'HURCAT'},
-            {data: 'MAXWIND'},
-            {data: 'MINPRES'},
+            {data: 'COMMENTS'}
         ],
         rowId:'KEY',
         responsive:true,
@@ -172,10 +170,11 @@ var updateTable = function(table){
 
 var runFilters = function(){
         
-    var exp = [getYearRange(), getCatList()].join(' ').replace('"','')
+    var exp = [getYearRange(), "(", getCatList(),")"].join(' ').replace('"','')
     
+    console.log(exp)
     //run the where filter for the arcgis online service
-    stormTracks.setWhere([getYearRange(), getCatList()].join(' ').replace('"',''));
+    stormTracks.setWhere(exp);
                          
     rt.clear() 
     
@@ -189,10 +188,8 @@ var runFilters = function(){
                 "KEY":fc.features[i].properties.KEY_,
                 "NAME":fc.features[i].properties.NAME,
                 "YEAR":fc.features[i].properties.YEAR,
-                "MAXSTAT":fc.features[i].properties.MAXSTAT,
                 "HURCAT":fc.features[i].properties.HURCAT,
-                "MAXWIND":fc.features[i].properties.MAXWIND,
-                "MINPRES":fc.features[i].properties.MINPRES
+                "COMMENTS":fc.features[i].properties.COMMENTS,
             });
         }
         updateTable(rt);
@@ -255,37 +252,70 @@ $("#storm-track-btn").on('click', function(){
     $("#to-map").trigger('click');
 });
 
-var pointRad = function(cat) {
-        return cat >= 1 ? cat * 4.5 :
-            3;
+$("#to-filter").on('click', function(){
+    if ( ! $("#storm-search").is(":visible")){
+        $("#toggle-filters").trigger('click');
     }
+});
 
-var pointColor = function(cat){
-        return cat == 5 ? c5 :
-         cat == 4 ? c4 :
-         cat == 3 ? c3 :
-         cat == 2 ? c2 :
-         cat == 1 ? c1 :
-            ct;
+var icons = {
+    c1: L.icon({
+      iconUrl: 'images/c1.png',
+      iconSize: [30.8, 28]
+    }),
+    c2: L.icon({
+      iconUrl: 'images/c2.png',
+      iconSize: [34.1, 31]
+    }),
+    c3: L.icon({
+      iconUrl: 'images/c3.png',
+      iconSize: [37.4, 34]
+    }),
+    c4: L.icon({
+      iconUrl: 'images/c4.png',
+      iconSize: [40.7, 37]
+    }),
+    c5: L.icon({
+      iconUrl: 'images/c5.png',
+      iconSize: [44, 40]
+    }),
+    td: L.icon({
+        iconUrl: 'images/ts.png',
+        iconSize: [27.5, 25]
+    }),
+    l: L.icon({
+        iconUrl: 'images/tl.png',
+        iconSize: [15, 13.5]
+    }),
+  };
+
+var getIcons = function(cat){
+        return cat == 'HU5' ? icons['c5'] :
+         cat == 'HU4' ? icons['c4'] :
+         cat == 'HU3' ? icons['c3'] :
+         cat == 'HU2' ? icons['c2'] :
+         cat == 'HU1' ? icons['c1'] :
+         cat == 'TD' ? icons['td'] :
+            icons['l'];
     }
 
 //ADD POINTS FOR INDIVIDUAL STORMS
 var pointData = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/sc_tropical_storms_points/FeatureServer/0"
 
 var stormPoints = L.esri.featureLayer({
-    url: pointData,
-    pointToLayer: function(feature, latlng){
-        return L.circleMarker(latlng, {
-            radius:pointRad(feature.properties.HU_cat),
-            fillColor:pointColor(feature.properties.HU_cat),
-            color:pointColor(feature.properties.HU_cat),
-            opacity:0.8,
-            weight:2,
-            fillOpacity:0.6
-        });
-    },
-    where:"KEY_=''"
-}).addTo(map);
+        url: pointData,
+        pointToLayer: function(feature, latlng){
+            return L.marker(latlng, {
+                icon: getIcons(feature.properties.STAT_CAT),
+                pane: 'markerPane'
+            });
+        },
+        where:"KEY_ = '"+stormKey+"'"
+    }).addTo(map);
+    
+stormPoints.bindTooltip(function(layer){
+    return L.Util.template(pointPopup, layer.feature.properties);
+});
 
 var pointPopup = '<div> \
     Date and Time: {DATE_TIME}<br> \
@@ -294,10 +324,6 @@ var pointPopup = '<div> \
     Pressure: {PRESSURE}<br>\
     Record:{RECORD}  <br> \
     </div>'
-
-stormPoints.bindTooltip(function(layer){
-    return L.Util.template(pointPopup, layer.feature.properties);
-});
 
 var pointTableData = []
 
@@ -331,11 +357,12 @@ var pointQuery = L.esri.query({
 $("#storm-details-btn, #popup-details").on('click',function(){
     map.removeLayer(stormTracks);
     
+    stormPoints.setWhere("KEY_ = '"+stormKey+"'");
+    
     //keep individual track from highlight
     trackHighlight.setWhere("KEY_ = '"+stormKey+"'");
     trackHighlight.unbindPopup();
     //add individual points
-    stormPoints.setWhere("KEY_ = '"+stormKey+"'");
     
     //remove the features no longer needed and add those for details
     $("#storm-select-row").addClass("d-none");
@@ -355,15 +382,24 @@ $("#storm-details-btn, #popup-details").on('click',function(){
     
     $("#storm-details-overview").slideToggle("slow");
     
-    query.where("KEY_ = '"+stormKey+"'").returnGeometry(false);
+    query.where("KEY_ = '"+stormKey+"'");
+    
+    query.bounds(function(error, latLngBounds, response){
+        map.flyToBounds(latLngBounds);
+    });
     
     query.run(function(error,fc,response){
                 $("#storm-name").text(fc.features[0].properties.NAME)
                 $("#storm-year").text(fc.features[0].properties.YEAR)
-                //$("#form-date").text(fc.features[0].properties.STARTDATE)
+                $("#form-date").text(fc.features[0].properties.STARTDATE)
+                //dates affecting SC
+                $("#lf-loc").text(fc.features[0].properties.LF_LOC)
                 $("#max-cat").text(fc.features[0].properties.MAXSTAT +" "+ fc.features[0].properties.HURCAT)
                 $("#max-wind").text(fc.features[0].properties.MAXWIND)
                 $("#min-pres").text(fc.features[0].properties.MINPRES)
+                $("#comments").text(fc.features[0].properties.COMMENTS)
+                $("#report").html('<a href="'+fc.features[0].properties.REPORT_URL+'" target="_blank">Storm Report</a>')
+                $("#damage").html('<a href="'+fc.features[0].properties.DAMAGE_URL+'" target="_blank">Damage Report</a>')
     });
     
     pointQuery.where("KEY_ = '"+stormKey+"'").returnGeometry(false);
@@ -384,8 +420,6 @@ $("#storm-details-btn, #popup-details").on('click',function(){
     });
 });
 
-
-
 //WHAT TO DO WHEN WE CLICK BACK TO ALL STORMS??
 
 //Modal for continuing and losing individual storm data
@@ -398,6 +432,50 @@ $("#storm-details-btn, #popup-details").on('click',function(){
     // remove storm details div and buttons
     // clear storm details table so it's not in back ground
     // 
+
+$("#back-to-tracks").on('click',function(){
+    map.removeLayer(stormPoints);
+    
+    //keep individual track from highlight
+    trackHighlight.setWhere("KEY_ = ''");
+    trackHighlight.bindPopup();
+
+    stormTracks.addTo(map);
+    stormTracks.setWhere();
+    map.flyToBounds([[21, -90],[52,-13]]);
+    stormTracks.setStyle({
+        opacity:0.8
+    });
+    
+    rt.clear();
+    
+    query.run(function(error,fc,response){
+        for (var i = 0; i < fc.features.length; i++){
+            tableData.push({
+                "KEY":fc.features[i].properties.KEY_,
+                "NAME":fc.features[i].properties.NAME,
+                "YEAR":fc.features[i].properties.YEAR,
+                "HURCAT":fc.features[i].properties.HURCAT,
+                "COMMENTS":fc.features[i].properties.COMMENTS,
+            });
+        }
+    });
+    
+    updateTable(rt);
+   
+    rt.draw();    
+        
+    //remove the features no longer needed and add those for details
+    $("#storm-select-row").removeClass("d-none");
+    $("#toggle-filters").removeClass("d-none");
+    $("#rt-row").removeClass("d-none");
+    
+    $("#back-to-tracks").addClass("d-none");
+    $("#dt-row").addClass("d-none");
+    
+    $("#storm-details-overview").slideToggle("slow");
+});
+    
 
 $('a[href^="#"]').on('click',function (e) {
 	    e.preventDefault();
