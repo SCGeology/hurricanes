@@ -8,6 +8,7 @@ need to get ID from selected line so that the details btn works
 make icons for landfalls or records
 colors for points need to be better
 need to clean up and combine things, make things more efficient
+fix TS filter
 
 TO BE DISCUSSED
 ---------------
@@ -41,31 +42,38 @@ var oef = function(feature,layer){
         });
 }
 
+var c1 = "#feb24c",
+    c2 = "#fd8d3c",
+    c3 = "#fc4e2a",
+    c4 = "#e31a1c",
+    c5 = "#b10026",
+    ct = "#41b6c4"
+
 var trackStyle = function(feature){
       var c,w, d = false
       switch (feature.properties.HURCAT) {
         case 1:
-          c = '#fef0d9';
+          c = c1;
           w = 3
           break;
         case 2:
-          c = '#fdcc8a';
+          c = c2;
               w = 4
           break;
         case 3:
-          c = '#fc8d59';
+          c = c3;
               w = 4
           break;
         case 4:
-          c = '#e34a33';
+          c = c4;
               w = 5
           break;
         case 5:
-          c = '#b30000';
+          c = c5;
               w = 5
           break;      
         default:
-          c = '#d1ffef';
+          c = ct;
               w = 3;
               d = "10 5"
       }
@@ -248,17 +256,17 @@ $("#storm-track-btn").on('click', function(){
 });
 
 var pointRad = function(cat) {
-        return cat >= 1 ? cat * 4 :
-            4;
+        return cat >= 1 ? cat * 4.5 :
+            3;
     }
 
 var pointColor = function(cat){
-        return cat == 5 ? '#b30000' :
-         cat == 4 ? '#e34a33' :
-         cat == 3 ? '#fc8d59' :
-         cat == 2 ? '#fdcc8a' :
-         cat == 1 ? '#fef0d9' :
-            '#d1ffef';
+        return cat == 5 ? c5 :
+         cat == 4 ? c4 :
+         cat == 3 ? c3 :
+         cat == 2 ? c2 :
+         cat == 1 ? c1 :
+            ct;
     }
 
 //ADD POINTS FOR INDIVIDUAL STORMS
