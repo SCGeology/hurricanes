@@ -1,20 +1,16 @@
 /*
 TO DO
 -----
-clear filters button
-back to storms button
-need to get ID from selected line so that the details btn works
-make icons for landfalls or records, highlight on map?
-need to clean up and combine things, make things more efficient
+CLEAN AND OPTIMIZE
+clear filters not resetting table
 validate filter fields
 add legends
 get rid of null in popups
-make storm details look nicer
 
-
-TO BE DISCUSSED
+TO BE DISCUSSED or do later
 ---------------
 download data
+make icons for landfalls or records, highlight on map?
 
 */
 var map = L.map('map', {
@@ -131,7 +127,7 @@ var popupTemplate = '<div id="popup"> \
     Max Wind: {MAXWIND}<br> \
     Min Pressure: {MINPRES}<br>\
     Max Category: {MAXSTAT} {HURCAT} <br> \
-    <button class="btn btn-sm btn-outline-primary mt-2" id="popup-details">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
+    <button class="btn btn-sm btn-outline-primary mt-2" onclick="getDetails()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
 
 stormTracks.bindPopup(function(layer){
     return L.Util.template(popupTemplate,layer.feature.properties);
@@ -199,8 +195,10 @@ var runFilters = function(){
 //FILTER BUTTON CLICKS 
 
 $("#toggle-filters").on('click',function(){
-    $("#storm-search").slideToggle( "slow" );
-    $("#filter-icon").toggleClass("fa-filter, fa-times")
+    $("#storm-search").slideToggle( "slow", function(){
+        Waypoint.refreshAll()
+    });
+    $("#filter-icon").toggleClass("fa-filter, fa-times");
 });
 
 $("#check-all").on('click', function(){
@@ -213,6 +211,7 @@ $("#uncheck-all").on('click', function(){
 $("#apply-filter").on('click', function(){
     trackHighlight.setWhere("KEY_ =''")
     runFilters();
+    $("#to-map").triggerHandler('click');
 });
 
 $("#reset").on('click', function(){
@@ -235,26 +234,33 @@ trackHighlight.bindPopup(function(layer){
 
 var stormKey
 
+// set storm key on table row click
 $("#results-table").on( 'click', 'tr', function () {
     stormKey = rt.row( this ).id();
     trackHighlight.setWhere("KEY_ =''")
-    $(".storm-select-btn").prop("disabled", false);
+    $(".storm-btn").prop("disabled", false);
     stormTracks.setStyle({
         opacity:0.8
     });
 });
 
-$("#storm-track-btn").on('click', function(){
+//set storm key on track click
+stormTracks.on('click', function(e) { 
+    stormKey = e.layer.feature.properties.KEY_ 
+    console.log(stormKey)
+});
+
+$(".storm-track-btn").on('click', function(){
     trackHighlight.setWhere("KEY_ ='"+stormKey+"'")
     stormTracks.setStyle({
         opacity:0.05
     });
-    $("#to-map").trigger('click');
+    $("#to-map").triggerHandler('click');
 });
 
 $("#to-filter").on('click', function(){
     if ( ! $("#storm-search").is(":visible")){
-        $("#toggle-filters").trigger('click');
+        $("#toggle-filters").triggerHandler('click');
     }
 });
 
@@ -354,7 +360,7 @@ var pointQuery = L.esri.query({
 
 //WHAT TO DO WHEN GET STORM DETAILS IS CLICKED
 
-$("#storm-details-btn, #popup-details").on('click',function(){
+var getDetails = function(){
     map.removeLayer(stormTracks);
     
     stormPoints.setWhere("KEY_ = '"+stormKey+"'");
@@ -376,16 +382,20 @@ $("#storm-details-btn, #popup-details").on('click',function(){
     rt.clear().draw();
     
     //check to see if filters are displayed. if so, initiate a click on the filter button to suck it back up
+    //disable filter button on mobile icon bar
     if ($("#storm-search").is(":visible")){
-        $("#toggle-filters").trigger('click');
+        $("#toggle-filters").triggerHandler('click');
     }
+    $("#to-filter").addClass("disabled");
     
     $("#storm-details-overview").slideToggle("slow");
     
     query.where("KEY_ = '"+stormKey+"'");
     
     query.bounds(function(error, latLngBounds, response){
-        map.flyToBounds(latLngBounds);
+        map.flyToBounds(latLngBounds, {
+            padding:[20,20]
+        });
     });
     
     query.run(function(error,fc,response){
@@ -418,6 +428,10 @@ $("#storm-details-btn, #popup-details").on('click',function(){
         makeDetailsTable(pointTableData);
         location.href = "#map";
     });
+}
+
+$(".details-btn").on('click',function(){
+    getDetails();
 });
 
 //WHAT TO DO WHEN WE CLICK BACK TO ALL STORMS??
@@ -433,14 +447,8 @@ $("#storm-details-btn, #popup-details").on('click',function(){
     // clear storm details table so it's not in back ground
     // 
 
-$("#back-to-tracks").on('click',function(){
-    map.removeLayer(stormPoints);
+var stormReset = function (){
     
-    //keep individual track from highlight
-    trackHighlight.setWhere("KEY_ = ''");
-    trackHighlight.bindPopup();
-
-    stormTracks.addTo(map);
     stormTracks.setWhere();
     map.flyToBounds([[21, -90],[52,-13]]);
     stormTracks.setStyle({
@@ -451,6 +459,7 @@ $("#back-to-tracks").on('click',function(){
     
     query.run(function(error,fc,response){
         for (var i = 0; i < fc.features.length; i++){
+            console.log("push")
             tableData.push({
                 "KEY":fc.features[i].properties.KEY_,
                 "NAME":fc.features[i].properties.NAME,
@@ -461,10 +470,21 @@ $("#back-to-tracks").on('click',function(){
         }
     });
     
-    updateTable(rt);
-   
-    rt.draw();    
-        
+    updateTable(rt);   
+}
+
+$("#back-to-tracks").on('click',function(){
+    
+    map.removeLayer(stormPoints);
+    stormTracks.addTo(map);
+    
+    trackHighlight.setWhere("KEY_ = ''");
+    trackHighlight.bindPopup();
+    
+    stormReset();
+    
+    $("#to-filter").removeClass("disabled");
+    
     //remove the features no longer needed and add those for details
     $("#storm-select-row").removeClass("d-none");
     $("#toggle-filters").removeClass("d-none");
@@ -476,6 +496,9 @@ $("#back-to-tracks").on('click',function(){
     $("#storm-details-overview").slideToggle("slow");
 });
     
+$("#clear-filter").on('click', function(){
+    stormReset();
+});
 
 $('a[href^="#"]').on('click',function (e) {
 	    e.preventDefault();
@@ -488,4 +511,13 @@ $('a[href^="#"]').on('click',function (e) {
 	    }, 900, 'swing', function () {
 	        window.location.hash = target;
 	    });
-	});  
+});  
+
+
+var waypoint = new Waypoint({
+  element: document.getElementById('rt-row'),
+  handler: function() {
+      $("#sticky-buttons").toggleClass("no-vis");
+  }
+});
+

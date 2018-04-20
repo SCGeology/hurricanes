@@ -159,17 +159,25 @@
     </div>
 
     <div id="table-container" class="container my-3">
+        
         <div class="row" id="storm-select-row">
             <div class="col-sm-6">
                 <h4 class="m-0">Select a Storm</h4>
-                <p class="m-0">from the table below or by clicking a track on the map.</p>
+                <p class="m-0">from the table below.</p>
             </div>
             <div class="col-sm-6 text-sm-right">
-                <button id="storm-track-btn" class="btn btn-primary btn-lg align-top m-1 storm-select-btn" title="Choose a storm below." disabled>Highlight on Map <i class="fas fa-globe"></i></button>
-                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-select-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i class="fas fa-info-circle"></i></button>
+                <button id="storm-track-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn storm-track-btn" title="Choose a storm below." disabled>Highlight on Map <i class="fas fa-globe"></i></button>
+                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i class="fas fa-info-circle"></i></button>
+                
+                <!-- sticky buttons for mobile scroll -->
+                <div id="sticky-buttons" class="no-vis">
+                    <button id="storm-track-sticky" class="btn btn-primary btn-lg storm-btn storm-track-btn btn-sticky" title="Choose a storm below." disabled><i class="fas fa-globe"></i></button>
+                    <button id="storm-details-sticky" class="btn btn-primary btn-lg storm-btn details-btn btn-sticky" title="Choose a storm below." disabled><i class="fas fa-info-circle"></i></button>
+                </div>
+                
+                
             </div>
         </div>
-
         <div class="row mt-2" id="rt-row">
             <table class="table table-striped" id="results-table">
                 <thead>
@@ -203,9 +211,9 @@
     </div>
     
     <div id="mobile-icon-bar" class="fixed-bottom text-center border-top d-sm-none">
-        <a href="#map" id="to-map"><i class="fas fa-map fa-2x"></i></a>
-        <a href="#table-container" id="to-table"><i class="fas fa-table fa-2x"></i></a>
-        <a href="#storm-search" id="to-filter"><i class="fas fa-filter fa-2x"></i></a>
+        <a href="#map" id="to-map" class="btn"><i class="fas fa-map fa-2x"></i></a>
+        <a href="#table-container" id="to-table" class="btn"><i class="fas fa-table fa-2x"></i></a>
+        <a href="#storm-search" id="to-filter" class="btn"><i class="fas fa-filter fa-2x"></i></a>
     </div>
 
     <!-- Footer -->
@@ -226,7 +234,11 @@
 
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
 
+    <script src="vendor/waypoints/noframework.waypoints.min.js"></script>
+    
     <script src="js/stormmap.js"></script>
+    
+    
 
 
 </body>

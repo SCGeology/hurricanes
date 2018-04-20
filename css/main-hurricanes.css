@@ -104,3 +104,31 @@
     top:10px;
     right:10px;
 }
+
+#sticky-buttons{
+    position: fixed;
+    top: 20px;
+    right:0px;
+    margin-right:-7px;
+    z-index: 5000;
+}
+.btn-sticky{
+    position: absolute;
+    right:0px;
+    box-shadow: -2px 2px 4px gray;
+    padding: 5px 15px 5px 10px;
+}
+#storm-details-sticky{
+    top: 50px;
+}
+#storm-track-sticky{
+    top: 0px;
+}
+.no-vis{
+    display: none;
+}
+.detail-header{
+    margin-top:0.5em;
+    margin-bottom:0.2em;
+    border-bottom: 1px solid #ddd;
+}
