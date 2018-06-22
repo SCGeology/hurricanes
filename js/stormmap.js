@@ -2,15 +2,15 @@
 TO DO
 -----
 CLEAN AND OPTIMIZE
-clear filters not resetting table
 validate filter fields
 add legends
-get rid of null in popups
 
 TO BE DISCUSSED or do later
 ---------------
+have map select row in table, table row selection make popup? 
 download data
 make icons for landfalls or records, highlight on map?
+
 
 */
 var map = L.map('map', {
@@ -18,9 +18,9 @@ var map = L.map('map', {
     wheelPxPerZoomLevel:100
 }).fitBounds([[21, -90],[52,-13]]);
 
-var Esri_NatGeoWorldMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-    noWrap: true
+var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    noWrap:true
 }).addTo(map);
 
 var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/sc_tropical_storms/FeatureServer/0"
@@ -28,12 +28,20 @@ var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/sc
 var tableData = []
 var rt
 
+var checkForNull = function(invalue){
+    if (invalue == null){
+        return ""
+    } else {
+        return invalue
+    }
+}
+
 var oef = function(feature,layer){
     tableData.push({
             "KEY":feature.properties.KEY_,
             "NAME":feature.properties.NAME,
             "YEAR":feature.properties.YEAR,
-            "HURCAT":feature.properties.HURCAT,
+            "HURCAT":feature.properties.MAXSTAT + " " +checkForNull(feature.properties.HURCAT),
             "COMMENTS":feature.properties.COMMENTS
         });
 }
@@ -50,28 +58,28 @@ var trackStyle = function(feature){
       switch (feature.properties.HURCAT) {
         case 1:
           c = c1;
-          w = 3
+          w = 1.2
           break;
         case 2:
           c = c2;
-              w = 4
+              w = 1.4
           break;
         case 3:
           c = c3;
-              w = 4
+              w = 1.6
           break;
         case 4:
           c = c4;
-              w = 5
+              w = 1.8
           break;
         case 5:
           c = c5;
-              w = 5
+              w = 2
           break;      
         default:
           c = ct;
-              w = 3;
-              d = "10 5"
+              w = 1.2;
+              d = "8 3"
       }
       return {color: c, opacity: 0.8, weight: w, dashArray:d};
     }
@@ -79,7 +87,8 @@ var trackStyle = function(feature){
 var stormTracks = L.esri.featureLayer({
     url: data,
     onEachFeature:oef,
-    style:trackStyle
+    style:trackStyle,
+    precision:4
 }).addTo(map);
 
 //load data table data from REST service
@@ -91,12 +100,12 @@ var makeResultTable = function(){
     rt = $('#results-table').DataTable({
         language:{
             search:"Search",
-            searchPlaceholder:"Storm name, description",
+            searchPlaceholder:"Name, keywords",
             info:"_TOTAL_ storms",
             infoFiltered: " of _MAX_ total",
             infoEmpty: "_TOTAL_ storms"
         },
-        select:'single',
+        select:true,
         data: tableData,
         columns:[
             {data: 'NAME'},
@@ -121,16 +130,14 @@ stormTracks.on('load', function(e){
     }
 });
 
-var popupTemplate = '<div id="popup"> \
-    <span id="name">{NAME}</span><br> \
-    Year: {YEAR}<br> \
-    Max Wind: {MAXWIND}<br> \
-    Min Pressure: {MINPRES}<br>\
-    Max Category: {MAXSTAT} {HURCAT} <br> \
-    <button class="btn btn-sm btn-outline-primary mt-2" onclick="getDetails()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
-
 stormTracks.bindPopup(function(layer){
-    return L.Util.template(popupTemplate,layer.feature.properties);
+    return '<div id="popup"> \
+    <span id="name">'+layer.feature.properties.NAME+'</span><br> \
+    Year: ' +layer.feature.properties.YEAR+'<br> \
+    Max Wind: '+checkForNull(layer.feature.properties.MAXWIND)+ '<br> \
+    Min Pressure: '+checkForNull(layer.feature.properties.MINPRES)+'<br>\
+    Max Category: '+checkForNull(layer.feature.properties.MAXSTAT)+" "+checkForNull(layer.feature.properties.HURCAT)+ '<br> \
+    <button class="btn btn-sm btn-outline-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
 });
 
 var getCatList = function(){
@@ -160,16 +167,21 @@ var getYearRange = function(){
     return "YEAR >= '"+$('#startyear').val()+"' AND YEAR <='"+$('#endyear').val()+"' AND";
 }
 
+var getLandfall = function(){
+    if ($("#lfsc-check").is(":checked")){
+        return "AND LandfallSC = 'y'"
+        console.log("yerp!")
+    }
+}
+
 var updateTable = function(table){
     table.rows.add(tableData).draw();
 }
 
 var runFilters = function(){
-        
-    var exp = [getYearRange(), "(", getCatList(),")"].join(' ').replace('"','')
     
-    console.log(exp)
-    //run the where filter for the arcgis online service
+    var exp = [getYearRange(), "(", getCatList(),")",getLandfall()].join(' ').replace('"','')
+    
     stormTracks.setWhere(exp);
                          
     rt.clear() 
@@ -184,7 +196,7 @@ var runFilters = function(){
                 "KEY":fc.features[i].properties.KEY_,
                 "NAME":fc.features[i].properties.NAME,
                 "YEAR":fc.features[i].properties.YEAR,
-                "HURCAT":fc.features[i].properties.HURCAT,
+                "HURCAT":fc.features[i].properties.MAXSTAT + " " +fc.features[i].properties.HURCAT,
                 "COMMENTS":fc.features[i].properties.COMMENTS,
             });
         }
@@ -221,7 +233,7 @@ $("#reset").on('click', function(){
 
 //TABLE SELECTION INTERACTION WITH MAP
 
-//!!!!!!!!!INSTEAD OF HAVING TWO FEATURE LAYER INSTANCES, SEE IF YOU CAN JUST CHANGE THE OPACITY BASED ON THE SELECTED ID!!!! 
+// ***FIX*** - INSTEAD OF HAVING TWO FEATURE LAYER INSTANCES, SEE IF YOU CAN JUST CHANGE THE OPACITY BASED ON THE SELECTED ID!!!! 
 var trackHighlight = L.esri.featureLayer({
     url: data,
     style: trackStyle,
@@ -233,29 +245,36 @@ trackHighlight.bindPopup(function(layer){
 });
 
 var stormKey
+var oldKey
+var selected = 0
 
-// set storm key on table row click
-$("#results-table").on( 'click', 'tr', function () {
+// set storm key on table row click 
+$("#results-table").on( 'click', 'td', function () {
     stormKey = rt.row( this ).id();
-    trackHighlight.setWhere("KEY_ =''")
-    $(".storm-btn").prop("disabled", false);
-    stormTracks.setStyle({
-        opacity:0.8
-    });
+    if (oldKey != stormKey || oldKey == stormKey && selected == 0){
+        oldKey = stormKey
+        trackHighlight.setWhere("KEY_ ='"+stormKey+"'")
+        stormTracks.setStyle({
+            opacity:0.12
+        });
+        $(".storm-btn").prop("disabled", false);
+        selected = 1
+    } else {
+        trackHighlight.setWhere("KEY_ =''")
+        stormTracks.setStyle({
+            opacity:0.8
+        });
+        $(".storm-btn").prop("disabled", true);
+        selected = 0
+    } 
 });
 
-//set storm key on track click
+//set storm key on track click - keep it separate until the get details button in popup is clicked
+//this keeps from confusion between keys set in the map and the table
+var mapClickKey
+
 stormTracks.on('click', function(e) { 
-    stormKey = e.layer.feature.properties.KEY_ 
-    console.log(stormKey)
-});
-
-$(".storm-track-btn").on('click', function(){
-    trackHighlight.setWhere("KEY_ ='"+stormKey+"'")
-    stormTracks.setStyle({
-        opacity:0.05
-    });
-    $("#to-map").triggerHandler('click');
+    mapClickKey = e.layer.feature.properties.KEY_ 
 });
 
 $("#to-filter").on('click', function(){
@@ -285,7 +304,7 @@ var icons = {
       iconUrl: 'images/c5.png',
       iconSize: [44, 40]
     }),
-    td: L.icon({
+    ts: L.icon({
         iconUrl: 'images/ts.png',
         iconSize: [27.5, 25]
     }),
@@ -301,7 +320,7 @@ var getIcons = function(cat){
          cat == 'HU3' ? icons['c3'] :
          cat == 'HU2' ? icons['c2'] :
          cat == 'HU1' ? icons['c1'] :
-         cat == 'TD' ? icons['td'] :
+         cat == 'TS' ? icons['ts'] :
             icons['l'];
     }
 
@@ -317,21 +336,19 @@ var stormPoints = L.esri.featureLayer({
             });
         },
         where:"KEY_ = '"+stormKey+"'"
-    }).addTo(map);
+    });
     
 stormPoints.bindTooltip(function(layer){
-    return L.Util.template(pointPopup, layer.feature.properties);
+    return '<div> \
+    Date and Time: '+layer.feature.properties.DATE_TIME+'<br> \
+    Status: '+layer.feature.properties.STATUS+' '+checkForNull(layer.feature.properties.HU_cat)+'<br> \
+    Wind: '+layer.feature.properties.WIND+'<br> \
+    Pressure: '+checkForNull(layer.feature.properties.PRESSURE)+'<br>\
+    Record: '+checkForNull(layer.feature.properties.RECORD)+'<br> \
+    </div>'
 });
 
-var pointPopup = '<div> \
-    Date and Time: {DATE_TIME}<br> \
-    Status: {STATUS} {HU_cat}<br> \
-    Wind: {WIND}<br> \
-    Pressure: {PRESSURE}<br>\
-    Record:{RECORD}  <br> \
-    </div>'
-
-var pointTableData = []
+var pointTableData
 
 var makeDetailsTable = function(pData){
     dt = $('#details-table').DataTable({
@@ -360,13 +377,14 @@ var pointQuery = L.esri.query({
 
 //WHAT TO DO WHEN GET STORM DETAILS IS CLICKED
 
-var getDetails = function(){
+var getDetails = function(key){
     map.removeLayer(stormTracks);
     
-    stormPoints.setWhere("KEY_ = '"+stormKey+"'");
+    stormPoints.addTo(map);
+    stormPoints.setWhere("KEY_ = '"+key+"'");
     
     //keep individual track from highlight
-    trackHighlight.setWhere("KEY_ = '"+stormKey+"'");
+    trackHighlight.setWhere("KEY_ = '"+key+"'");
     trackHighlight.unbindPopup();
     //add individual points
     
@@ -377,6 +395,8 @@ var getDetails = function(){
     
     $("#back-to-tracks").removeClass("d-none");
     $("#dt-row").removeClass("d-none");
+    
+    $("#toggle-legend").attr("data-target","#icon-legend-modal");
     
     //clear the data table
     rt.clear().draw();
@@ -390,29 +410,45 @@ var getDetails = function(){
     
     $("#storm-details-overview").slideToggle("slow");
     
-    query.where("KEY_ = '"+stormKey+"'");
+    query.where("KEY_ = '"+key+"'");
     
-    query.bounds(function(error, latLngBounds, response){
-        map.flyToBounds(latLngBounds, {
-            padding:[20,20]
-        });
-    });
+    pointTableData = []
     
+    var nullReports = function(inValue){
+        if (inValue == null){
+            return "No"
+        } else {
+            return '<a href="'+inValue+'" target="_blank">'
+        }
+    }
+    
+    var nullDate = function(inDate){
+        if (inDate == null){
+            return ""
+        } else {
+            return new Date(inDate).toLocaleDateString()
+        }
+    }
+     
     query.run(function(error,fc,response){
                 $("#storm-name").text(fc.features[0].properties.NAME)
                 $("#storm-year").text(fc.features[0].properties.YEAR)
-                $("#form-date").text(fc.features[0].properties.STARTDATE)
-                //dates affecting SC
+                
+                $("#form-date").text(new Date(fc.features[0].properties.STARTDATE).toLocaleDateString())
+        
+                $("#sc-date-st").text(new Date(fc.features[0].properties.SC_DATE_START).toLocaleDateString())
+                $("#sc-date-end").text(nullDate(fc.features[0].properties.SC_DATE_END))
+        
                 $("#lf-loc").text(fc.features[0].properties.LF_LOC)
-                $("#max-cat").text(fc.features[0].properties.MAXSTAT +" "+ fc.features[0].properties.HURCAT)
+                $("#max-cat").text(checkForNull(fc.features[0].properties.MAXSTAT) +" "+ checkForNull(fc.features[0].properties.HURCAT))
                 $("#max-wind").text(fc.features[0].properties.MAXWIND)
                 $("#min-pres").text(fc.features[0].properties.MINPRES)
                 $("#comments").text(fc.features[0].properties.COMMENTS)
-                $("#report").html('<a href="'+fc.features[0].properties.REPORT_URL+'" target="_blank">Storm Report</a>')
-                $("#damage").html('<a href="'+fc.features[0].properties.DAMAGE_URL+'" target="_blank">Damage Report</a>')
+                $("#report").html(nullReports(fc.features[0].properties.REPORT_URL)+' Storm Report</a>')
+                $("#damage").html(nullReports(fc.features[0].properties.REPORT_URL)+' Damage Report</a>')
     });
     
-    pointQuery.where("KEY_ = '"+stormKey+"'").returnGeometry(false);
+    pointQuery.where("KEY_ = '"+key+"'");
     
     pointQuery.run(function(error,fc,response){
         for (var i = 0; i < fc.features.length; i++){
@@ -428,24 +464,16 @@ var getDetails = function(){
         makeDetailsTable(pointTableData);
         location.href = "#map";
     });
+    
 }
 
 $(".details-btn").on('click',function(){
-    getDetails();
+    getDetails(stormKey);
 });
-
-//WHAT TO DO WHEN WE CLICK BACK TO ALL STORMS??
-
-//Modal for continuing and losing individual storm data
-// if continue
-    // clear results table
-    // repopulate with all data
-    // add all storms to map
-    // clear any filters 
-    // re-add buttons
-    // remove storm details div and buttons
-    // clear storm details table so it's not in back ground
-    // 
+var getDetailsMap = function(){
+    stormKey = mapClickKey
+    getDetails(mapClickKey); 
+};
 
 var stormReset = function (){
     
@@ -454,36 +482,35 @@ var stormReset = function (){
     stormTracks.setStyle({
         opacity:0.8
     });
-    
     rt.clear();
+    //indicates that there is not a selected row - for track highlighting on table row click - see table.on(click) function
+    selected = 0
+    //reset years
+    $('#startyear').val(1871);
+    $('#endyear').val(2017);
+    //reset categories
+    $("#storm-cat-group input:checkbox").prop('checked',true);
+    $("#lfsc-check").prop('checked',false);
     
-    query.run(function(error,fc,response){
-        for (var i = 0; i < fc.features.length; i++){
-            console.log("push")
-            tableData.push({
-                "KEY":fc.features[i].properties.KEY_,
-                "NAME":fc.features[i].properties.NAME,
-                "YEAR":fc.features[i].properties.YEAR,
-                "HURCAT":fc.features[i].properties.HURCAT,
-                "COMMENTS":fc.features[i].properties.COMMENTS,
-            });
-        }
-    });
-    
-    updateTable(rt);   
+    runFilters();
 }
 
-$("#back-to-tracks").on('click',function(){
+$("#continue-back").on('click',function(){
     
-    map.removeLayer(stormPoints);
+    stormPoints.setWhere("KEY_ = ''");
+    
+    //map.removeLayer(stormPoints);
     stormTracks.addTo(map);
     
     trackHighlight.setWhere("KEY_ = ''");
     trackHighlight.bindPopup();
     
+    dt.destroy();
+    
     stormReset();
     
     $("#to-filter").removeClass("disabled");
+    $(".storm-btn").prop("disabled", true);
     
     //remove the features no longer needed and add those for details
     $("#storm-select-row").removeClass("d-none");
@@ -493,10 +520,12 @@ $("#back-to-tracks").on('click',function(){
     $("#back-to-tracks").addClass("d-none");
     $("#dt-row").addClass("d-none");
     
+    $("#toggle-legend").attr("data-target","#trackline-legend-modal");
+    
     $("#storm-details-overview").slideToggle("slow");
 });
     
-$("#clear-filter").on('click', function(){
+$("#continue-clear").on('click', function(){
     stormReset();
 });
 

@@ -40,8 +40,11 @@
 .map-btn {
     position: absolute;
     bottom: 20px;
-    left: 10px;
+    left: 2%;
     z-index: 1000;
+}
+#toggle-legend {
+    bottom:65px;
 }
 #storm-search {
     display:none;
@@ -56,10 +59,7 @@
 #results-table_info{
     text-align: right;
 }
-.filter-col {
-    background-color:#eee;
-    border-radius:2px;
-}
+
 #t-search {
     background-color:#2e445b;
     color:white;
@@ -121,14 +121,61 @@
 #storm-details-sticky{
     top: 50px;
 }
-#storm-track-sticky{
-    top: 0px;
-}
+
 .no-vis{
     display: none;
 }
 .detail-header{
     margin-top:0.5em;
     margin-bottom:0.2em;
-    border-bottom: 1px solid #ddd;
+    background-color:#eff4f7;
+    border-radius: 0.2rem 0.1rem;
+}
+.details-col > * {
+    padding:4px;
+}
+.filter-col {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding-bottom: 3.5rem;
+}
+.filter-col button {
+    position: absolute;
+    left: 0.5rem;
+    bottom: 0.5rem;
+}
+#uncheck-all {
+    left: 7rem;
+}
+.legend-table img {
+    width:40px;
+    height: auto;
+}
+.tl-icon {
+    width:50px;
+    text-align: center;
+}
+.legend-table{
+    background-color:#1e3556;
+    color:white;
+    border-radius: 5px;
+}
+
+/*div table css*/
+.divTable{
+	display: table;
+	width: 100%;
+}
+.divTableRow {
+	display: table-row;
+}
+.divTableHeading {
+	display: table-header-group;
+}
+.divTableCell, .divTableHead {
+	display: table-cell;
+	padding: 8px 10px;
+}
+.divTableBody {
+	display: table-row-group;
 }
