@@ -3,7 +3,6 @@ TO DO
 -----
 CLEAN AND OPTIMIZE
 validate filter fields
-add legends
 
 TO BE DISCUSSED or do later
 ---------------
@@ -15,7 +14,9 @@ make icons for landfalls or records, highlight on map?
 */
 var map = L.map('map', {
     doubleClickZoom:'center',
-    wheelPxPerZoomLevel:100
+    wheelPxPerZoomLevel:100,
+    maxZoom: 10,
+    minZoom: 3
 }).fitBounds([[21, -90],[52,-13]]);
 
 var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -106,6 +107,7 @@ var makeResultTable = function(){
             infoEmpty: "_TOTAL_ storms"
         },
         select:true,
+        pagingType:'simple',
         data: tableData,
         columns:[
             {data: 'NAME'},
