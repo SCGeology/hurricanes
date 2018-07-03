@@ -2,7 +2,10 @@
 TO DO
 -----
 CLEAN AND OPTIMIZE
-validate filter fields
+lines are too hard to click
+get more info button appears too high after getting details, and then going back.... sometimes
+need zoom to bounds to work
+width is weird on iphone SE... it's still a little too wide. 
 
 TO BE DISCUSSED or do later
 ---------------
@@ -10,13 +13,16 @@ have map select row in table, table row selection make popup?
 download data
 make icons for landfalls or records, highlight on map?
 
-
 */
 var map = L.map('map', {
     doubleClickZoom:'center',
     wheelPxPerZoomLevel:100,
     maxZoom: 10,
-    minZoom: 3
+    minZoom: 3,
+    maxBounds: [
+        [70.77, -174.67],
+        [-12.89, 90.37]
+    ]
 }).fitBounds([[21, -90],[52,-13]]);
 
 var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -101,7 +107,7 @@ var makeResultTable = function(){
     rt = $('#results-table').DataTable({
         language:{
             search:"Search",
-            searchPlaceholder:"Name, keywords",
+            searchPlaceholder:"Name, year, keywords",
             info:"_TOTAL_ storms",
             infoFiltered: " of _MAX_ total",
             infoEmpty: "_TOTAL_ storms"
@@ -184,25 +190,31 @@ var runFilters = function(){
     
     var exp = [getYearRange(), "(", getCatList(),")",getLandfall()].join(' ').replace('"','')
     
-    stormTracks.setWhere(exp);
-                         
-    rt.clear() 
-    
-    tableData = []
-    
     query.where(exp).returnGeometry(false);
     
     query.run(function(error,fc,response){
-        for (var i = 0; i < fc.features.length; i++){
-            tableData.push({
-                "KEY":fc.features[i].properties.KEY_,
-                "NAME":fc.features[i].properties.NAME,
-                "YEAR":fc.features[i].properties.YEAR,
-                "HURCAT":fc.features[i].properties.MAXSTAT + " " +fc.features[i].properties.HURCAT,
-                "COMMENTS":fc.features[i].properties.COMMENTS,
-            });
+        if (fc == null || fc.features.length == 0) {
+            $("#return-zero-modal").modal("show")
+        } else {
+            
+            stormTracks.setWhere(exp);
+                         
+            rt.clear() 
+    
+            tableData = []
+            
+            for (var i = 0; i < fc.features.length; i++){
+                tableData.push({
+                    "KEY":fc.features[i].properties.KEY_,
+                    "NAME":fc.features[i].properties.NAME,
+                    "YEAR":fc.features[i].properties.YEAR,
+                    "HURCAT":fc.features[i].properties.MAXSTAT + " " + checkForNull(fc.features[i].properties.HURCAT),
+                    "COMMENTS":fc.features[i].properties.COMMENTS,
+                });
+            }
+            updateTable(rt);
         }
-        updateTable(rt);
+        
     }); 
 };
 
@@ -235,7 +247,6 @@ $("#reset").on('click', function(){
 
 //TABLE SELECTION INTERACTION WITH MAP
 
-// ***FIX*** - INSTEAD OF HAVING TWO FEATURE LAYER INSTANCES, SEE IF YOU CAN JUST CHANGE THE OPACITY BASED ON THE SELECTED ID!!!! 
 var trackHighlight = L.esri.featureLayer({
     url: data,
     style: trackStyle,
@@ -551,4 +562,3 @@ var waypoint = new Waypoint({
       $("#sticky-buttons").toggleClass("no-vis");
   }
 });
-
