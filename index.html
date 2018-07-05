@@ -35,7 +35,7 @@
             <div class="row text-center bg-image">
                 <div class="mx-auto my-2">
                     <h1 class="display-4 text-sm-left text-white" style="font-size:2.2rem;margin-bottom: -0.8rem;">South Carolina</h1>
-                    <h1 class="display-4 text-center mt-0 text-white">Hurricanes &amp; Tropical Storms</h1>
+                    <h1 class="display-4 text-center mt-0 text-white">Hurricanes<span class="d-none d-sm-inline"> &amp; Tropical Storms</span></h1>
                 </div>
             </div>
         </div>
@@ -43,16 +43,22 @@
 
     <div class="container-fluid py-2">
         <div id="map">
+            <button type="button" id="toggle-about" class="btn btn-outline-light align-top btn-sm map-btn" data-toggle="modal" data-target="#about-modal">
+                <span class="d-none d-md-inline">About</span>
+                <i class="fas fa-question-circle ml-md-2" title="Find out more information about this application."></i>
+                <span class="sr-only">Find out more information about this application.</span>
+            </button>
+            
+            <button type="button" id="toggle-legend" class="btn btn-outline-light align-top btn-sm map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
+                <span class="d-none d-md-inline">Legend</span>
+                <i class="fas fa-bars ml-md-2" title="Display the legend for the current map symbols."></i>
+                <span class="sr-only">Display the legend for the current map symbols.</span>
+            </button>
+                        
             <button type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">
                 <span class="d-none d-md-inline">Filter Storms</span>
                 <i id="filter-icon" class="fas fa-filter ml-md-2" title="Display storm filters"></i>
                 <span class="sr-only">Display storm filters</span>
-            </button>
-            
-            <button type="button" id="toggle-legend" class="btn btn-primary align-top btn-sm map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
-                <span class="d-none d-md-inline">Legend</span>
-                <i class="fas fa-bars ml-md-2" title="Display the legend for the current map symbols."></i>
-                <span class="sr-only">Display the legend for the current map symbols.</span>
             </button>
             
             <button type="button" id="back-to-tracks" class="btn btn-primary map-btn d-none" data-toggle="modal" data-target="#back-modal">
@@ -75,11 +81,11 @@
                     <legend class="sr-only">Filter storms by range of years:</legend>
                     <form class="form-inline mb-1">
                         <div class="form-group m-1">
-                            <label for="startdate" class="mr-2">Start Year</label>
+                            <label for="startyear" class="mr-2">Start Year</label>
                             <input type="number" class="form-control" id="startyear" min="1871" max="2017" maxlength="4" size="4" value="1871" title="Start year for filtering by range of years.">
                         </div>
                         <div class="form-group m-1">
-                            <label for="enddate" class="mr-3">End Year</label>
+                            <label for="endyear" class="mr-3">End Year</label>
                             <input type="number" class="form-control" id="endyear" min="1871" max="2017" maxlength="4" size="4" value="2017" title="End year for filtering by range of years.">
                         </div>
                     </form> 
@@ -192,11 +198,11 @@
                 <p class="m-0">from the table below.</p>
             </div>
             <div class="col-sm-6 text-sm-right">
-                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i class="fas fa-info-circle" aria-hidden></i></button>
+                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i aria-hidden class="fas fa-info-circle" aria-hidden></i></button>
                 
                 <!-- sticky buttons for mobile scroll -->
                 <div id="sticky-buttons" class="no-vis">
-                    <button id="storm-details-sticky" class="btn btn-primary btn-lg storm-btn details-btn btn-sticky" title="Choose a storm to get details." disabled><i class="fas fa-info-circle"></i></button>
+                    <button id="storm-details-sticky" class="btn btn-primary btn-lg storm-btn details-btn btn-sticky" title="Choose a storm to get details." disabled><i class="fas fa-info-circle" title="View storm details for selected storm."></i><span class="sr-only">View storm details for selected storm.</span></button>
                 </div>                
             </div>
         </div>
@@ -206,7 +212,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Year</th>
-                        <th>Max Category</th>
+                        <th>Max Cat</th>
                         <th>Comments</th>
                     </tr>
                 </thead>
@@ -248,6 +254,34 @@
     </div>
     
     <!-- MODALS -->
+    
+         <!-- ABOUT MODAL -->
+    <div class="modal fade d-print-none" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="aboutLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="aboutLabel">About</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>This application lets you search for and view information for over 300 years of hurricanes and tropical storms that have impacted South Carolina. You will find storm track data for all storms after 1851, when official records began. In addition, information and comments specific to South Carolina are included, which make this a very rich dataset.</p>  
+              <p>Information in this application was compiled by the South Carolina State Climate Office from many sources.</p>
+              <ul>
+                <li>Storm Tracks: HURDAT</li>
+                <li>NOAA National Weather Service</li>
+                <li>Purvis Book</li>
+                <li>SC State Climate Office</li>
+              </ul>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
         <!-- Trackline Legend Modal -->
     <div class="modal fade" id="trackline-legend-modal" tabindex="-1" role="dialog" aria-labelledby="tracklineLegendLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

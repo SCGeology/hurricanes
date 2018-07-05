@@ -44,8 +44,13 @@
     z-index: 1000;
 }
 #toggle-legend {
-    bottom:65px;
+    bottom:67px;
+    min-width: 32px;
 }
+#toggle-about {
+    bottom: 105px;
+}
+
 #storm-search {
     display:none;
 }
