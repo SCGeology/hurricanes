@@ -166,6 +166,10 @@
     border-radius: 5px;
 }
 
+.cat-check{
+    width:25%;
+}
+
 /*div table css*/
 .divTable{
 	display: table;

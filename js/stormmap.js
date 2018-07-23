@@ -1,11 +1,11 @@
 /*
 TO DO
 -----
-CLEAN AND OPTIMIZE
-lines are too hard to click
-get more info button appears too high after getting details, and then going back.... sometimes
 need zoom to bounds to work
-width is weird on iphone SE... it's still a little too wide. 
+
+ADD 6 HOURS TO THE TIME ON TRACKS FOR IT TO WORK CORRECTLY. 
+NEED TO USE NON RESERVED WORDS (key, year). WILL REQUIRE A RE-WRITE OF SCHEMA A LITTLE BIT, BUT THAT'S OK. WILL BE GOOD TO REORDER FIELDS
+WHEN GO BACK TO ALL STORMS, SOMEHOW ONLY 227 STORMS ARE RETURNED
 
 TO BE DISCUSSED or do later
 ---------------
@@ -30,7 +30,7 @@ var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/service
     noWrap:true
 }).addTo(map);
 
-var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/sc_tropical_storms/FeatureServer/0"
+var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes/FeatureServer/1"
 
 var tableData = []
 var rt
@@ -43,12 +43,20 @@ var checkForNull = function(invalue){
     }
 }
 
+var checkDateNull = function(invalue){
+    if (invalue == null){
+        return ""
+    } else{
+        return new Date(invalue).toLocaleDateString();
+    }
+}
+
 var oef = function(feature,layer){
     tableData.push({
-            "KEY":feature.properties.KEY_,
+            "KEY":feature.properties.Key_,
             "NAME":feature.properties.NAME,
             "YEAR":feature.properties.YEAR,
-            "HURCAT":feature.properties.MAXSTAT + " " +checkForNull(feature.properties.HURCAT),
+            "SCDATES":checkDateNull(feature.properties.SC_DATE_START) + " - " + checkDateNull(feature.properties.SC_DATE_END),
             "COMMENTS":feature.properties.COMMENTS
         });
 }
@@ -91,12 +99,24 @@ var trackStyle = function(feature){
       return {color: c, opacity: 0.8, weight: w, dashArray:d};
     }
 
+//extra layer with large width to make clicking lines possible
+var stormTracksClick = L.esri.featureLayer({
+    url: data,
+    precision:3,
+    style: {
+        opacity:0,
+        weight:10
+    }
+}).addTo(map);
+
 var stormTracks = L.esri.featureLayer({
     url: data,
     onEachFeature:oef,
     style:trackStyle,
     precision:4
 }).addTo(map);
+
+var stormTracksGroup = L.layerGroup([stormTracks, stormTracksClick]);
 
 //load data table data from REST service
 var query = L.esri.query({
@@ -118,8 +138,8 @@ var makeResultTable = function(){
         columns:[
             {data: 'NAME'},
             {data: 'YEAR'},
-            {data: 'HURCAT'},
-            {data: 'COMMENTS'}
+            {data: 'SCDATES', width: "12%", orderable:false},
+            {data: 'COMMENTS', orderable:false}
         ],
         rowId:'KEY',
         responsive:true,
@@ -138,15 +158,18 @@ stormTracks.on('load', function(e){
     }
 });
 
-stormTracks.bindPopup(function(layer){
+var popup = function(layer){
     return '<div id="popup"> \
     <span id="name">'+layer.feature.properties.NAME+'</span><br> \
     Year: ' +layer.feature.properties.YEAR+'<br> \
+    Dates in SC: '+checkDateNull(layer.feature.properties.SC_DATE_START)+' - '+checkDateNull(layer.feature.properties.SC_DATE_END)+'<br> \
     Max Wind: '+checkForNull(layer.feature.properties.MAXWIND)+ '<br> \
     Min Pressure: '+checkForNull(layer.feature.properties.MINPRES)+'<br>\
     Max Category: '+checkForNull(layer.feature.properties.MAXSTAT)+" "+checkForNull(layer.feature.properties.HURCAT)+ '<br> \
     <button class="btn btn-sm btn-outline-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
-});
+};
+
+stormTracksClick.bindPopup(popup);
 
 var getCatList = function(){
     var catList = []
@@ -198,6 +221,7 @@ var runFilters = function(){
         } else {
             
             stormTracks.setWhere(exp);
+            stormTracksClick.setWhere(exp);
                          
             rt.clear() 
     
@@ -205,7 +229,7 @@ var runFilters = function(){
             
             for (var i = 0; i < fc.features.length; i++){
                 tableData.push({
-                    "KEY":fc.features[i].properties.KEY_,
+                    "KEY":fc.features[i].properties.Key_,
                     "NAME":fc.features[i].properties.NAME,
                     "YEAR":fc.features[i].properties.YEAR,
                     "HURCAT":fc.features[i].properties.MAXSTAT + " " + checkForNull(fc.features[i].properties.HURCAT),
@@ -214,7 +238,6 @@ var runFilters = function(){
             }
             updateTable(rt);
         }
-        
     }); 
 };
 
@@ -235,7 +258,7 @@ $("#uncheck-all").on('click', function(){
 });
 
 $("#apply-filter").on('click', function(){
-    trackHighlight.setWhere("KEY_ =''")
+    //trackHighlight.setWhere("Key_ =''")
     runFilters();
     $("#to-map").triggerHandler('click');
 });
@@ -247,15 +270,16 @@ $("#reset").on('click', function(){
 
 //TABLE SELECTION INTERACTION WITH MAP
 
-var trackHighlight = L.esri.featureLayer({
-    url: data,
-    style: trackStyle,
-    where:"KEY_=''"
-}).addTo(map);
-
-trackHighlight.bindPopup(function(layer){
-    return L.Util.template(popupTemplate,layer.feature.properties);
-});
+var highlightStyle = function(feature){
+      switch (feature.properties.Key_) {
+        case stormKey:
+          o = 1;
+          break;    
+        default:
+          o = 0.12      
+      }
+      return {opacity: o};
+    }
 
 var stormKey
 var oldKey
@@ -266,14 +290,10 @@ $("#results-table").on( 'click', 'td', function () {
     stormKey = rt.row( this ).id();
     if (oldKey != stormKey || oldKey == stormKey && selected == 0){
         oldKey = stormKey
-        trackHighlight.setWhere("KEY_ ='"+stormKey+"'")
-        stormTracks.setStyle({
-            opacity:0.12
-        });
+        stormTracks.setStyle(highlightStyle);
         $(".storm-btn").prop("disabled", false);
         selected = 1
     } else {
-        trackHighlight.setWhere("KEY_ =''")
         stormTracks.setStyle({
             opacity:0.8
         });
@@ -286,8 +306,8 @@ $("#results-table").on( 'click', 'td', function () {
 //this keeps from confusion between keys set in the map and the table
 var mapClickKey
 
-stormTracks.on('click', function(e) { 
-    mapClickKey = e.layer.feature.properties.KEY_ 
+stormTracksClick.on('click', function(e) { 
+    mapClickKey = e.layer.feature.properties.Key_ 
 });
 
 $("#to-filter").on('click', function(){
@@ -338,7 +358,7 @@ var getIcons = function(cat){
     }
 
 //ADD POINTS FOR INDIVIDUAL STORMS
-var pointData = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/sc_tropical_storms_points/FeatureServer/0"
+var pointData = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes/FeatureServer/0"
 
 var stormPoints = L.esri.featureLayer({
         url: pointData,
@@ -348,16 +368,16 @@ var stormPoints = L.esri.featureLayer({
                 pane: 'markerPane'
             });
         },
-        where:"KEY_ = '"+stormKey+"'"
+        where:"Key_ = '"+stormKey+"'"
     });
     
 stormPoints.bindTooltip(function(layer){
     return '<div> \
-    Date and Time: '+layer.feature.properties.DATE_TIME+'<br> \
-    Status: '+layer.feature.properties.STATUS+' '+checkForNull(layer.feature.properties.HU_cat)+'<br> \
-    Wind: '+layer.feature.properties.WIND+'<br> \
-    Pressure: '+checkForNull(layer.feature.properties.PRESSURE)+'<br>\
-    Record: '+checkForNull(layer.feature.properties.RECORD)+'<br> \
+    Date and Time: '+ new Date(layer.feature.properties.Time).toLocaleString()+'<br> \
+    Status: '+layer.feature.properties.Status+' '+checkForNull(layer.feature.properties.HU_CAT)+'<br> \
+    Wind: '+layer.feature.properties.Wind+'<br> \
+    Pressure: '+checkForNull(layer.feature.properties.Pressure)+'<br>\
+    Record: '+checkForNull(layer.feature.properties.Record)+'<br> \
     </div>'
 });
 
@@ -371,12 +391,12 @@ var makeDetailsTable = function(pData){
             info:"_TOTAL_ storm advisories."
         },
         columns:[
-            {data: 'DATE_TIME'},
-            {data: 'STATUS'},
-            {data: 'HU_cat'},
-            {data: 'WIND'},
-            {data: 'PRESSURE'},
-            {data: 'RECORD'}
+            {data: 'Time'},
+            {data: 'Status'},
+            {data: 'HU_CAT'},
+            {data: 'Wind'},
+            {data: 'Pressure'},
+            {data: 'Record'}
         ],
         responsive:true,
         pageLength:25,
@@ -391,14 +411,19 @@ var pointQuery = L.esri.query({
 //WHAT TO DO WHEN GET STORM DETAILS IS CLICKED
 
 var getDetails = function(key){
-    map.removeLayer(stormTracks);
+
+    map.closePopup();
+    
+    stormTracksClick.unbindPopup();
     
     stormPoints.addTo(map);
-    stormPoints.setWhere("KEY_ = '"+key+"'");
+    stormPoints.setWhere("Key_ = '"+key+"'");
+
+    stormTracks.setStyle(highlightStyle);
     
     //keep individual track from highlight
-    trackHighlight.setWhere("KEY_ = '"+key+"'");
-    trackHighlight.unbindPopup();
+    //trackHighlight.setWhere("Key_ = '"+key+"'");
+    //trackHighlight.unbindPopup();
     //add individual points
     
     //remove the features no longer needed and add those for details
@@ -423,7 +448,7 @@ var getDetails = function(key){
     
     $("#storm-details-overview").slideToggle("slow");
     
-    query.where("KEY_ = '"+key+"'");
+    query.where("Key_ = '"+key+"'");
     
     pointTableData = []
     
@@ -444,6 +469,7 @@ var getDetails = function(key){
     }
      
     query.run(function(error,fc,response){
+        
                 $("#storm-name").text(fc.features[0].properties.NAME)
                 $("#storm-year").text(fc.features[0].properties.YEAR)
                 
@@ -461,17 +487,17 @@ var getDetails = function(key){
                 $("#damage").html(nullReports(fc.features[0].properties.REPORT_URL)+' Damage Report</a>')
     });
     
-    pointQuery.where("KEY_ = '"+key+"'");
+    pointQuery.where("Key_ = '"+key+"'");
     
     pointQuery.run(function(error,fc,response){
         for (var i = 0; i < fc.features.length; i++){
             pointTableData.push({
-                "DATE_TIME":fc.features[i].properties.DATE_TIME,
-                "STATUS":fc.features[i].properties.STATUS,
-                "HU_cat":fc.features[i].properties.HU_cat,
-                "WIND":fc.features[i].properties.WIND,
-                "PRESSURE":fc.features[i].properties.PRESSURE,
-                "RECORD":fc.features[i].properties.RECORD
+                "Time":new Date(fc.features[i].properties.Time).toLocaleString(),
+                "Status":fc.features[i].properties.Status,
+                "HU_CAT":fc.features[i].properties.HU_CAT,
+                "Wind":fc.features[i].properties.Wind,
+                "Pressure":fc.features[i].properties.Pressure,
+                "Record":fc.features[i].properties.Record
             });
         }
         makeDetailsTable(pointTableData);
@@ -491,6 +517,7 @@ var getDetailsMap = function(){
 var stormReset = function (){
     
     stormTracks.setWhere();
+    stormTracksClick.setWhere();
     map.flyToBounds([[21, -90],[52,-13]]);
     stormTracks.setStyle({
         opacity:0.8
@@ -510,13 +537,12 @@ var stormReset = function (){
 
 $("#continue-back").on('click',function(){
     
-    stormPoints.setWhere("KEY_ = ''");
+    stormPoints.setWhere("Key_ = ''");
     
     //map.removeLayer(stormPoints);
-    stormTracks.addTo(map);
     
-    trackHighlight.setWhere("KEY_ = ''");
-    trackHighlight.bindPopup();
+    //trackHighlight.setWhere("Key_ = ''");
+    stormTracksClick.bindPopup(popup);
     
     dt.destroy();
     

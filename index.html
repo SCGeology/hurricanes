@@ -48,19 +48,19 @@
                 <i class="fas fa-question-circle ml-md-2" title="Find out more information about this application."></i>
                 <span class="sr-only">Find out more information about this application.</span>
             </button>
-            
+
             <button type="button" id="toggle-legend" class="btn btn-outline-light align-top btn-sm map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
                 <span class="d-none d-md-inline">Legend</span>
                 <i class="fas fa-bars ml-md-2" title="Display the legend for the current map symbols."></i>
                 <span class="sr-only">Display the legend for the current map symbols.</span>
             </button>
-                        
+
             <button type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">
                 <span class="d-none d-md-inline">Filter Storms</span>
                 <i id="filter-icon" class="fas fa-filter ml-md-2" title="Display storm filters"></i>
                 <span class="sr-only">Display storm filters</span>
             </button>
-            
+
             <button type="button" id="back-to-tracks" class="btn btn-primary map-btn d-none" data-toggle="modal" data-target="#back-modal">
                 <span class="d-none d-md-inline">Back to All Storms</span>
                 <i class="fas fa-undo-alt ml-md-2" title="Go back to viewing all storms, removing current storm data."></i>
@@ -68,7 +68,7 @@
             </button>
         </div>
     </div>
-    
+
     <!-- Page Content -->
     <div class="container" id="storm-search">
         <h2 class="h3">Storm Filters</h2>
@@ -78,91 +78,144 @@
                 <p id="year-label">Filter storms by range of years:</p>
                 <div role="group" aria-labelledby="year-label" id="storm-years">
                     <fieldset>
-                    <legend class="sr-only">Filter storms by range of years:</legend>
-                    <form class="form-inline mb-1">
-                        <div class="form-group m-1">
-                            <label for="startyear" class="mr-2">Start Year</label>
-                            <input type="number" class="form-control" id="startyear" min="1871" max="2017" maxlength="4" size="4" value="1871" title="Start year for filtering by range of years.">
-                        </div>
-                        <div class="form-group m-1">
-                            <label for="endyear" class="mr-3">End Year</label>
-                            <input type="number" class="form-control" id="endyear" min="1871" max="2017" maxlength="4" size="4" value="2017" title="End year for filtering by range of years.">
-                        </div>
-                    </form> 
-                    </fieldset>  
+                        <legend class="sr-only">Filter storms by range of years:</legend>
+                        <form class="form-inline mb-1">
+                            <div class="form-group m-1">
+                                <label for="startyear" class="mr-2">Start Year</label>
+                                <input type="number" class="form-control" id="startyear" min="1871" max="2017" maxlength="4" size="4" value="1871" title="Start year for filtering by range of years.">
+                            </div>
+                            <div class="form-group m-1">
+                                <label for="endyear" class="mr-3">End Year</label>
+                                <input type="number" class="form-control" id="endyear" min="1871" max="2017" maxlength="4" size="4" value="2017" title="End year for filtering by range of years.">
+                            </div>
+                        </form>
+                    </fieldset>
                 </div>
                 <button id="reset" type="button" class="btn btn-outline-primary m-2 btn-sm">All Years <i class="fas fa-calendar-alt" aria-hidden></i></button>
             </div>
 
             <div class="col-lg-3 m-2 pt-2 filter-col">
                 <h3 class="h4">Storm Category</h3>
-                <p id="cat-label">Highest category reached during storm's duration. </p>
+                <p id="cat-label">Category during impacts to South Carolina.</p>
                 <fieldset>
                     <legend class="sr-only">Highest category reached during storm's duration. </legend>
-                <form class="mb-1">
-                    <div role="group" aria-labelledby="cat-label" class="form-group mb-0" id="storm-cat-group">
-                        <input type="checkbox" checked value="" title="Storms less than hurricane status"/><label class="checkbox-inline mx-1"> TS</label>
-                        <input class="hu" type="checkbox" checked value="1" title="Storms with highest duration of category 1"/><label class="checkbox-inline mx-1 "> Cat 1</label>
-                        <input class="hu" type="checkbox" checked value="2" title="Storms with highest duration of category 2" /><label class="checkbox-inline mx-1 "> Cat 2</label>
-                        <input class="hu" type="checkbox" checked value="3" title="Storms with highest duration of category 3" /><label class="checkbox-inline mx-1 "> Cat 3</label>
-                        <input class="hu" type="checkbox" checked value="4" title="Storms with highest duration of category 4" /><label class="checkbox-inline mx-1 "> Cat 4</label>
-                        <input class="hu" type="checkbox" checked value="5" title="Storms with highest duration of category 5" /><label class="checkbox-inline mx-1 "> Cat 5</label>
-                    </div>
-                </form>
-                </fieldset>    
+                    <form class="mb-1">
+                        <div role="group" aria-labelledby="cat-label" class="form-group mb-0">
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="" title="Tropical storm during impact to SC." id="sc-cat-ts" />
+                                <label class="form-check-label" for="sc-cat-ts">TS</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="1" title="Category 1 storm during impact to SC." id="sc-cat-1" />
+                                <label class="form-check-label" for="sc-cat-1">Cat 1</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="2" title="Category 2 storm during impact to SC." id="sc-cat-2"/>
+                                <label class="form-check-label" for="sc-cat-2">Cat 2</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="3" title="Category 3 storm during impact to SC." id="sc-cat-3"/>
+                                <label class="form-check-label" for="sc-cat-3">Cat 3</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="4" title="Category 4 storm during impact to SC." id="sc-cat-4"/>
+                                <label class="form-check-label" for="sc-cat-4">Cat 4</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="5" title="Category 5 storm during impact to SC." id="sc-cat-5"/>
+                                <label class="form-check-label" for="sc-cat-5">Cat 5</label>
+                            </div>
+                        </div>
+                    </form>
+                </fieldset>
                 <button id="check-all" class="btn btn-outline-primary m-2 btn-sm">Check All <i class="fas fa-check" aria-hidden></i></button>
                 <button id="uncheck-all" class="btn btn-outline-primary m-2 btn-sm">Uncheck All <i class="fas fa-minus" aria-hidden></i></button>
             </div>
-            <div class="col-lg-3 m-2 py-2 filter-col">
+            <div class="col-lg-4 m-2 py-2 filter-col">
                 <h3 id="other-label" class="h4">Other Filters</h3>
                 <div role="group" aria-labelledby="other-label">
+                    <fieldset>
+                        <legend class="sr-only">Other Filters</legend>
+                        <form id="others-form">
+                            <div>
+                                <input class="checkbox" type="checkbox" value="" id="lfsc-check">
+                                <label for="lfsc-check">Landfall in South Carolina</label>
+                            </div>
+                        </form>
+                    </fieldset>
                     
-                <fieldset> 
-                    <legend class="sr-only">Other storm fitlers.</legend>
-                <form id="others-form">
-                    <div>
-                    <input class="checkbox mx-1" type="checkbox" value="" id="lfsc-check">  
-                        <label for="lfsc-check">Landfall in SC</label>
-                    </div>
-                </form>
+                    <fieldset>
+                    <legend class="sr-only">Max Storm Category</legend>
+                    <form class="mb-1">
+                        <h5 >Max Storm Category</h5>
+                        <div role="group" aria-labelledby="cat-label" class="form-group mb-0" id="storm-cat-group">
+                            <div class="form-check form-check-inline cat-check">
+                                <input type="checkbox" checked value="" title="Storms less than hurricane status" />
+                                <label class="mx-1">TS</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="hu" type="checkbox" checked value="1" title="Storms with highest duration of category 1" />
+                                <label class="mx-1 ">Cat 1</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="hu" type="checkbox" checked value="2" title="Storms with highest duration of category 2" />
+                                <label class="mx-1 ">Cat 2</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="hu" type="checkbox" checked value="3" title="Storms with highest duration of category 3" />
+                                <label class="mx-1 ">Cat 3</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="hu" type="checkbox" checked value="4" title="Storms with highest duration of category 4" />
+                                <label class="mx-1 ">Cat 4</label>
+                            </div>
+                            <div class="form-check form-check-inline cat-check">
+                                <input class="hu" type="checkbox" checked value="5" title="Storms with highest duration of category 5" />
+                                <label class="mx-1 ">Cat 5</label>
+                            </div>
+                        </div>
+                    </form>
                 </fieldset>
-                
-                <fieldset>
-                    <legend id="tornadoes-legend" class="sr-only">Number of tornadoes generated by storm.</legend>
-                <form class="mb-1">
-                    <h4 class="h5">Tornadoes</h4>
-                    <div role="group" aria-labelledby="tornadoes-legend" class="form-group mb-0" id="">
-                        <input type="checkbox" value="-5" title="Storms less than hurricane status"/><label class="checkbox-inline mx-2"> &lt; 5</label>
-                        <input class="hu" type="checkbox" value="5-20" title="Storms with highest duration of category 1"/><label class="checkbox-inline mx-2 "> 5 to 20</label>
-                        <input class="hu" type="checkbox" value="20+" title="Storms with highest duration of category 2" /><label class="checkbox-inline mx-2"> &gt; 20 </label>
-                    </div>
-                </form>
-                </fieldset>    
                     
-                <fieldset>
-                    <legend id="fatalities-legend" class="sr-only">Number of fatalities.</legend>
-                <form class="mb-1">
-                    <h4 class="h5">Fatalities</h4>
-                    <div role="group" aria-labelledby="fatalities-legend" class="form-group mb-0" id="">
-                        <input type="checkbox" value="-10" title="Storms less than hurricane status"/><label class="checkbox-inline mx-2"> &lt; 10</label>
-                        <input class="hu" type="checkbox" value="10-50" title="Storms with highest duration of category 1"/><label class="checkbox-inline mx-2 "> 10 to 50</label>
-                        <input class="hu" type="checkbox" value="50+" title="Storms with highest duration of category 2" /><label class="checkbox-inline mx-2 "> &gt; 50 </label>
-                    </div>
-                </form>
-                </fieldset>     
-                    
-                </div>    
+                    <fieldset>
+                        <legend id="tornadoes-legend" class="sr-only">Number of tornadoes generated by storm.</legend>
+                        <form class="mb-2">
+                            <h4 class="h5">Tornadoes</h4>
+                            <div role="group" aria-labelledby="tornadoes-legend" class="form-group mb-0" id="">
+
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="tornadoes1" value="t1">
+                                    <label class="form-check-label" for="tornadoes1">&lt; 5</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="tornadoes2" value="t2">
+                                    <label class="form-check-label" for="tornadoes2">5 to 20</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="tornadoes3" value="t3">
+                                    <label class="form-check-label" for="tornadoes3">&gt; 20</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" checked type="radio" name="inlineRadioOptions" id="tornadoesNone" value="t0">
+                                    <label class="form-check-label" for="tornadoesNone">No Filter</label>
+                                </div>
+
+                            </div>
+                        </form>
+                    </fieldset>
+
+                </div>
             </div>
         </div>
         <div class="row border-bottom">
             <div class="col-lg-12 ml-lg-5 my-2">
                 <button id="apply-filter" class="btn btn-outline-success m-2">Apply Filters <i class="fas fa-check-circle" aria-hidden></i></button>
-                <button id="clear-filter" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#clear-filters-modal" >Clear Filters <i class="fas fa-times-circle" aria-hidden></i></button>
+                <button id="clear-filter" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#clear-filters-modal">Clear Filters <i class="fas fa-times-circle" aria-hidden></i></button>
             </div>
         </div>
     </div>
     <!-- /.container -->
-    
+
     <div class="container" id="storm-details-overview">
         <div class="row">
             <div class="col">
@@ -171,39 +224,41 @@
         </div>
         <div class="row">
             <div class="col-lg-6 py-2 details-col">
-                <h4 class="detail-header h5">Formation Date</h4> <span id="form-date"></span>  
+                <h4 class="detail-header h5">Formation Date</h4> <span id="form-date"></span>
                 <h4 class="detail-header h5">Dates Affecting SC</h4> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
                 <h4 class="detail-header h5">Landfall Location</h4> <span id="lf-loc"></span>
             </div>
             <div class="col-lg-5 py-2 details-col">
-                <h4 class="detail-header h5">Max Category</h4> <span id="max-cat"></span> 
-                <h4 class="detail-header h5">Max Wind</h4> <span id="max-wind"></span>  
+                <h4 class="detail-header h5">Max Category</h4> <span id="max-cat"></span>
+                <h4 class="detail-header h5">Max Wind</h4> <span id="max-wind"></span>
                 <h4 class="detail-header h5">Min Pressure</h4> <span id="min-pres"></span>
             </div>
-        </div>    
-        <div class="row mt-2">    
-            <div class="col-lg-11 py-2 details-col">  
-                <h4 class="detail-header h5">Comments</h4> <p><span id="comments"></span></p>
-                <span id="report"></span><br>
+        </div>
+        <div class="row mt-2">
+            <div class="col-lg-11 py-2 details-col">
+                <h4 class="detail-header h5">Comments</h4>
+                <p><span id="comments"></span></p>
+                <span id="report"></span>
+                <br>
                 <span id="damage"></span>
-            </div>    
+            </div>
         </div>
     </div>
 
     <div id="table-container" class="container my-3">
-        
+
         <div class="row" id="storm-select-row">
             <div class="col-sm-6">
                 <h4 class="m-0">Select a Storm</h4>
                 <p class="m-0">from the table below.</p>
             </div>
             <div class="col-sm-6 text-sm-right">
-                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Choose a storm below." disabled>Get Storm Details <i aria-hidden class="fas fa-info-circle" aria-hidden></i></button>
-                
+                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Choose a storm below." disabled>Storm Details <i aria-hidden class="fas fa-info-circle" aria-hidden></i></button>
+
                 <!-- sticky buttons for mobile scroll -->
                 <div id="sticky-buttons" class="no-vis">
                     <button id="storm-details-sticky" class="btn btn-primary btn-lg storm-btn details-btn btn-sticky" title="Choose a storm to get details." disabled><i class="fas fa-info-circle" title="View storm details for selected storm."></i><span class="sr-only">View storm details for selected storm.</span></button>
-                </div>                
+                </div>
             </div>
         </div>
         <div class="row mt-2" id="rt-row">
@@ -212,15 +267,15 @@
                     <tr>
                         <th>Name</th>
                         <th>Year</th>
-                        <th>Max Cat</th>
+                        <th>Dates SC</th>
                         <th>Comments</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
             </table>
-            </div>
-            <div class="row d-none" id="dt-row">
-                <h4>Storm Advisories</h4>
+        </div>
+        <div class="row d-none" id="dt-row">
+            <h4>Storm Advisories</h4>
             <table class="table table-striped" id="details-table">
                 <thead>
                     <tr>
@@ -234,10 +289,10 @@
                 </thead>
                 <tbody></tbody>
             </table>
-        
+
         </div>
     </div>
-    
+
     <div id="mobile-icon-bar" class="fixed-bottom text-center border-top d-sm-none">
         <a href="#map" id="to-map" class="btn">
             <i aria-hidden title="Go to map." class="fas fa-map fa-2x"></i>
@@ -252,201 +307,229 @@
             <span class="sr-only">Display storm filters.</span>
         </a>
     </div>
-    
+
     <!-- MODALS -->
-    
-         <!-- ABOUT MODAL -->
+
+    <!-- ABOUT MODAL -->
     <div class="modal fade d-print-none" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="aboutLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="aboutLabel">About</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>This application lets you search for and view information for over 300 years of hurricanes and tropical storms that have impacted South Carolina. You will find storm track data for all storms after 1851, when official records began. In addition, information and comments specific to South Carolina are included, which make this a very rich dataset.</p>  
-              <p>Information in this application was compiled by the South Carolina State Climate Office from many sources.</p>
-              <ul>
-                <li>Storm Tracks: HURDAT</li>
-                <li>NOAA National Weather Service</li>
-                <li>Purvis Book</li>
-                <li>SC State Climate Office</li>
-              </ul>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-          </div>
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="aboutLabel">About</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body m-4">
+                    <p>This application lets you search for and view information for over 300 years of hurricanes and tropical storms that have impacted South Carolina. You will find storm track data for all storms after 1851, when official records began. In addition, information and comments specific to South Carolina are included, which make this a very rich dataset.</p>
+                
+                    <h5>Have Questions?</h5>
+                    <p>Contact the <a href="http://dnr.sc.gov/climate/sco">South Carolina State Climate Office:</a></p>
+                    <p>
+                        SC Department of Natural Resources
+                        <br> Land, Water, and Conservation Division
+                        <br> State Climate Office
+                        <br> P.O. Box 167
+                        <br> Columbia, SC 29202
+                        <br>
+                    </p>
+                    <h5>References</h5>
+                    <p>Information in this application was compiled by the South Carolina State Climate Office from many sources.</p>
+                    <ul>
+                        <li>National Hurricane Center Hurricane Data, 2nd Edition <a href="http://www.aoml.noaa.gov/hrd/hurdat/Data_Storm.html">HURDAT2</a></li>
+                        <li>Purvis, J. C. (1964). South Carolina Hurricanes. Columbia, SC: The South Carolina Civil Defense Agency.</li>
+                        <li>Purvis, J. C. (1980). South Carolina Hurricanes 1950 – 1979. Columbia, SC: Office of the Adjutant General, Emergency Preparedness Division.</li>
+                        <li>Purvis, J. C., Tyler, W., and Sidlow, S. (1986). Hurricanes Affecting South Carolina. Columbia, SC: South Carolina State Climatology Office.</li>
+                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).<br> 
+                            <a href="http://dnr.sc.gov/climate/sco/Publications/page_tropical_storm_reports.php">South Carolina Climate Office Tropical Storm Reports.</a></li>
+                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).<br> 
+                            <a href="http://dnr.sc.gov/climate/sco/Tropics/hurricanes_affecting_sc.php">South Carolina Hurricane Climatology.</a></li>
+                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.). <br> 
+                            <a href="http://dnr.sc.gov/climate/sco/Tropics/hurricane_tracks_affecting_sc.php"> Hurricanes and Tropical Storms Affecting South Carolina. </a></li>
+                        <li>Sugg, A. L., Pardue, L., and Carrodus, R. (1971). NOAA Technical Memorandum NWS SR-56: Memorable Hurricanes of the United States Since 1873. Fort Worth, TX: U.S. Department of Commerce.</li>
+                        <li>US Department of Commerce, &amp; NOAA. (2018, May 09). <br>
+                            <a href="https://www.weather.gov/chs/TChistory"> Tropical Cyclone History for Southeast South Carolina and Northern Portions of Southeast Georgia. </a></li>
+                        <li>US Department of Commerce, &amp; NOAA. (n.d.). <br>
+                            <a href="https://coast.noaa.gov/hurricanes/">Historical Hurricane Tracks. </a></li>
+                        
+                    </ul>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    
-        <!-- Trackline Legend Modal -->
+
+    <!-- Trackline Legend Modal -->
     <div class="modal fade" id="trackline-legend-modal" tabindex="-1" role="dialog" aria-labelledby="tracklineLegendLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="tracklineLegendLabel">Trackline Legend</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <p>Tracklines indicate the highest category over the storm's duration, based on the <a href="https://www.nhc.noaa.gov/aboutsshws.php?" target="_blank">Saffir-Simpson Hurricane Wind Scale</a>.</p>
-                <div class="divTable legend-table">
-                    <div class="divTableBody">
-                        <div class="divTableRow">
-                            <div class="divTableCell tl-icon"><img src="images/tl5.png" alt="category 5 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 5 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell tl-icon"><img src="images/tl4.png" alt="category 4 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 4 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell tl-icon"><img src="images/tl3.png" alt="category 3 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 3 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell tl-icon"><img src="images/tl2.png" alt="category 2 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 2 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell tl-icon"><img src="images/tl1.png" alt="category 1 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 1 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell tl-icon"><img src="images/tlts.png" alt="tropical storm symbol" /></div>
-                            <div class="divTableCell">Tropical Storm</div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tracklineLegendLabel">Trackline Legend</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tracklines indicate the highest category over the storm's duration, based on the <a href="https://www.nhc.noaa.gov/aboutsshws.php?" target="_blank">Saffir-Simpson Hurricane Wind Scale</a>.</p>
+                    <div class="divTable legend-table">
+                        <div class="divTableBody">
+                            <div class="divTableRow">
+                                <div class="divTableCell tl-icon"><img src="images/tl5.png" alt="category 5 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 5 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell tl-icon"><img src="images/tl4.png" alt="category 4 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 4 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell tl-icon"><img src="images/tl3.png" alt="category 3 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 3 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell tl-icon"><img src="images/tl2.png" alt="category 2 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 2 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell tl-icon"><img src="images/tl1.png" alt="category 1 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 1 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell tl-icon"><img src="images/tlts.png" alt="tropical storm symbol" /></div>
+                                <div class="divTableCell">Tropical Storm</div>
+                            </div>
                         </div>
                     </div>
-                </div> 
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-          </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    
-        <!-- Icon Legend Modal -->
+
+    <!-- Icon Legend Modal -->
     <div class="modal fade" id="icon-legend-modal" tabindex="-1" role="dialog" aria-labelledby="StormIconLegendLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="stormIconLegendLabel">Storm Category Icon Legend</h5> 
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-              <p>Each NOAA Storm Advisory has a <a href="https://www.nhc.noaa.gov/aboutsshws.php?" target="_blank">Saffir-Simpson Hurricane Wind Scale</a> ranking, which is symbolized on the map.</p> 
-                <div class="divTable legend-table">
-                    <div class="divTableBody">
-                        <div class="divTableRow">
-                            <div class="divTableCell"><img src="images/c5.png" alt="category 5 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 5 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell"><img src="images/c4.png" alt="category 4 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 4 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell"><img src="images/c3.png" alt="category 3 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 3 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell"><img src="images/c2.png" alt="category 2 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 2 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell"><img src="images/c1.png" alt="category 1 hurricane symbol" /></div>
-                            <div class="divTableCell">Category 1 Hurricane</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell"><img src="images/ts.png" alt="tropical storm symbol" /></div>
-                            <div class="divTableCell">Tropical Storm</div>
-                        </div>
-                        <div class="divTableRow">
-                            <div class="divTableCell"><img src="images/tl.png" alt="tropical depression or other status symbol" /></div>
-                            <div class="divTableCell">Tropical Depression, or other status.</div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="stormIconLegendLabel">Storm Category Icon Legend</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Each NOAA Storm Advisory has a <a href="https://www.nhc.noaa.gov/aboutsshws.php?" target="_blank">Saffir-Simpson Hurricane Wind Scale</a> ranking, which is symbolized on the map.</p>
+                    <div class="divTable legend-table">
+                        <div class="divTableBody">
+                            <div class="divTableRow">
+                                <div class="divTableCell"><img src="images/c5.png" alt="category 5 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 5 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell"><img src="images/c4.png" alt="category 4 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 4 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell"><img src="images/c3.png" alt="category 3 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 3 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell"><img src="images/c2.png" alt="category 2 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 2 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell"><img src="images/c1.png" alt="category 1 hurricane symbol" /></div>
+                                <div class="divTableCell">Category 1 Hurricane</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell"><img src="images/ts.png" alt="tropical storm symbol" /></div>
+                                <div class="divTableCell">Tropical Storm</div>
+                            </div>
+                            <div class="divTableRow">
+                                <div class="divTableCell"><img src="images/tl.png" alt="tropical depression or other status symbol" /></div>
+                                <div class="divTableCell">Tropical Depression, or other status.</div>
+                            </div>
                         </div>
                     </div>
-                </div> 
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-          </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    
-        <!-- Back to all storms Modal -->
+
+    <!-- Back to all storms Modal -->
     <div class="modal fade d-print-none" id="back-modal" tabindex="-1" role="dialog" aria-labelledby="backToAllStormsLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="backToAllStormsLabel">Back to All Storms</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>The storm details that you are currently viewing will be lost if you continue back to viewing all storms. </p>              
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Don't Go Back</button>
-              <button type="button" id="continue-back" class="btn btn-outline-danger" data-dismiss="modal">Continue Back <i class="fas fa-undo-al" aria-hidden></i></button>
-          </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="backToAllStormsLabel">Back to All Storms</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>The storm details that you are currently viewing will be lost if you continue back to viewing all storms. </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Don't Go Back</button>
+                    <button type="button" id="continue-back" class="btn btn-outline-danger" data-dismiss="modal">Continue Back <i class="fas fa-undo-al" aria-hidden></i></button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    
-        <!-- Clear filters Modal -->
+
+    <!-- Clear filters Modal -->
     <div class="modal fade" id="clear-filters-modal" tabindex="-1" role="dialog" aria-labelledby="clearFiltersLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="clearFiltersLabel">Clear Storm Filters</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>Clearing filters will reset the map and table. Are you sure you want to clear all filters? </p>  
-          </div>
-          <div class="modal-footer">
-              <button type="button" id="continue-clear" class="btn btn-outline-danger" data-dismiss="modal">Yes, Clear Filters <i class="fas fa-times-circle" aria-hidden></i></button>
-          </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clearFiltersLabel">Clear Storm Filters</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Clearing filters will reset the map and table. Are you sure you want to clear all filters? </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="continue-clear" class="btn btn-outline-danger" data-dismiss="modal">Yes, Clear Filters <i class="fas fa-times-circle" aria-hidden></i></button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    
+
     <!-- Filter returns no records modal -->
     <div class="modal fade" id="return-zero-modal" tabindex="-1" role="dialog" aria-labelledby="noStormsFoundLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="noStormsFoundLabel">No Storms Found</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p>There were no storms found with the current filter settings that you chose. Please check your filter values and try again.</p>  
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-          </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="noStormsFoundLabel">No Storms Found</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>There were no storms found with the current filter settings that you chose. Please check your filter values and try again.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    
+
     <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
-            <p class="m-0 text-center text-white">Copyright &copy; SC State Climate Office</p>
+            <div class="text-center">
+                <p class="m-0 text-white mb-3">SC State Climate Office</p>
+                <img style="width:100px;height:auto;" src="images/dnr-logo.gif" alt="scdnr logo" />
+            </div>
         </div>
         <div id="mobile-buffer" class="d-block d-lg-none" style="height:100px;"></div>
         <!-- /.container -->
@@ -463,7 +546,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
 
     <script src="vendor/waypoints/noframework.waypoints.min.js"></script>
-    
+
     <script src="js/stormmap.js"></script>
 
 </body>
