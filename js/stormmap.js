@@ -1,16 +1,12 @@
 /*
 TO DO
 -----
-need zoom to bounds to work
-
-ADD 6 HOURS TO THE TIME ON TRACKS FOR IT TO WORK CORRECTLY. 
-NEED TO USE NON RESERVED WORDS (key, year). WILL REQUIRE A RE-WRITE OF SCHEMA A LITTLE BIT, BUT THAT'S OK. WILL BE GOOD TO REORDER FIELDS
-WHEN GO BACK TO ALL STORMS, SOMEHOW ONLY 227 STORMS ARE RETURNED
+Need to figure out why side icon for details gets stuck farther up whenever the filter box is open when going back from a storm detail 
 
 TO BE DISCUSSED or do later
 ---------------
 have map select row in table, table row selection make popup? 
-download data
+download data / get to services
 make icons for landfalls or records, highlight on map?
 
 */
@@ -23,12 +19,27 @@ var map = L.map('map', {
         [70.77, -174.67],
         [-12.89, 90.37]
     ]
-}).fitBounds([[21, -90],[52,-13]]);
+}).setView([31.044741, -70.804940],4);
 
 var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
     noWrap:true
 }).addTo(map);
+
+var scoutline = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SCOutline/FeatureServer/0"
+
+var outline = L.esri.featureLayer({
+    url: scoutline,
+    simplifyFactor: 0.5,
+    pane: 'shadowPane',
+    style: {
+        weight:2,
+        color:'white',
+        fill:false
+    }
+    
+}).addTo(map);
+
 
 var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes/FeatureServer/1"
 
@@ -46,18 +57,21 @@ var checkForNull = function(invalue){
 var checkDateNull = function(invalue){
     if (invalue == null){
         return ""
-    } else{
-        return new Date(invalue).toLocaleDateString();
+    } else {
+        d = new Date(invalue)
+        return d.getMonth() + "/" + d.getDate();
     }
 }
 
 var oef = function(feature,layer){
     tableData.push({
-            "KEY":feature.properties.Key_,
-            "NAME":feature.properties.NAME,
-            "YEAR":feature.properties.YEAR,
-            "SCDATES":checkDateNull(feature.properties.SC_DATE_START) + " - " + checkDateNull(feature.properties.SC_DATE_END),
-            "COMMENTS":feature.properties.COMMENTS
+            "KEY":feature.properties.stormkey,
+            "NAME":feature.properties.stormname,
+            "YEAR":feature.properties.stormyear,
+            "SCDATES":checkDateNull(feature.properties.scstartdate) + " - " + checkDateNull(feature.properties.scenddate),
+            //"SCCAT":feature.properties.scstatus+" "+checkForNull(feature.properties.schurcat),
+            //"MAXCAT":feature.properties.status+" "+checkForNull(feature.properties.hurcat),
+            "COMMENTS":feature.properties.comments
         });
 }
 
@@ -70,7 +84,7 @@ var c1 = "#feb24c",
 
 var trackStyle = function(feature){
       var c,w, d = false
-      switch (feature.properties.HURCAT) {
+      switch (feature.properties.hurcat) {
         case 1:
           c = c1;
           w = 1.2
@@ -139,7 +153,9 @@ var makeResultTable = function(){
             {data: 'NAME'},
             {data: 'YEAR'},
             {data: 'SCDATES', width: "12%", orderable:false},
-            {data: 'COMMENTS', orderable:false}
+            //{data: 'SCCAT'},
+            //{data: 'MAXCAT'},
+            {data: 'COMMENTS', width:"70%", orderable:false}
         ],
         rowId:'KEY',
         responsive:true,
@@ -160,12 +176,12 @@ stormTracks.on('load', function(e){
 
 var popup = function(layer){
     return '<div id="popup"> \
-    <span id="name">'+layer.feature.properties.NAME+'</span><br> \
-    Year: ' +layer.feature.properties.YEAR+'<br> \
-    Dates in SC: '+checkDateNull(layer.feature.properties.SC_DATE_START)+' - '+checkDateNull(layer.feature.properties.SC_DATE_END)+'<br> \
-    Max Wind: '+checkForNull(layer.feature.properties.MAXWIND)+ '<br> \
-    Min Pressure: '+checkForNull(layer.feature.properties.MINPRES)+'<br>\
-    Max Category: '+checkForNull(layer.feature.properties.MAXSTAT)+" "+checkForNull(layer.feature.properties.HURCAT)+ '<br> \
+    <span id="name">'+layer.feature.properties.stormname+'</span><br> \
+    Year: ' +layer.feature.properties.stormyear+'<br> \
+    Dates in SC: '+checkDateNull(layer.feature.properties.scstartdate)+' - '+checkDateNull(layer.feature.properties.scenddate)+'<br> \
+    Max Wind: '+checkForNull(layer.feature.properties.maxwind)+ '<br> \
+    Min Pressure: '+checkForNull(layer.feature.properties.minpres)+'<br>\
+    Max Category: '+checkForNull(layer.feature.properties.status)+" "+checkForNull(layer.feature.properties.hurcat)+ '<br> \
     <button class="btn btn-sm btn-outline-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
 };
 
@@ -176,9 +192,19 @@ var getCatList = function(){
     var catNull = ""
     var huWhere = ""
     var operator = ""
+    var catField
+    
+    if ($("#cat-filter-select").val() == 1) {
+        catField = "hurcat"
+        //console.log("hurcat")
+    } else {
+        catField = "schurcat"
+        //console.log("sc_cat")
+    }
+    
     $("#storm-cat-group input:checkbox").each(function(){
         if (!$(this).hasClass('hu') && $(this).is(':checked')){
-            catNull = "HURCAT IS NULL"
+            catNull = catField + " IS NULL"
         } else if ($(this).is(':checked')){
             catList.push($(this).val());
         }
@@ -186,24 +212,42 @@ var getCatList = function(){
     
     if (catList.length > 0 && catNull.length > 0) {
         operator = "OR"
-        huWhere = "HURCAT IN ("+catList.toString()+")"
+        huWhere = catField + " IN ("+catList.toString()+")"
     } else if (catList.length > 0 && catNull.length == 0){
-        huWhere = "HURCAT IN ("+catList.toString()+")"
+        huWhere = catField + " IN ("+catList.toString()+")"
     }
     
     return [huWhere,operator,catNull].join(' ');
 };
 
 var getYearRange = function(){
-    return "YEAR >= '"+$('#startyear').val()+"' AND YEAR <='"+$('#endyear').val()+"' AND";
+    return "stormyear >= '"+$('#startyear').val()+"' AND stormyear <='"+$('#endyear').val()+"' AND";
 }
 
 var getLandfall = function(){
     if ($("#lfsc-check").is(":checked")){
-        return "AND LandfallSC = 'y'"
-        console.log("yerp!")
+        return "AND sclandfall = 'y'"
     }
 }
+
+var getTornadoes = function(){
+    var t
+    switch ($("input[name='tornadoCheck']:checked").val()) {
+        case "t0":
+            t = ""
+          break;
+        case "t1":
+            t = "AND sctornadoes < 5"
+          break;
+        case "t2":
+            t = "AND (sctornadoes >= 5 AND sctornadoes <= 20)"
+          break;
+        case "t3":
+            t = "AND sctornadoes > 20"
+          break;
+      }
+      return t;
+} 
 
 var updateTable = function(table){
     table.rows.add(tableData).draw();
@@ -211,7 +255,9 @@ var updateTable = function(table){
 
 var runFilters = function(){
     
-    var exp = [getYearRange(), "(", getCatList(),")",getLandfall()].join(' ').replace('"','')
+    console.log(getTornadoes());
+    
+    var exp = [getYearRange(),"(", getCatList(),")",getLandfall(),getTornadoes()].join(' ').replace('"','')
     
     query.where(exp).returnGeometry(false);
     
@@ -229,11 +275,13 @@ var runFilters = function(){
             
             for (var i = 0; i < fc.features.length; i++){
                 tableData.push({
-                    "KEY":fc.features[i].properties.Key_,
-                    "NAME":fc.features[i].properties.NAME,
-                    "YEAR":fc.features[i].properties.YEAR,
-                    "HURCAT":fc.features[i].properties.MAXSTAT + " " + checkForNull(fc.features[i].properties.HURCAT),
-                    "COMMENTS":fc.features[i].properties.COMMENTS,
+                    "KEY":fc.features[i].properties.stormkey,
+                    "NAME":fc.features[i].properties.stormname,
+                    "YEAR":fc.features[i].properties.stormyear,
+                    "SCDATES":checkDateNull(fc.features[i].properties.scstartdate) + " - " + checkDateNull(fc.features[i].properties.scenddate),
+                    //"SCCAT":fc.features[i].properties.scstatus+" "+checkForNull(fc.feature[i].properties.schurcat),
+                    //"MAXCAT":fc.features[i].properties.status+" "+checkForNull(fc.feature[i].properties.hurcat),
+                    "COMMENTS":fc.features[i].properties.comments
                 });
             }
             updateTable(rt);
@@ -258,20 +306,20 @@ $("#uncheck-all").on('click', function(){
 });
 
 $("#apply-filter").on('click', function(){
-    //trackHighlight.setWhere("Key_ =''")
+    //trackHighlight.setWhere("stormkey =''")
     runFilters();
     $("#to-map").triggerHandler('click');
 });
 
 $("#reset").on('click', function(){
-    $('#startyear').val(1871);
+    $('#startyear').val(1850);
     $('#endyear').val(2017);
 });
 
 //TABLE SELECTION INTERACTION WITH MAP
 
 var highlightStyle = function(feature){
-      switch (feature.properties.Key_) {
+      switch (feature.properties.stormkey) {
         case stormKey:
           o = 1;
           break;    
@@ -307,7 +355,7 @@ $("#results-table").on( 'click', 'td', function () {
 var mapClickKey
 
 stormTracksClick.on('click', function(e) { 
-    mapClickKey = e.layer.feature.properties.Key_ 
+    mapClickKey = e.layer.feature.properties.stormkey 
 });
 
 $("#to-filter").on('click', function(){
@@ -364,20 +412,19 @@ var stormPoints = L.esri.featureLayer({
         url: pointData,
         pointToLayer: function(feature, latlng){
             return L.marker(latlng, {
-                icon: getIcons(feature.properties.STAT_CAT),
+                icon: getIcons(feature.properties.statcat),
                 pane: 'markerPane'
             });
         },
-        where:"Key_ = '"+stormKey+"'"
+        where:"stormkey = '"+stormKey+"'"
     });
     
 stormPoints.bindTooltip(function(layer){
     return '<div> \
-    Date and Time: '+ new Date(layer.feature.properties.Time).toLocaleString()+'<br> \
-    Status: '+layer.feature.properties.Status+' '+checkForNull(layer.feature.properties.HU_CAT)+'<br> \
-    Wind: '+layer.feature.properties.Wind+'<br> \
-    Pressure: '+checkForNull(layer.feature.properties.Pressure)+'<br>\
-    Record: '+checkForNull(layer.feature.properties.Record)+'<br> \
+    Date and Time: '+ new Date(layer.feature.properties.datetime).toLocaleString()+'<br> \
+    Status: '+layer.feature.properties.status+' '+checkForNull(layer.feature.properties.hurcat)+'<br> \
+    Wind: '+layer.feature.properties.wind+'<br> \
+    Pressure: '+checkForNull(layer.feature.properties.pressure)+'<br>\
     </div>'
 });
 
@@ -391,12 +438,11 @@ var makeDetailsTable = function(pData){
             info:"_TOTAL_ storm advisories."
         },
         columns:[
-            {data: 'Time'},
-            {data: 'Status'},
-            {data: 'HU_CAT'},
-            {data: 'Wind'},
-            {data: 'Pressure'},
-            {data: 'Record'}
+            {data: 'datetime'},
+            {data: 'status'},
+            {data: 'hurcat'},
+            {data: 'wind'},
+            {data: 'pressure'}
         ],
         responsive:true,
         pageLength:25,
@@ -417,12 +463,12 @@ var getDetails = function(key){
     stormTracksClick.unbindPopup();
     
     stormPoints.addTo(map);
-    stormPoints.setWhere("Key_ = '"+key+"'");
+    stormPoints.setWhere("stormkey = '"+key+"'");
 
     stormTracks.setStyle(highlightStyle);
     
     //keep individual track from highlight
-    //trackHighlight.setWhere("Key_ = '"+key+"'");
+    //trackHighlight.setWhere("stormkey = '"+key+"'");
     //trackHighlight.unbindPopup();
     //add individual points
     
@@ -448,7 +494,7 @@ var getDetails = function(key){
     
     $("#storm-details-overview").slideToggle("slow");
     
-    query.where("Key_ = '"+key+"'");
+    query.where("stormkey = '"+key+"'");
     
     pointTableData = []
     
@@ -470,34 +516,34 @@ var getDetails = function(key){
      
     query.run(function(error,fc,response){
         
-                $("#storm-name").text(fc.features[0].properties.NAME)
-                $("#storm-year").text(fc.features[0].properties.YEAR)
+                $("#storm-name").text(fc.features[0].properties.stormname)
+                $("#storm-year").text(fc.features[0].properties.stormyear)
                 
-                $("#form-date").text(new Date(fc.features[0].properties.STARTDATE).toLocaleDateString())
+                $("#form-date").text(new Date(fc.features[0].properties.startdate).toLocaleDateString())
         
-                $("#sc-date-st").text(new Date(fc.features[0].properties.SC_DATE_START).toLocaleDateString())
-                $("#sc-date-end").text(nullDate(fc.features[0].properties.SC_DATE_END))
+                $("#sc-date-st").text(new Date(fc.features[0].properties.scstartdate).toLocaleDateString())
+                $("#sc-date-end").text(nullDate(fc.features[0].properties.scenddate))
         
-                $("#lf-loc").text(fc.features[0].properties.LF_LOC)
-                $("#max-cat").text(checkForNull(fc.features[0].properties.MAXSTAT) +" "+ checkForNull(fc.features[0].properties.HURCAT))
-                $("#max-wind").text(fc.features[0].properties.MAXWIND)
-                $("#min-pres").text(fc.features[0].properties.MINPRES)
-                $("#comments").text(fc.features[0].properties.COMMENTS)
-                $("#report").html(nullReports(fc.features[0].properties.REPORT_URL)+' Storm Report</a>')
-                $("#damage").html(nullReports(fc.features[0].properties.REPORT_URL)+' Damage Report</a>')
+                $("#lf-loc").text(fc.features[0].properties.landfalls)
+                $("#max-cat").text(fc.features[0].properties.status +" "+ checkForNull(fc.features[0].properties.hurcat))
+                $("#sc-cat").text(fc.features[0].properties.scstatus+" "+ checkForNull(fc.features[0].properties.schurcat))
+                $("#max-wind").text(fc.features[0].properties.maxwind)
+                $("#min-pres").text(fc.features[0].properties.minpres)
+                $("#comments").text(fc.features[0].properties.comments)
+                $("#report").html(nullReports(fc.features[0].properties.reporturl)+' Storm Report</a>')
+                $("#damage").html(nullReports(fc.features[0].properties.damageurl)+' Damage Report</a>')
     });
     
-    pointQuery.where("Key_ = '"+key+"'");
+    pointQuery.where("stormkey = '"+key+"'");
     
     pointQuery.run(function(error,fc,response){
         for (var i = 0; i < fc.features.length; i++){
             pointTableData.push({
-                "Time":new Date(fc.features[i].properties.Time).toLocaleString(),
-                "Status":fc.features[i].properties.Status,
-                "HU_CAT":fc.features[i].properties.HU_CAT,
-                "Wind":fc.features[i].properties.Wind,
-                "Pressure":fc.features[i].properties.Pressure,
-                "Record":fc.features[i].properties.Record
+                "datetime":new Date(fc.features[i].properties.datetime).toLocaleString(),
+                "status":fc.features[i].properties.status,
+                "hurcat":fc.features[i].properties.hurcat,
+                "wind":fc.features[i].properties.wind,
+                "pressure":fc.features[i].properties.pressure
             });
         }
         makeDetailsTable(pointTableData);
@@ -509,6 +555,7 @@ var getDetails = function(key){
 $(".details-btn").on('click',function(){
     getDetails(stormKey);
 });
+
 var getDetailsMap = function(){
     stormKey = mapClickKey
     getDetails(mapClickKey); 
@@ -518,7 +565,7 @@ var stormReset = function (){
     
     stormTracks.setWhere();
     stormTracksClick.setWhere();
-    map.flyToBounds([[21, -90],[52,-13]]);
+    map.setView([31.044741, -70.804940],4);
     stormTracks.setStyle({
         opacity:0.8
     });
@@ -526,22 +573,24 @@ var stormReset = function (){
     //indicates that there is not a selected row - for track highlighting on table row click - see table.on(click) function
     selected = 0
     //reset years
-    $('#startyear').val(1871);
+    $('#startyear').val(1851);
     $('#endyear').val(2017);
     //reset categories
     $("#storm-cat-group input:checkbox").prop('checked',true);
     $("#lfsc-check").prop('checked',false);
+    $("#tornadoesNone").prop("checked", true);
+    $("#cat-filter-select").val(1);
     
     runFilters();
 }
 
 $("#continue-back").on('click',function(){
     
-    stormPoints.setWhere("Key_ = ''");
+    stormPoints.setWhere("stormkey = ''");
     
     //map.removeLayer(stormPoints);
     
-    //trackHighlight.setWhere("Key_ = ''");
+    //trackHighlight.setWhere("stormkey = ''");
     stormTracksClick.bindPopup(popup);
     
     dt.destroy();
@@ -588,3 +637,10 @@ var waypoint = new Waypoint({
       $("#sticky-buttons").toggleClass("no-vis");
   }
 });
+
+//trying out column select
+/*$("a.toggle-vis").on('click', function (e) {
+    e.preventDefault();
+    var column = rt.column($(this).attr('data-column'));
+    column.visible( ! column.visible() );
+});*/

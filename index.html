@@ -14,9 +14,6 @@
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="vendor/jquery/jquery-ui.min.css" rel="stylesheet" />
 
-    <!-- Custom styles for this template -->
-    <link href="css/main-hurricanes.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="" />
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.css" />
@@ -24,6 +21,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/solid.css" integrity="sha384-HTDlLIcgXajNzMJv5hiW5s2fwegQng6Hi+fN6t5VAcwO/9qbg2YEANIyKBlqLsiT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/fontawesome.css" integrity="sha384-8WwquHbb2jqa7gKWSoAwbJBV2Q+/rQRss9UXL5wlvXOZfSodONmVnifo/+5xJIWX" crossorigin="anonymous">
 
+    <!-- Custom styles for this template -->
+    <link href="css/main-hurricanes.css" rel="stylesheet">
 
 </head>
 
@@ -67,6 +66,10 @@
                 <span class="sr-only">Go back to viewing all storms, removing current storm data from view.</span>
             </button>
         </div>
+        <!--<div id="message-div" class="mb-1 p-1">
+            <span id="no-track" class="mx-lg-5">* Track data are unavailable for storms prior to 1851. Information about these early storms can still be obtained in the table.</span>
+            <span id="messages"></span>
+        </div>-->
     </div>
 
     <!-- Page Content -->
@@ -74,7 +77,7 @@
         <h2 class="h3">Storm Filters</h2>
         <div class="row ml-lg-5">
             <div class="col-lg-3 m-2 pt-2 filter-col">
-                <h3 class="h4">Hurricane Year</h3>
+                <h3 class="h4 border-bottom">Hurricane Year</h3>
                 <p id="year-label">Filter storms by range of years:</p>
                 <div role="group" aria-labelledby="year-label" id="storm-years">
                     <fieldset>
@@ -82,11 +85,11 @@
                         <form class="form-inline mb-1">
                             <div class="form-group m-1">
                                 <label for="startyear" class="mr-2">Start Year</label>
-                                <input type="number" class="form-control" id="startyear" min="1871" max="2017" maxlength="4" size="4" value="1871" title="Start year for filtering by range of years.">
+                                <input type="number" class="form-control" id="startyear" min="1851" max="2017" maxlength="4" size="4" value="1851" title="Start year for filtering by range of years.">
                             </div>
                             <div class="form-group m-1">
                                 <label for="endyear" class="mr-3">End Year</label>
-                                <input type="number" class="form-control" id="endyear" min="1871" max="2017" maxlength="4" size="4" value="2017" title="End year for filtering by range of years.">
+                                <input type="number" class="form-control" id="endyear" min="1851" max="2017" maxlength="4" size="4" value="2017" title="End year for filtering by range of years.">
                             </div>
                         </form>
                     </fieldset>
@@ -94,36 +97,43 @@
                 <button id="reset" type="button" class="btn btn-outline-primary m-2 btn-sm">All Years <i class="fas fa-calendar-alt" aria-hidden></i></button>
             </div>
 
-            <div class="col-lg-3 m-2 pt-2 filter-col">
-                <h3 class="h4">Storm Category</h3>
-                <p id="cat-label">Category during impacts to South Carolina.</p>
+            <div class="col-lg-4 m-2 pt-2 filter-col">
+                <h3 class="h4 border-bottom">Storm Category</h3>
+                <div class="form-group">
+                    <label for="cat-filter-select">Filter by maximum storm category...&hellip;</label>
+                    <select class="form-control" id="cat-filter-select">
+                        <option value="1">at any time during the storm.</option>
+                        <option value="2">during impacts to South Carolina.</option>
+                    </select>
+                </div>
+
                 <fieldset>
-                    <legend class="sr-only">Highest category reached during storm's duration. </legend>
+                    <legend class="sr-only">Highest category reached during storm's duration or during impact to South Carolina.</legend>
                     <form class="mb-1">
-                        <div role="group" aria-labelledby="cat-label" class="form-group mb-0">
+                        <div role="group" aria-labelledby="cat-label" id="storm-cat-group" class="form-group mb-0">
                             <div class="form-check form-check-inline cat-check">
-                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="" title="Tropical storm during impact to SC." id="sc-cat-ts" />
-                                <label class="form-check-label" for="sc-cat-ts">TS</label>
+                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="" title="Tropical storm category." id="sc-cat-ts" />
+                                <label class="form-check-label" for="cat-ts">TS</label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
-                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="1" title="Category 1 storm during impact to SC." id="sc-cat-1" />
-                                <label class="form-check-label" for="sc-cat-1">Cat 1</label>
+                                <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="1" title="Category 1 storm." id="cat-1" />
+                                <label class="form-check-label" for="cat-1">Cat 1</label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
-                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="2" title="Category 2 storm during impact to SC." id="sc-cat-2"/>
-                                <label class="form-check-label" for="sc-cat-2">Cat 2</label>
+                                <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="2" title="Category 2 storm." id="cat-2" />
+                                <label class="form-check-label" for="cat-2">Cat 2</label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
-                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="3" title="Category 3 storm during impact to SC." id="sc-cat-3"/>
-                                <label class="form-check-label" for="sc-cat-3">Cat 3</label>
+                                <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="3" title="Category 3 storm." id="cat-3" />
+                                <label class="form-check-label" for="cat-3">Cat 3</label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
-                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="4" title="Category 4 storm during impact to SC." id="sc-cat-4"/>
-                                <label class="form-check-label" for="sc-cat-4">Cat 4</label>
+                                <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="4" title="Category 4 storm." id="cat-4" />
+                                <label class="form-check-label" for="cat-4">Cat 4</label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
-                                <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="5" title="Category 5 storm during impact to SC." id="sc-cat-5"/>
-                                <label class="form-check-label" for="sc-cat-5">Cat 5</label>
+                                <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="5" title="Category 5 storm." id="cat-5" />
+                                <label class="form-check-label" for="cat-5">Cat 5</label>
                             </div>
                         </div>
                     </form>
@@ -131,73 +141,41 @@
                 <button id="check-all" class="btn btn-outline-primary m-2 btn-sm">Check All <i class="fas fa-check" aria-hidden></i></button>
                 <button id="uncheck-all" class="btn btn-outline-primary m-2 btn-sm">Uncheck All <i class="fas fa-minus" aria-hidden></i></button>
             </div>
-            <div class="col-lg-4 m-2 py-2 filter-col">
-                <h3 id="other-label" class="h4">Other Filters</h3>
+            <div class="col-lg-3 m-2 py-2 filter-col">
+                <h3 id="other-label" class="h4 border-bottom">Other Filters</h3>
                 <div role="group" aria-labelledby="other-label">
                     <fieldset>
                         <legend class="sr-only">Other Filters</legend>
                         <form id="others-form">
+                            <h4 class="h5">Landfall</h4>
                             <div>
                                 <input class="checkbox" type="checkbox" value="" id="lfsc-check">
                                 <label for="lfsc-check">Landfall in South Carolina</label>
                             </div>
                         </form>
                     </fieldset>
-                    
+
                     <fieldset>
-                    <legend class="sr-only">Max Storm Category</legend>
-                    <form class="mb-1">
-                        <h5 >Max Storm Category</h5>
-                        <div role="group" aria-labelledby="cat-label" class="form-group mb-0" id="storm-cat-group">
-                            <div class="form-check form-check-inline cat-check">
-                                <input type="checkbox" checked value="" title="Storms less than hurricane status" />
-                                <label class="mx-1">TS</label>
-                            </div>
-                            <div class="form-check form-check-inline cat-check">
-                                <input class="hu" type="checkbox" checked value="1" title="Storms with highest duration of category 1" />
-                                <label class="mx-1 ">Cat 1</label>
-                            </div>
-                            <div class="form-check form-check-inline cat-check">
-                                <input class="hu" type="checkbox" checked value="2" title="Storms with highest duration of category 2" />
-                                <label class="mx-1 ">Cat 2</label>
-                            </div>
-                            <div class="form-check form-check-inline cat-check">
-                                <input class="hu" type="checkbox" checked value="3" title="Storms with highest duration of category 3" />
-                                <label class="mx-1 ">Cat 3</label>
-                            </div>
-                            <div class="form-check form-check-inline cat-check">
-                                <input class="hu" type="checkbox" checked value="4" title="Storms with highest duration of category 4" />
-                                <label class="mx-1 ">Cat 4</label>
-                            </div>
-                            <div class="form-check form-check-inline cat-check">
-                                <input class="hu" type="checkbox" checked value="5" title="Storms with highest duration of category 5" />
-                                <label class="mx-1 ">Cat 5</label>
-                            </div>
-                        </div>
-                    </form>
-                </fieldset>
-                    
-                    <fieldset>
-                        <legend id="tornadoes-legend" class="sr-only">Number of tornadoes generated by storm.</legend>
+                        <legend id="tornadoes-legend" class="sr-only">Number of tornadoes generated by storm in South Carolina.</legend>
                         <form class="mb-2">
-                            <h4 class="h5">Tornadoes</h4>
+                            <h4 class="h5">Tornadoes in SC</h4>
                             <div role="group" aria-labelledby="tornadoes-legend" class="form-group mb-0" id="">
 
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="tornadoes1" value="t1">
+                                    <input class="form-check-input" type="radio" name="tornadoCheck" id="tornadoes1" value="t1">
                                     <label class="form-check-label" for="tornadoes1">&lt; 5</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="tornadoes2" value="t2">
+                                    <input class="form-check-input" type="radio" name="tornadoCheck" id="tornadoes2" value="t2">
                                     <label class="form-check-label" for="tornadoes2">5 to 20</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="tornadoes3" value="t3">
+                                    <input class="form-check-input" type="radio" name="tornadoCheck" id="tornadoes3" value="t3">
                                     <label class="form-check-label" for="tornadoes3">&gt; 20</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" checked type="radio" name="inlineRadioOptions" id="tornadoesNone" value="t0">
-                                    <label class="form-check-label" for="tornadoesNone">No Filter</label>
+                                    <input class="form-check-input" checked type="radio" name="tornadoCheck" id="tornadoesNone" value="t0">
+                                    <label class="form-check-label" for="tornadoesNone">No Tornado Filter</label>
                                 </div>
 
                             </div>
@@ -225,27 +203,27 @@
         <div class="row">
             <div class="col-lg-6 py-2 details-col">
                 <h4 class="detail-header h5">Formation Date</h4> <span id="form-date"></span>
-                <h4 class="detail-header h5">Dates Affecting SC</h4> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
-                <h4 class="detail-header h5">Landfall Location</h4> <span id="lf-loc"></span>
+                <h4 class="detail-header h5">Max Category</h4> <span id="max-cat"></span>
+                <h4 class="detail-header h5">Max Wind | Min Pressure</h4> <span id="max-wind"></span> knots | <span id="min-pres"></span> millibars
             </div>
             <div class="col-lg-5 py-2 details-col">
-                <h4 class="detail-header h5">Max Category</h4> <span id="max-cat"></span>
-                <h4 class="detail-header h5">Max Wind</h4> <span id="max-wind"></span>
-                <h4 class="detail-header h5">Min Pressure</h4> <span id="min-pres"></span>
+                <h4 class="detail-header h5">SC Impacts Dates</h4> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
+                <h4 class="detail-header h5">SC Impacts Category</h4> <span id="sc-cat"></span>
+                <h4 class="detail-header h5">Landfall Locations</h4> <span id="lf-loc"></span>
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-lg-11 py-2 details-col">
                 <h4 class="detail-header h5">Comments</h4>
                 <p><span id="comments"></span></p>
-                <span id="report"></span>
+                <span id="report" class="d-none"></span>
                 <br>
-                <span id="damage"></span>
+                <span id="damage" class="d-none"></span>
             </div>
         </div>
     </div>
 
-    <div id="table-container" class="container my-3">
+    <div id="table-container" class="container mb-3">
 
         <div class="row" id="storm-select-row">
             <div class="col-sm-6">
@@ -267,8 +245,11 @@
                     <tr>
                         <th>Name</th>
                         <th>Year</th>
-                        <th>Dates SC</th>
-                        <th>Comments</th>
+                        <th>SC Impacts</th>
+                        <!--
+                        <th>SC Cat</th>
+                        <th>Max Cat</th> -->
+                        <th>Storm Comments</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -284,7 +265,6 @@
                         <th>Hur Cat</th>
                         <th>Wind</th>
                         <th>Pressure</th>
-                        <th>Record</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -322,7 +302,7 @@
                 </div>
                 <div class="modal-body m-4">
                     <p>This application lets you search for and view information for over 300 years of hurricanes and tropical storms that have impacted South Carolina. You will find storm track data for all storms after 1851, when official records began. In addition, information and comments specific to South Carolina are included, which make this a very rich dataset.</p>
-                
+
                     <h5>Have Questions?</h5>
                     <p>Contact the <a href="http://dnr.sc.gov/climate/sco">South Carolina State Climate Office:</a></p>
                     <p>
@@ -340,18 +320,23 @@
                         <li>Purvis, J. C. (1964). South Carolina Hurricanes. Columbia, SC: The South Carolina Civil Defense Agency.</li>
                         <li>Purvis, J. C. (1980). South Carolina Hurricanes 1950 – 1979. Columbia, SC: Office of the Adjutant General, Emergency Preparedness Division.</li>
                         <li>Purvis, J. C., Tyler, W., and Sidlow, S. (1986). Hurricanes Affecting South Carolina. Columbia, SC: South Carolina State Climatology Office.</li>
-                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).<br> 
+                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).
+                            <br>
                             <a href="http://dnr.sc.gov/climate/sco/Publications/page_tropical_storm_reports.php">South Carolina Climate Office Tropical Storm Reports.</a></li>
-                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).<br> 
+                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).
+                            <br>
                             <a href="http://dnr.sc.gov/climate/sco/Tropics/hurricanes_affecting_sc.php">South Carolina Hurricane Climatology.</a></li>
-                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.). <br> 
+                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).
+                            <br>
                             <a href="http://dnr.sc.gov/climate/sco/Tropics/hurricane_tracks_affecting_sc.php"> Hurricanes and Tropical Storms Affecting South Carolina. </a></li>
                         <li>Sugg, A. L., Pardue, L., and Carrodus, R. (1971). NOAA Technical Memorandum NWS SR-56: Memorable Hurricanes of the United States Since 1873. Fort Worth, TX: U.S. Department of Commerce.</li>
-                        <li>US Department of Commerce, &amp; NOAA. (2018, May 09). <br>
+                        <li>US Department of Commerce, &amp; NOAA. (2018, May 09).
+                            <br>
                             <a href="https://www.weather.gov/chs/TChistory"> Tropical Cyclone History for Southeast South Carolina and Northern Portions of Southeast Georgia. </a></li>
-                        <li>US Department of Commerce, &amp; NOAA. (n.d.). <br>
+                        <li>US Department of Commerce, &amp; NOAA. (n.d.).
+                            <br>
                             <a href="https://coast.noaa.gov/hurricanes/">Historical Hurricane Tracks. </a></li>
-                        
+
                     </ul>
 
                 </div>

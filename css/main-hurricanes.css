@@ -169,6 +169,10 @@
 .cat-check{
     width:25%;
 }
+#message-div{
+    background-color:#2e445b;
+    color:white;
+}
 
 /*div table css*/
 .divTable{
@@ -187,4 +191,8 @@
 }
 .divTableBody {
 	display: table-row-group;
+}
+#results-table tbody tr.selected, #details-table tbody tr.selected {
+    background-color:#a0d2de;
+    color:black;
 }
