@@ -133,15 +133,27 @@
 .detail-header{
     margin-top:0.5em;
     margin-bottom:0.2em;
-    background-color:#eff4f7;
-    border-radius: 0.2rem 0.1rem;
+    border-bottom: 1px solid #aaa;
 }
 .details-col > * {
     padding:4px;
 }
+.details-col {
+    border:1px solid #aaa;
+}
+.details-col h4{
+    color:#fff;
+    background-color:#2e445b;
+    padding:0.3rem;
+    padding-left:0.5rem;
+    margin:-1rem -1rem 0 -1rem;
+    border-top-left-radius: 0.2rem;
+    border-top-right-radius: 0.2rem;
+}
+
 .filter-col {
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    border: 1px solid #aaa;
+    border-radius: 0.3rem;
     padding-bottom: 3.5rem;
 }
 .filter-col button {

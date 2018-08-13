@@ -83,7 +83,7 @@ var c1 = "#feb24c",
     ct = "#76e2ce"
 
 var trackStyle = function(feature){
-      var c,w, d = false
+      var c,w,d = false
       switch (feature.properties.hurcat) {
         case 1:
           c = c1;
@@ -149,16 +149,18 @@ var makeResultTable = function(){
         select:true,
         pagingType:'simple',
         data: tableData,
+        order: [[ 1, "desc" ]],
+        responsive:true,
+        autoWidth: false,
         columns:[
             {data: 'NAME'},
             {data: 'YEAR'},
-            {data: 'SCDATES', width: "12%", orderable:false},
+            {data: 'SCDATES', width:"12%", orderable:false},
             //{data: 'SCCAT'},
             //{data: 'MAXCAT'},
-            {data: 'COMMENTS', width:"70%", orderable:false}
+            {data: 'COMMENTS', orderable:false}
         ],
         rowId:'KEY',
-        responsive:true,
         pageLength:25,
         dom: "<'#t-search.row'<'col-sm-8'f><'col-sm-4'i>>t<'row'<'col-sm-3'l><'col-sm-4'p>>"
     });
@@ -179,8 +181,8 @@ var popup = function(layer){
     <span id="name">'+layer.feature.properties.stormname+'</span><br> \
     Year: ' +layer.feature.properties.stormyear+'<br> \
     Dates in SC: '+checkDateNull(layer.feature.properties.scstartdate)+' - '+checkDateNull(layer.feature.properties.scenddate)+'<br> \
-    Max Wind: '+checkForNull(layer.feature.properties.maxwind)+ '<br> \
-    Min Pressure: '+checkForNull(layer.feature.properties.minpres)+'<br>\
+    Max Wind: '+(layer.feature.properties.maxwind*1.15078).toFixed(0) + ' mph<br> \
+    Min Pressure: '+checkForNull(layer.feature.properties.minpres)+ ' mb<br>\
     Max Category: '+checkForNull(layer.feature.properties.status)+" "+checkForNull(layer.feature.properties.hurcat)+ '<br> \
     <button class="btn btn-sm btn-outline-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
 };
@@ -438,15 +440,15 @@ var makeDetailsTable = function(pData){
             info:"_TOTAL_ storm advisories."
         },
         columns:[
-            {data: 'datetime'},
-            {data: 'status'},
-            {data: 'hurcat'},
-            {data: 'wind'},
-            {data: 'pressure'}
+            {data: 'sortdate', visible:false, order:'asc'},
+            {data: 'datetime', orderable:false},
+            {data: 'status', orderable:false},
+            {data: 'wind', orderable:false},
+            {data: 'pressure', orderable:false}
         ],
         responsive:true,
         pageLength:25,
-        dom: "<'#t-details.row'<'col-sm-12'i>>t<'row'<'col-sm-3'l><'col-sm-4'p>>"
+        dom: "<'#t-details.row'<'col-sm-12'i>>t<'row'<'col-sm-12'l>><'row'<'col-sm-12'p>>"
     });
 };
 
@@ -454,10 +456,40 @@ var pointQuery = L.esri.query({
     url:pointData
 });
 
+var nullStormReport = function(inValue){
+    if (inValue == null){
+        return ""
+    } else {
+        return '<a href="'+inValue+'" target="_blank">Storm Report</a>'
+    }
+}
+
+var nullDamageReport = function(inValue){
+    if (inValue == null){
+        return ""
+    } else {
+        return ' | &nbsp;<a href="'+inValue+'" target="_blank">Damage Report</a>'
+    }
+}
+
+var nullDate = function(inDate){
+    if (inDate == null){
+        return ""
+    } else {
+        return new Date(inDate).toLocaleDateString()
+    }
+}
+
 //WHAT TO DO WHEN GET STORM DETAILS IS CLICKED
 
 var getDetails = function(key){
 
+    //check to see if filters are displayed. if so, initiate a click on the filter button to suck it back up
+    //disable filter button on mobile icon bar
+    if ($("#storm-search").is(":visible")){
+        $("#toggle-filters").triggerHandler('click');
+    }
+    
     map.closePopup();
     
     stormTracksClick.unbindPopup();
@@ -480,41 +512,27 @@ var getDetails = function(key){
     $("#back-to-tracks").removeClass("d-none");
     $("#dt-row").removeClass("d-none");
     
+    $("#to-filter").addClass("d-none");
+    $("#to-details").removeClass("d-none");
+    
     $("#toggle-legend").attr("data-target","#icon-legend-modal");
     
     //clear the data table
     rt.clear().draw();
-    
-    //check to see if filters are displayed. if so, initiate a click on the filter button to suck it back up
-    //disable filter button on mobile icon bar
-    if ($("#storm-search").is(":visible")){
-        $("#toggle-filters").triggerHandler('click');
-    }
-    $("#to-filter").addClass("disabled");
     
     $("#storm-details-overview").slideToggle("slow");
     
     query.where("stormkey = '"+key+"'");
     
     pointTableData = []
-    
-    var nullReports = function(inValue){
-        if (inValue == null){
-            return "No"
-        } else {
-            return '<a href="'+inValue+'" target="_blank">'
-        }
-    }
-    
-    var nullDate = function(inDate){
-        if (inDate == null){
-            return ""
-        } else {
-            return new Date(inDate).toLocaleDateString()
-        }
-    }
      
     query.run(function(error,fc,response){
+        
+                if (fc.features[0].properties.status == "HU") {
+                    $("#storm-cat").text("HURRICANE");
+                } else {
+                    $("#storm-cat").text("TROPICAL STORM");
+                }
         
                 $("#storm-name").text(fc.features[0].properties.stormname)
                 $("#storm-year").text(fc.features[0].properties.stormyear)
@@ -527,11 +545,11 @@ var getDetails = function(key){
                 $("#lf-loc").text(fc.features[0].properties.landfalls)
                 $("#max-cat").text(fc.features[0].properties.status +" "+ checkForNull(fc.features[0].properties.hurcat))
                 $("#sc-cat").text(fc.features[0].properties.scstatus+" "+ checkForNull(fc.features[0].properties.schurcat))
-                $("#max-wind").text(fc.features[0].properties.maxwind)
+                $("#max-wind").text((fc.features[0].properties.maxwind*1.15078).toFixed(0))
                 $("#min-pres").text(fc.features[0].properties.minpres)
                 $("#comments").text(fc.features[0].properties.comments)
-                $("#report").html(nullReports(fc.features[0].properties.reporturl)+' Storm Report</a>')
-                $("#damage").html(nullReports(fc.features[0].properties.damageurl)+' Damage Report</a>')
+                $("#report").html(nullStormReport(fc.features[0].properties.reporturl))
+                $("#damage").html(nullDamageReport(fc.features[0].properties.damageurl))
     });
     
     pointQuery.where("stormkey = '"+key+"'");
@@ -539,9 +557,9 @@ var getDetails = function(key){
     pointQuery.run(function(error,fc,response){
         for (var i = 0; i < fc.features.length; i++){
             pointTableData.push({
+                "sortdate":fc.features[i].properties.datetime,
                 "datetime":new Date(fc.features[i].properties.datetime).toLocaleString(),
-                "status":fc.features[i].properties.status,
-                "hurcat":fc.features[i].properties.hurcat,
+                "status":fc.features[i].properties.status + checkForNull(fc.features[i].properties.hurcat),
                 "wind":fc.features[i].properties.wind,
                 "pressure":fc.features[i].properties.pressure
             });
@@ -608,9 +626,13 @@ $("#continue-back").on('click',function(){
     $("#back-to-tracks").addClass("d-none");
     $("#dt-row").addClass("d-none");
     
+    $("#to-filter").removeClass("d-none");
+    $("#to-details").addClass("d-none");
+    
     $("#toggle-legend").attr("data-target","#trackline-legend-modal");
     
     $("#storm-details-overview").slideToggle("slow");
+    
 });
     
 $("#continue-clear").on('click', function(){
@@ -632,15 +654,9 @@ $('a[href^="#"]').on('click',function (e) {
 
 
 var waypoint = new Waypoint({
-  element: document.getElementById('rt-row'),
+  element: document.getElementById('table-container'),
   handler: function() {
       $("#sticky-buttons").toggleClass("no-vis");
-  }
+  },
+    offset:-50
 });
-
-//trying out column select
-/*$("a.toggle-vis").on('click', function (e) {
-    e.preventDefault();
-    var column = rt.column($(this).attr('data-column'));
-    column.visible( ! column.visible() );
-});*/

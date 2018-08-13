@@ -42,11 +42,11 @@
 
     <div class="container-fluid py-2">
         <div id="map">
-            <button type="button" id="toggle-about" class="btn btn-outline-light align-top btn-sm map-btn" data-toggle="modal" data-target="#about-modal">
+            <a href="about.html" target="_blank"><button type="button" id="toggle-about" class="btn btn-outline-light align-top btn-sm map-btn">
                 <span class="d-none d-md-inline">About</span>
                 <i class="fas fa-question-circle ml-md-2" title="Find out more information about this application."></i>
                 <span class="sr-only">Find out more information about this application.</span>
-            </button>
+            </button></a>
 
             <button type="button" id="toggle-legend" class="btn btn-outline-light align-top btn-sm map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
                 <span class="d-none d-md-inline">Legend</span>
@@ -74,7 +74,9 @@
 
     <!-- Page Content -->
     <div class="container" id="storm-search">
-        <h2 class="h3">Storm Filters</h2>
+        
+        <h2 class="h3 w-50 d-inline">Storm Filters</h2>
+        
         <div class="row ml-lg-5">
             <div class="col-lg-3 m-2 pt-2 filter-col">
                 <h3 class="h4 border-bottom">Hurricane Year</h3>
@@ -186,7 +188,7 @@
             </div>
         </div>
         <div class="row border-bottom">
-            <div class="col-lg-12 ml-lg-5 my-2">
+            <div class="col-lg-10 ml-lg-5 my-2">
                 <button id="apply-filter" class="btn btn-outline-success m-2">Apply Filters <i class="fas fa-check-circle" aria-hidden></i></button>
                 <button id="clear-filter" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#clear-filters-modal">Clear Filters <i class="fas fa-times-circle" aria-hidden></i></button>
             </div>
@@ -197,28 +199,24 @@
     <div class="container" id="storm-details-overview">
         <div class="row">
             <div class="col">
-                <h3>Storm Details for <span id="storm-name"></span> - <span id="storm-year"></span></h3>
+                <h3><span id="storm-cat"></span> <span id="storm-name"></span> - <span id="storm-year"></span></h3>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 py-2 details-col">
-                <h4 class="detail-header h5">Formation Date</h4> <span id="form-date"></span>
-                <h4 class="detail-header h5">Max Category</h4> <span id="max-cat"></span>
-                <h4 class="detail-header h5">Max Wind | Min Pressure</h4> <span id="max-wind"></span> knots | <span id="min-pres"></span> millibars
+            <div class="col-lg-5 py-2 m-2 details-col" id="storm-summary">
+                <h4>Storm Summary</h4>
+                <h5 class="detail-header">Formation Date</h5> <span id="form-date"></span>
+                <h5 class="detail-header">Max Category</h5> <span id="max-cat"></span>
+                <h5 class="detail-header">Max Wind | Min Pressure</h5> <span id="max-wind"></span> mph | <span id="min-pres"></span> millibars
+                <h5 class="detail-header h5">Landfall Locations</h5> <span id="lf-loc"></span>
             </div>
-            <div class="col-lg-5 py-2 details-col">
-                <h4 class="detail-header h5">SC Impacts Dates</h4> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
-                <h4 class="detail-header h5">SC Impacts Category</h4> <span id="sc-cat"></span>
-                <h4 class="detail-header h5">Landfall Locations</h4> <span id="lf-loc"></span>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-lg-11 py-2 details-col">
-                <h4 class="detail-header h5">Comments</h4>
+            <div class="col-lg-6 py-2 m-2 details-col" id="sc-impacts">
+                <h4>South Carolina Impacts</h4>
+                <h5 class="detail-header h5">SC Impacts Dates</h5> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
+                <h5 class="detail-header h5">SC Impacts Category</h5> <span id="sc-cat"></span>
+                 <h5 class="detail-header h5">Comments</h5>
                 <p><span id="comments"></span></p>
-                <span id="report" class="d-none"></span>
-                <br>
-                <span id="damage" class="d-none"></span>
+                <span id="report"></span><span id="damage"></span>
             </div>
         </div>
     </div>
@@ -245,11 +243,11 @@
                     <tr>
                         <th>Name</th>
                         <th>Year</th>
-                        <th>SC Impacts</th>
+                        <th class="not-mobile">SC Impacts</th>
                         <!--
                         <th>SC Cat</th>
                         <th>Max Cat</th> -->
-                        <th>Storm Comments</th>
+                        <th class="not-mobile">Storm Comments</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -260,11 +258,11 @@
             <table class="table table-striped" id="details-table">
                 <thead>
                     <tr>
+                        <th>sortdate</th>
                         <th>Date &amp; Time</th>
                         <th>Status</th>
-                        <th>Hur Cat</th>
-                        <th>Wind</th>
-                        <th>Pressure</th>
+                        <th class="not-mobile">Wind</th>
+                        <th class="not-mobile">Pressure</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -272,81 +270,27 @@
 
         </div>
     </div>
-
+    
     <div id="mobile-icon-bar" class="fixed-bottom text-center border-top d-sm-none">
         <a href="#map" id="to-map" class="btn">
             <i aria-hidden title="Go to map." class="fas fa-map fa-2x"></i>
-            <span class="sr-only">Go to map.</span>
-        </a>
-        <a href="#table-container" id="to-table" class="btn">
-            <i aria-hidden title="Go to table." class="fas fa-table fa-2x"></i>
-            <span class="sr-only">Go to table.</span>
+            <span class="sr-only">Go to map section.</span>
         </a>
         <a href="#storm-search" id="to-filter" class="btn">
             <i aria-hidden title="Display storm filters." class="fas fa-filter fa-2x"></i>
             <span class="sr-only">Display storm filters.</span>
         </a>
+        <a href="#storm-details-overview" id="to-details" class="btn d-none">
+            <i aria-hidden title="Go to Storm Details section." class="fas fa-info-circle fa-2x"></i>
+            <span class="sr-only">Go to Storm Details section.</span>
+        </a>
+        <a href="#table-container" id="to-table" class="btn">
+            <i aria-hidden title="Go to table." class="fas fa-table fa-2x"></i>
+            <span class="sr-only">Go to table section.</span>
+        </a>
     </div>
 
     <!-- MODALS -->
-
-    <!-- ABOUT MODAL -->
-    <div class="modal fade d-print-none" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="aboutLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="aboutLabel">About</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body m-4">
-                    <p>This application lets you search for and view information for over 300 years of hurricanes and tropical storms that have impacted South Carolina. You will find storm track data for all storms after 1851, when official records began. In addition, information and comments specific to South Carolina are included, which make this a very rich dataset.</p>
-
-                    <h5>Have Questions?</h5>
-                    <p>Contact the <a href="http://dnr.sc.gov/climate/sco">South Carolina State Climate Office:</a></p>
-                    <p>
-                        SC Department of Natural Resources
-                        <br> Land, Water, and Conservation Division
-                        <br> State Climate Office
-                        <br> P.O. Box 167
-                        <br> Columbia, SC 29202
-                        <br>
-                    </p>
-                    <h5>References</h5>
-                    <p>Information in this application was compiled by the South Carolina State Climate Office from many sources.</p>
-                    <ul>
-                        <li>National Hurricane Center Hurricane Data, 2nd Edition <a href="http://www.aoml.noaa.gov/hrd/hurdat/Data_Storm.html">HURDAT2</a></li>
-                        <li>Purvis, J. C. (1964). South Carolina Hurricanes. Columbia, SC: The South Carolina Civil Defense Agency.</li>
-                        <li>Purvis, J. C. (1980). South Carolina Hurricanes 1950 – 1979. Columbia, SC: Office of the Adjutant General, Emergency Preparedness Division.</li>
-                        <li>Purvis, J. C., Tyler, W., and Sidlow, S. (1986). Hurricanes Affecting South Carolina. Columbia, SC: South Carolina State Climatology Office.</li>
-                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).
-                            <br>
-                            <a href="http://dnr.sc.gov/climate/sco/Publications/page_tropical_storm_reports.php">South Carolina Climate Office Tropical Storm Reports.</a></li>
-                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).
-                            <br>
-                            <a href="http://dnr.sc.gov/climate/sco/Tropics/hurricanes_affecting_sc.php">South Carolina Hurricane Climatology.</a></li>
-                        <li>South Carolina Department of Natural Resources, South Carolina State Climatology Office. (n.d.).
-                            <br>
-                            <a href="http://dnr.sc.gov/climate/sco/Tropics/hurricane_tracks_affecting_sc.php"> Hurricanes and Tropical Storms Affecting South Carolina. </a></li>
-                        <li>Sugg, A. L., Pardue, L., and Carrodus, R. (1971). NOAA Technical Memorandum NWS SR-56: Memorable Hurricanes of the United States Since 1873. Fort Worth, TX: U.S. Department of Commerce.</li>
-                        <li>US Department of Commerce, &amp; NOAA. (2018, May 09).
-                            <br>
-                            <a href="https://www.weather.gov/chs/TChistory"> Tropical Cyclone History for Southeast South Carolina and Northern Portions of Southeast Georgia. </a></li>
-                        <li>US Department of Commerce, &amp; NOAA. (n.d.).
-                            <br>
-                            <a href="https://coast.noaa.gov/hurricanes/">Historical Hurricane Tracks. </a></li>
-
-                    </ul>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Trackline Legend Modal -->
     <div class="modal fade" id="trackline-legend-modal" tabindex="-1" role="dialog" aria-labelledby="tracklineLegendLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -511,8 +455,15 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
-            <div class="text-center">
-                <p class="m-0 text-white mb-3">SC State Climate Office</p>
+            <div>
+                <p class="m-0 text-white mb-3">South Carolina State Climate Office<br>
+                South Carolina Department of Natural Resources<br>
+                    Land, Water, and Conservation Division<br>
+                        State Climate Office<br>
+                        P.O. Box 167<br>
+                        Columbia, SC 29202<br>
+                        <a href="http://dnr.sc.gov/climate/sco">dnr.sc.gov/climate/sco</a>
+                    </p>
                 <img style="width:100px;height:auto;" src="images/dnr-logo.gif" alt="scdnr logo" />
             </div>
         </div>
