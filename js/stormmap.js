@@ -439,6 +439,8 @@ var makeDetailsTable = function(pData){
         language:{
             info:"_TOTAL_ storm advisories."
         },
+        pagingType:'simple',
+        autoWidth: false,
         columns:[
             {data: 'sortdate', visible:false, order:'asc'},
             {data: 'datetime', orderable:false},
@@ -448,7 +450,7 @@ var makeDetailsTable = function(pData){
         ],
         responsive:true,
         pageLength:25,
-        dom: "<'#t-details.row'<'col-sm-12'i>>t<'row'<'col-sm-12'l>><'row'<'col-sm-12'p>>"
+        dom: "<'#t-details.row'<'col-sm-12'i>>t<'row'<'col-sm-3'l><'col-sm-4'p>>"
     });
 };
 
@@ -658,5 +660,5 @@ var waypoint = new Waypoint({
   handler: function() {
       $("#sticky-buttons").toggleClass("no-vis");
   },
-    offset:-50
+    offset:-70
 });

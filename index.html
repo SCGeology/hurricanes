@@ -42,13 +42,13 @@
 
     <div class="container-fluid py-2">
         <div id="map">
-            <a href="about.html" target="_blank"><button type="button" id="toggle-about" class="btn btn-outline-light align-top btn-sm map-btn">
+            <a href="about.html" target="_blank"><button type="button" id="toggle-about" class="btn btn-light align-top map-btn" title="Find out more about this application and the data that it displays.">
                 <span class="d-none d-md-inline">About</span>
                 <i class="fas fa-question-circle ml-md-2" title="Find out more information about this application."></i>
                 <span class="sr-only">Find out more information about this application.</span>
             </button></a>
 
-            <button type="button" id="toggle-legend" class="btn btn-outline-light align-top btn-sm map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
+            <button type="button" id="toggle-legend" class="btn btn-light align-top map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
                 <span class="d-none d-md-inline">Legend</span>
                 <i class="fas fa-bars ml-md-2" title="Display the legend for the current map symbols."></i>
                 <span class="sr-only">Display the legend for the current map symbols.</span>
@@ -218,10 +218,11 @@
                 <p><span id="comments"></span></p>
                 <span id="report"></span><span id="damage"></span>
             </div>
+            <div class="col-lg-12"><a href="about.html" target="_blank">See the About page</a> for more detailed descriptions of these data fields.</div>
         </div>
     </div>
 
-    <div id="table-container" class="container mb-3">
+    <div id="table-container" class="container mb-3 mt-4">
 
         <div class="row" id="storm-select-row">
             <div class="col-sm-6">
@@ -253,8 +254,8 @@
                 <tbody></tbody>
             </table>
         </div>
-        <div class="row d-none" id="dt-row">
-            <h4>Storm Advisories</h4>
+        <div class="row d-none mt-4" id="dt-row">
+            <h4 class="ml-2">Storm Advisories</h4>
             <table class="table table-striped" id="details-table">
                 <thead>
                     <tr>

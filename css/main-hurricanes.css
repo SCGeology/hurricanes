@@ -48,7 +48,10 @@
     min-width: 32px;
 }
 #toggle-about {
-    bottom: 105px;
+    top: 10px;
+    bottom:auto;
+    right:10px;
+    left:auto;
 }
 
 #storm-search {
@@ -207,4 +210,18 @@
 #results-table tbody tr.selected, #details-table tbody tr.selected {
     background-color:#a0d2de;
     color:black;
+}
+#about h2 {
+    border-bottom:2px solid #666;
+}
+#about h3 {
+    border-bottom: 1px solid gray;
+    margin-top:2rem;
+}
+#about h5 {
+    background-color:#edf9fc;
+    padding:0.2rem;
+}
+div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+    justify-content: center;
 }
