@@ -482,6 +482,14 @@ var nullDate = function(inDate){
     }
 }
 
+var nullTornadoes = function(inTornado){
+    if (inTornado == null){
+        return ""
+    } else {
+        return "There were "+inTornado+" tornadoes reported in South Carolina."
+    }
+}
+
 //WHAT TO DO WHEN GET STORM DETAILS IS CLICKED
 
 var getDetails = function(key){
@@ -550,6 +558,9 @@ var getDetails = function(key){
                 $("#max-wind").text((fc.features[0].properties.maxwind*1.15078).toFixed(0))
                 $("#min-pres").text(fc.features[0].properties.minpres)
                 $("#comments").text(fc.features[0].properties.comments)
+        
+                $("#tornadoes").text(nullTornadoes(fc.features[0].properties.sctornadoes))
+        
                 $("#report").html(nullStormReport(fc.features[0].properties.reporturl))
                 $("#damage").html(nullDamageReport(fc.features[0].properties.damageurl))
     });
