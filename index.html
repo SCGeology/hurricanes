@@ -44,12 +44,12 @@
         <div id="map">
             <a href="about.html" target="_blank"><button type="button" id="toggle-about" class="btn btn-light align-top map-btn" title="Find out more about this application and the data that it displays.">
                 <span class="d-none d-md-inline">About</span>
-                <i class="fas fa-question-circle ml-md-2" title="Find out more information about this application."></i>
+                <i class="fas fa-question ml-md-2" title="Find out more information about this application."></i>
                 <span class="sr-only">Find out more information about this application.</span>
             </button></a>
 
             <button type="button" id="toggle-legend" class="btn btn-light align-top map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
-                <span class="d-none d-md-inline">Legend</span>
+                <span class="d-none d-md-inline">Map Legend</span>
                 <i class="fas fa-bars ml-md-2" title="Display the legend for the current map symbols."></i>
                 <span class="sr-only">Display the legend for the current map symbols.</span>
             </button>
@@ -226,11 +226,16 @@
 
         <div class="row" id="storm-select-row">
             <div class="col-sm-6">
-                <h4 class="m-0">Select a Storm</h4>
-                <p class="m-0">from the table below.</p>
+                <h4 class="m-0">Select a Storm 
+                     <button type="button" id="toggle-use-table" class="btn btn-outline-primary" data-toggle="modal" data-target="#using-table">
+                        <i class="fas fa-question-circle fa-lg" title="Get help using this application."></i>
+                        <span class="sr-only">Get help using this application.</span>
+                    </button>
+                </h4>
+                <p class="m-0">from the table below. </p>
             </div>
             <div class="col-sm-6 text-sm-right">
-                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Choose a storm below." disabled>Storm Details <i aria-hidden class="fas fa-info-circle" aria-hidden></i></button>
+                <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Select a storm from the table below to view the track on the map and get storm details." disabled>Storm Details <i aria-hidden class="fas fa-info-circle" aria-hidden></i></button>
 
                 <!-- sticky buttons for mobile scroll -->
                 <div id="sticky-buttons" class="no-vis">
@@ -292,6 +297,33 @@
     </div>
 
     <!-- MODALS -->
+    <!-- Simple Table Selection Modal --> 
+        <!-- Filter returns no records modal -->
+    <div class="modal fade" id="using-table" tabindex="-1" role="dialog" aria-labelledby="using-table" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="usingtable">Selecting Storms</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Getting Storm Details</h5>
+                    <p>Storms can be selected by clicking a row in the table or a track in the map, which will highlight the storm track on the map. For more detailed track and summary information about the selected storm, click the Get Storm Details button.</p>
+                    <h5>Filtering Storms</h5>
+                    <p>The Filter Storms button opens up options for filtering storms by year, storm category, and others. Applying the filters will limit the display of storms in the map and table.</p>
+                    <h5>Searching the Table</h5>
+                    <p>Storms can be searched by name, year, or any keywords found in the table. For example, typing "flood" in the search box will return all storms that have "flood" somewhere in the description. This option does not filter the map.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
     <!-- Trackline Legend Modal -->
     <div class="modal fade" id="trackline-legend-modal" tabindex="-1" role="dialog" aria-labelledby="tracklineLegendLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -476,7 +508,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="vendor/jquery/jquery-ui.min.js"></script>
-
+    
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
     <script src="https://unpkg.com/esri-leaflet@2.0.4/dist/esri-leaflet.js"></script>
 

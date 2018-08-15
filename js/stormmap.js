@@ -184,7 +184,7 @@ var popup = function(layer){
     Max Wind: '+(layer.feature.properties.maxwind*1.15078).toFixed(0) + ' mph<br> \
     Min Pressure: '+checkForNull(layer.feature.properties.minpres)+ ' mb<br>\
     Max Category: '+checkForNull(layer.feature.properties.status)+" "+checkForNull(layer.feature.properties.hurcat)+ '<br> \
-    <button class="btn btn-sm btn-outline-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
+    <button class="btn btn-sm btn-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
 };
 
 stormTracksClick.bindPopup(popup);
@@ -338,6 +338,7 @@ var selected = 0
 // set storm key on table row click 
 $("#results-table").on( 'click', 'td', function () {
     stormKey = rt.row( this ).id();
+    map.closePopup();
     if (oldKey != stormKey || oldKey == stormKey && selected == 0){
         oldKey = stormKey
         stormTracks.setStyle(highlightStyle);
@@ -357,7 +358,16 @@ $("#results-table").on( 'click', 'td', function () {
 var mapClickKey
 
 stormTracksClick.on('click', function(e) { 
-    mapClickKey = e.layer.feature.properties.stormkey 
+    mapClickKey = e.layer.feature.properties.stormkey
+    stormKey = mapClickKey
+    stormTracks.setStyle(highlightStyle)
+    rt.rows().deselect();
+});
+
+map.on('popupclose', function(e){
+    stormTracks.setStyle({
+        opacity:0.8
+    });
 });
 
 $("#to-filter").on('click', function(){
@@ -509,9 +519,6 @@ var getDetails = function(key){
 
     stormTracks.setStyle(highlightStyle);
     
-    //keep individual track from highlight
-    //trackHighlight.setWhere("stormkey = '"+key+"'");
-    //trackHighlight.unbindPopup();
     //add individual points
     
     //remove the features no longer needed and add those for details
@@ -588,7 +595,8 @@ $(".details-btn").on('click',function(){
 });
 
 var getDetailsMap = function(){
-    stormKey = mapClickKey
+    //don't need this below because we do it on click... i think
+    //stormKey = mapClickKey
     getDetails(mapClickKey); 
 };
 
@@ -666,6 +674,8 @@ $('a[href^="#"]').on('click',function (e) {
 });  
 
 
+//OTHER SMALL PIECES OF FUNCTIONALITY
+
 var waypoint = new Waypoint({
   element: document.getElementById('table-container'),
   handler: function() {
@@ -673,3 +683,7 @@ var waypoint = new Waypoint({
   },
     offset:-70
 });
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})

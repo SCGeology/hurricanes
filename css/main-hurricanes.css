@@ -233,3 +233,17 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 #report, #damage {
     font-size:1.2rem;
 }
+.btn.btn-primary[disabled].storm-btn {
+    background-color: #ccc;
+    color:#555;
+    border-color:#555;
+}
+#toggle-use-table {
+    /*color:#000;*/
+    background-color:#fff;
+    border:none;
+    padding:0;
+}
+#toggle-use-table:hover{
+    color:#2e445b;
+}
