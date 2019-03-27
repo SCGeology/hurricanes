@@ -43,6 +43,8 @@ var outline = L.esri.featureLayer({
 
 var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes/FeatureServer/1"
 
+//~~~ ADD URL TO PRE-1851 TABLE DATA
+
 var tableData = []
 var rt
 
@@ -59,9 +61,12 @@ var checkDateNull = function(invalue){
         return ""
     } else {
         d = new Date(invalue)
-        return d.getMonth() + "/" + d.getDate();
+        return (d.getMonth()+1).toString() + "/" + d.getDate();
     }
 }
+
+//~~~ NEW QUERY AND FUNCTION FOR PUSHING PRE-1851 DATA TO THE tableData ARRAY. 
+// THIS WILL MAKE PRE-1851 DATA SHOW UP IN TABLE BECAUSE tableData IS USED TO MAKE DATA TABLES TABLE.
 
 var oef = function(feature,layer){
     tableData.push({
@@ -255,6 +260,8 @@ var updateTable = function(table){
     table.rows.add(tableData).draw();
 }
 
+//~~~ ADD SEPARATE FUNCTION TO FILTER PRE-1851 DATA, USING THE EXISTING FUNCTIONS ABOVE, AND PASSING RESULTS TO THE FUNCTION BELOW.
+
 var runFilters = function(){
     
     console.log(getTornadoes());
@@ -262,6 +269,8 @@ var runFilters = function(){
     var exp = [getYearRange(),"(", getCatList(),")",getLandfall(),getTornadoes()].join(' ').replace('"','')
     
     query.where(exp).returnGeometry(false);
+    
+    //~~~ WILL REQUIRE AN EXTRA QUERY TO PUSH PRE-1851 TABLE DATA USING RESULTS OF FUNCTION ABOVE.
     
     query.run(function(error,fc,response){
         if (fc == null || fc.features.length == 0) {

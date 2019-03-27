@@ -230,7 +230,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     font-size: 16px;
   }
 }
-#report, #damage {
+#report, #damage, #trackmap {
     font-size:1.2rem;
 }
 .btn.btn-primary[disabled].storm-btn {
@@ -246,4 +246,10 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 }
 #toggle-use-table:hover{
     color:#2e445b;
+}
+.drop-shadow {
+    text-shadow: 1px 1px 4px #444;
+}
+#report, #damage {
+    border-radius:3px;
 }

@@ -33,8 +33,8 @@
         <div class="container">
             <div class="row text-center bg-image">
                 <div class="mx-auto my-2">
-                    <h1 class="display-4 text-sm-left text-white" style="font-size:2.2rem;margin-bottom: -0.8rem;">South Carolina</h1>
-                    <h1 class="display-4 text-center mt-0 text-white">Hurricanes<span class="d-none d-sm-inline"> &amp; Tropical Storms</span></h1>
+                    <h1 class="display-4 text-sm-left text-white drop-shadow" style="font-size:2.2rem;margin-bottom: -0.8rem;">South Carolina</h1>
+                    <h1 class="display-4 text-center mt-0 text-white drop-shadow">Hurricanes<span class="d-none d-sm-inline"> &amp; Tropical Storms</span></h1>
                 </div>
             </div>
         </div>
@@ -197,7 +197,7 @@
     <!-- /.container -->
 
     <div class="container" id="storm-details-overview">
-        <div class="row">
+        <div class="row my-2">
             <div class="col">
                 <h3><span id="storm-cat"></span> <span id="storm-name"></span> - <span id="storm-year"></span></h3>
             </div>
@@ -207,18 +207,22 @@
                 <h4>Storm Summary</h4>
                 <h5 class="detail-header">Formation Date</h5> <span id="form-date"></span>
                 <h5 class="detail-header">Max Category</h5> <span id="max-cat"></span>
-                <h5 class="detail-header">Max Wind | Min Pressure</h5> <span id="max-wind"></span> mph | <span id="min-pres"></span> millibars
+                <h5 class="detail-header">Max Wind</h5> <span id="max-wind"></span> mph 
+                <h5 class="detail-header">Min Pressure</h5> <span id="min-pres"></span> millibars
                 <h5 class="detail-header h5">Landfall Locations</h5> <span id="lf-loc"></span>
             </div>
             <div class="col-lg-6 py-2 m-2 details-col" id="sc-impacts">
                 <h4>South Carolina Impacts</h4>
                 <h5 class="detail-header h5">SC Impacts Dates</h5> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
                 <h5 class="detail-header h5">SC Impacts Category</h5> <span id="sc-cat"></span>
-                 <h5 class="detail-header h5">Comments</h5>
+                <h5 class="detail-header h5">Comments</h5>
                 <p><span id="comments"></span> <span id="tornadoes"></span></p>
-                <span id="report"></span><span id="damage"></span>
+                <h5 class="detail-header h5">Reports</h5>
+                <div class="mt-1">
+                    <span id="trackmap"><a href="#">Track Map</a> | </span><span id="report"></span><span id="damage"></span>
+                </div>
             </div>
-            <div class="col-lg-12"><a href="about.html" target="_blank">See the About page</a> for more detailed descriptions of these data fields.</div>
+            <div class="ml-4"><a href="about.html" target="_blank">See the About page</a> for more detailed descriptions of these data fields.</div>
         </div>
     </div>
 
