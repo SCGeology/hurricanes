@@ -579,6 +579,7 @@ var getDetails = function(key){
         
                 $("#report").html(nullStormReport(fc.features[0].properties.reporturl))
                 $("#damage").html(nullDamageReport(fc.features[0].properties.damageurl))
+                $("#trackmap").html("<a href='./trackmaps/"+fc.features[0].properties.stormkey+"_map.jpg' target='_blank'>Track Map</a>")
     });
     
     pointQuery.where("stormkey = '"+key+"'");
