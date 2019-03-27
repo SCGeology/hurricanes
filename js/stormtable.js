@@ -8,7 +8,7 @@ put in to data table
 
 */
 
-var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes/FeatureServer/1"
+var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes_Public/FeatureServer/1"
 
 //~~~ ADD URL TO PRE-1851 TABLE DATA
 

@@ -41,7 +41,7 @@ var outline = L.esri.featureLayer({
 }).addTo(map);
 
 
-var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes/FeatureServer/1"
+var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes_Public/FeatureServer/1"
 
 //~~~ ADD URL TO PRE-1851 TABLE DATA
 
@@ -427,7 +427,7 @@ var getIcons = function(cat){
     }
 
 //ADD POINTS FOR INDIVIDUAL STORMS
-var pointData = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes/FeatureServer/0"
+var pointData = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes_Public/FeatureServer/0"
 
 var stormPoints = L.esri.featureLayer({
         url: pointData,
