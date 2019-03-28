@@ -35,6 +35,13 @@ var checkDateNull = function(invalue){
 //~~~ NEW QUERY AND FUNCTION FOR PUSHING PRE-1851 DATA TO THE tableData ARRAY. 
 // THIS WILL MAKE PRE-1851 DATA SHOW UP IN TABLE BECAUSE tableData IS USED TO MAKE DATA TABLES TABLE.
 
+//load data table data from REST service
+var query = L.esri.query({
+    url:data
+}).returnGeometry(false);
+
+
+
 var oef = function(feature,layer){
     tableData.push({
             //"KEY":feature.properties.stormkey,
@@ -46,16 +53,6 @@ var oef = function(feature,layer){
             "COMMENTS":feature.properties.comments
         });
 }
-
-var stormTracks = L.esri.featureLayer({
-    url: data,
-    onEachFeature:oef
-});
-
-/*//load data table data from REST service
-var query = L.esri.query({
-    url:data
-});*/
 
 var makeResultTable = function(){
     rt = $('#results-table').DataTable({
