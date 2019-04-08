@@ -36,7 +36,14 @@
 #results-table_info {
     padding:0.2em 0 0.2em 0.5em;;
 }
-
+.white-link {
+    color:aqua;
+    text-decoration: none;
+}
+.white-link:hover{
+    text-decoration: underline;
+    color:#fff;
+}
 .map-btn {
     position: absolute;
     bottom: 20px;
@@ -61,20 +68,20 @@
     display:none;
 }
 
-#results-table_filter{
+#results-table_filter, #pre-table_filter{
     text-align: left;
 }
-#results-table_info{
+#results-table_info, #pre-table_info {
     text-align: right;
 }
 
-#t-search {
+#t-search, #p-search {
     background-color:#2e445b;
     color:white;
     padding-top:0.7em;
     border-radius:3px;
 }
-#t-details {
+#t-details, #p-details {
     background-color:#2e445b;
     color:white;
     border-radius:3px;

@@ -10,10 +10,13 @@ put in to data table
 
 var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes_Public/FeatureServer/1"
 
+var predata = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes_Public/FeatureServer/2"
 //~~~ ADD URL TO PRE-1851 TABLE DATA
 
 var tableData = []
+var preTableData = []
 var rt
+var pt
 
 var checkForNull = function(invalue){
     if (invalue == null){
@@ -35,26 +38,7 @@ var checkDateNull = function(invalue){
 //~~~ NEW QUERY AND FUNCTION FOR PUSHING PRE-1851 DATA TO THE tableData ARRAY. 
 // THIS WILL MAKE PRE-1851 DATA SHOW UP IN TABLE BECAUSE tableData IS USED TO MAKE DATA TABLES TABLE.
 
-//load data table data from REST service
-var query = L.esri.query({
-    url:data
-}).returnGeometry(false);
-
-
-
-var oef = function(feature,layer){
-    tableData.push({
-            //"KEY":feature.properties.stormkey,
-            "NAME":feature.properties.stormname,
-            "YEAR":feature.properties.stormyear,
-            "SCDATES":checkDateNull(feature.properties.scstartdate) + " - " + checkDateNull(feature.properties.scenddate),
-            "SCCAT":feature.properties.scstatus+" "+checkForNull(feature.properties.schurcat),
-            "MAXCAT":feature.properties.status+" "+checkForNull(feature.properties.hurcat),
-            "COMMENTS":feature.properties.comments
-        });
-}
-
-var makeResultTable = function(){
+var makeStormTable = function(){
     rt = $('#results-table').DataTable({
         language:{
             search:"Search",
@@ -63,7 +47,7 @@ var makeResultTable = function(){
             infoFiltered: " of _MAX_ total",
             infoEmpty: "_TOTAL_ storms"
         },
-        select:true,
+        //select:true,
         pagingType:'simple',
         data: tableData,
         order: [[ 1, "desc" ]],
@@ -72,66 +56,96 @@ var makeResultTable = function(){
         columns:[
             {data: 'NAME'},
             {data: 'YEAR'},
-            {data: 'SCDATES', width:"12%", orderable:false},
-            {data: 'SCCAT'},
             {data: 'MAXCAT'},
+            {data: 'MINPRES'},
+            {data: 'MAXWIND'},
+            {data: 'SCCAT'},
+            {data: 'SCDATES', width:"12%", orderable:false},
             {data: 'COMMENTS', orderable:false}
         ],
-        rowId:'KEY',
+        //rowId:'KEY',
         pageLength:25,
         dom: "<'#t-search.row'<'col-sm-8'f><'col-sm-4'i>>t<'row'<'col-sm-3'l><'col-sm-4'p>>"
     });
 };
 
-makeResultTable()
-
-var popup = function(layer){
-    return '<div id="popup"> \
-    <span id="name">'+layer.feature.properties.stormname+'</span><br> \
-    Year: ' +layer.feature.properties.stormyear+'<br> \
-    Dates in SC: '+checkDateNull(layer.feature.properties.scstartdate)+' - '+checkDateNull(layer.feature.properties.scenddate)+'<br> \
-    Max Wind: '+(layer.feature.properties.maxwind*1.15078).toFixed(0) + ' mph<br> \
-    Min Pressure: '+checkForNull(layer.feature.properties.minpres)+ ' mb<br>\
-    Max Category: '+checkForNull(layer.feature.properties.status)+" "+checkForNull(layer.feature.properties.hurcat)+ '<br> \
-    <button class="btn btn-sm btn-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
+var makePreTable = function(){
+    console.log(preTableData)
+    pt = $('#pre-table').DataTable({
+        language:{
+            search:"Search",
+            searchPlaceholder:"Name, year, keywords",
+            info:"_TOTAL_ storms",
+            infoFiltered: " of _MAX_ total",
+            infoEmpty: "_TOTAL_ storms"
+        },
+        //select:true,
+        pagingType:'simple',
+        data: preTableData,
+        order: [[ 1, "desc" ]],
+        responsive:true,
+        autoWidth: false,
+        columns:[
+            {data: 'NAME', orderable:false},
+            {data: 'YEAR'},
+            {data: 'SCDATES', width:"12%", orderable:false},
+            {data: 'SCCAT'},
+            {data: 'LANDFALL', orderable:false},
+            {data: 'COMMENTS', orderable:false}
+        ],
+        //rowId:'KEY',
+        pageLength:25,
+        dom: "<'#p-search.row'<'col-sm-8'f><'col-sm-4'i>>t<'row'<'col-sm-3'l><'col-sm-4'p>>"
+    });
 };
 
-var updateTable = function(table){
-    table.rows.add(tableData).draw();
-}
 
-var nullStormReport = function(inValue){
-    if (inValue == null){
-        return ""
-    } else {
-        return '<a href="'+inValue+'" target="_blank">Storm Report</a>'
+//load data table data from REST service
+//QUERY POST STORMS
+var postQuery = L.esri.query({
+    url:data
+}).returnGeometry(false);
+
+postQuery.run(function(error,fc,response){   
+    for (var i = 0; i < fc.features.length; i++){
+        tableData.push({
+            //"KEY":feature.properties.stormkey,
+            "NAME":fc.features[i].properties.stormname,
+            "YEAR":fc.features[i].properties.stormyear,
+            "MAXCAT":fc.features[i].properties.status+" "+checkForNull(fc.features[i].properties.hurcat),
+            "MINPRES":fc.features[i].properties.minpres,
+            "MAXWIND":fc.features[i].properties.maxwind,
+            "SCDATES":checkDateNull(fc.features[i].properties.scstartdate) + " - " + checkDateNull(fc.features[i].properties.scenddate),
+            "SCCAT":fc.features[i].properties.scstatus+" "+checkForNull(fc.features[i].properties.schurcat),            
+            "COMMENTS":fc.features[i].properties.comments
+
+        })
     }
-}
+    makeStormTable()
+});
 
-var nullDamageReport = function(inValue){
-    if (inValue == null){
-        return ""
-    } else {
-        return ' | &nbsp;<a href="'+inValue+'" target="_blank">Damage Report</a>'
+//load data table data from REST service
+//QUERY POST STORMS
+var preQuery = L.esri.query({
+    url:predata
+}).returnGeometry(false);
+
+preQuery.run(function(error,fc,response){   
+    console.log(fc)
+    for (var i = 0; i < fc.features.length; i++){
+        preTableData.push({
+            //"KEY":feature.properties.stormkey,
+            "NAME":fc.features[i].properties.stormkey,
+            "YEAR":fc.features[i].properties.stormyear,
+            "SCDATES":checkDateNull(fc.features[i].properties.scstarddate) + " - " + checkDateNull(fc.features[i].properties.scenddate),
+            "SCCAT":fc.features[i].properties.status,
+            "LANDFALL":fc.features[i].properties.landfalls,
+            "COMMENTS":fc.features[i].properties.comments
+
+        })
     }
-}
-
-var nullDate = function(inDate){
-    if (inDate == null){
-        return ""
-    } else {
-        return new Date(inDate).toLocaleDateString()
-    }
-}
-
-var nullTornadoes = function(inTornado){
-    if (inTornado == null){
-        return ""
-    } else {
-        return "There were "+inTornado+" tornadoes reported in South Carolina."
-    }
-}
-
+    makePreTable()
+});
 
 $('a[href^="#"]').on('click',function (e) {
 	    e.preventDefault();

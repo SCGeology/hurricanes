@@ -56,12 +56,11 @@ var checkForNull = function(invalue){
     }
 }
 
-var checkDateNull = function(invalue){
-    if (invalue == null){
+var checkForDateNull = function(inValDate) {
+    if (inValDate == null){
         return ""
     } else {
-        d = new Date(invalue)
-        return (d.getMonth()+1).toString() + "/" + d.getDate();
+        return inValDate.substring(0,5)
     }
 }
 
@@ -73,7 +72,7 @@ var oef = function(feature,layer){
             "KEY":feature.properties.stormkey,
             "NAME":feature.properties.stormname,
             "YEAR":feature.properties.stormyear,
-            "SCDATES":checkDateNull(feature.properties.scstartdate) + " - " + checkDateNull(feature.properties.scenddate),
+            "SCDATES":checkForDateNull(feature.properties.scstartdate_txt) + " - " + checkForDateNull(feature.properties.scenddate_txt),
             //"SCCAT":feature.properties.scstatus+" "+checkForNull(feature.properties.schurcat),
             //"MAXCAT":feature.properties.status+" "+checkForNull(feature.properties.hurcat),
             "COMMENTS":feature.properties.comments
@@ -185,7 +184,7 @@ var popup = function(layer){
     return '<div id="popup"> \
     <span id="name">'+layer.feature.properties.stormname+'</span><br> \
     Year: ' +layer.feature.properties.stormyear+'<br> \
-    Dates in SC: '+checkDateNull(layer.feature.properties.scstartdate)+' - '+checkDateNull(layer.feature.properties.scenddate)+'<br> \
+    Dates in SC: '+checkForDateNull(layer.feature.properties.scstartdate_txt)+' - '+checkForDateNull(layer.feature.properties.scenddate_txt)+'<br> \
     Max Wind: '+(layer.feature.properties.maxwind*1.15078).toFixed(0) + ' mph<br> \
     Min Pressure: '+checkForNull(layer.feature.properties.minpres)+ ' mb<br>\
     Max Category: '+checkForNull(layer.feature.properties.status)+" "+checkForNull(layer.feature.properties.hurcat)+ '<br> \
@@ -289,7 +288,7 @@ var runFilters = function(){
                     "KEY":fc.features[i].properties.stormkey,
                     "NAME":fc.features[i].properties.stormname,
                     "YEAR":fc.features[i].properties.stormyear,
-                    "SCDATES":checkDateNull(fc.features[i].properties.scstartdate) + " - " + checkDateNull(fc.features[i].properties.scenddate),
+                    "SCDATES":checkForNull(fc.features[i].properties.scstartdate_txt) + " - " + checkForNull(fc.features[i].properties.scenddate_txt),
                     //"SCCAT":fc.features[i].properties.scstatus+" "+checkForNull(fc.feature[i].properties.schurcat),
                     //"MAXCAT":fc.features[i].properties.status+" "+checkForNull(fc.feature[i].properties.hurcat),
                     "COMMENTS":fc.features[i].properties.comments
@@ -442,7 +441,7 @@ var stormPoints = L.esri.featureLayer({
     
 stormPoints.bindTooltip(function(layer){
     return '<div> \
-    Date and Time: '+ new Date(layer.feature.properties.datetime).toLocaleString()+'<br> \
+    Date and Time: '+ layer.feature.properties.datetime_est_text +'<br> \
     Status: '+layer.feature.properties.status+' '+checkForNull(layer.feature.properties.hurcat)+'<br> \
     Wind: '+layer.feature.properties.wind+'<br> \
     Pressure: '+checkForNull(layer.feature.properties.pressure)+'<br>\
@@ -493,13 +492,14 @@ var nullDamageReport = function(inValue){
     }
 }
 
-var nullDate = function(inDate){
+//should be the same function as checknulldate...
+/*var nullDate = function(inDate){
     if (inDate == null){
         return ""
     } else {
-        return new Date(inDate).toLocaleDateString()
+        return inDate
     }
-}
+}*/
 
 var nullTornadoes = function(inTornado){
     if (inTornado == null){
@@ -563,10 +563,10 @@ var getDetails = function(key){
                 $("#storm-name").text(fc.features[0].properties.stormname)
                 $("#storm-year").text(fc.features[0].properties.stormyear)
                 
-                $("#form-date").text(new Date(fc.features[0].properties.startdate).toLocaleDateString())
+                $("#form-date").text(checkForNull(fc.features[0].properties.startdate_est_txt))
         
-                $("#sc-date-st").text(new Date(fc.features[0].properties.scstartdate).toLocaleDateString())
-                $("#sc-date-end").text(nullDate(fc.features[0].properties.scenddate))
+                $("#sc-date-st").text(checkForNull(fc.features[0].properties.scstartdate_txt))
+                $("#sc-date-end").text(checkForNull(fc.features[0].properties.scenddate_txt))
         
                 $("#lf-loc").text(fc.features[0].properties.landfalls)
                 $("#max-cat").text(fc.features[0].properties.status +" "+ checkForNull(fc.features[0].properties.hurcat))
@@ -588,7 +588,7 @@ var getDetails = function(key){
         for (var i = 0; i < fc.features.length; i++){
             pointTableData.push({
                 "sortdate":fc.features[i].properties.datetime,
-                "datetime":new Date(fc.features[i].properties.datetime).toLocaleString(),
+                "datetime":fc.features[i].properties.datetime_est_text,
                 "status":fc.features[i].properties.status + checkForNull(fc.features[i].properties.hurcat),
                 "wind":fc.features[i].properties.wind,
                 "pressure":fc.features[i].properties.pressure
