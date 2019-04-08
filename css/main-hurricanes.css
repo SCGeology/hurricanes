@@ -37,7 +37,7 @@
     padding:0.2em 0 0.2em 0.5em;;
 }
 .white-link {
-    color:aqua;
+    color:#00ffff;
     text-decoration: none;
 }
 .white-link:hover{
@@ -218,7 +218,7 @@
     background-color:#a0d2de;
     color:black;
 }
-#about h2 {
+#about h2, #table-view h2 {
     border-bottom:2px solid #666;
 }
 #about h3 {
@@ -259,4 +259,22 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 }
 #report, #damage {
     border-radius:3px;
+}
+
+/*some print stuff*/
+#print-map{
+    text-align:center;
+    margin:auto;
+}
+#print-map{
+    page-break-before: always;
+}
+@media print {
+    .container {
+            margin-top: 50px;
+            background-color:none !important;
+        }
+    p, h1,h2,h3,h4,h5{
+        color: #000 !important;
+    }
 }

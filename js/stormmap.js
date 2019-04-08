@@ -288,7 +288,7 @@ var runFilters = function(){
                     "KEY":fc.features[i].properties.stormkey,
                     "NAME":fc.features[i].properties.stormname,
                     "YEAR":fc.features[i].properties.stormyear,
-                    "SCDATES":checkForNull(fc.features[i].properties.scstartdate_txt) + " - " + checkForNull(fc.features[i].properties.scenddate_txt),
+                    "SCDATES":checkForDateNull(fc.features[i].properties.scstartdate_txt) + " - " + checkForDateNull(fc.features[i].properties.scenddate_txt),
                     //"SCCAT":fc.features[i].properties.scstatus+" "+checkForNull(fc.feature[i].properties.schurcat),
                     //"MAXCAT":fc.features[i].properties.status+" "+checkForNull(fc.feature[i].properties.hurcat),
                     "COMMENTS":fc.features[i].properties.comments
@@ -565,8 +565,8 @@ var getDetails = function(key){
                 
                 $("#form-date").text(checkForNull(fc.features[0].properties.startdate_est_txt))
         
-                $("#sc-date-st").text(checkForNull(fc.features[0].properties.scstartdate_txt))
-                $("#sc-date-end").text(checkForNull(fc.features[0].properties.scenddate_txt))
+                $("#sc-date-st").text(checkForDateNull(fc.features[0].properties.scstartdate_txt))
+                $("#sc-date-end").text(checkForDateNull(fc.features[0].properties.scenddate_txt))
         
                 $("#lf-loc").text(fc.features[0].properties.landfalls)
                 $("#max-cat").text(fc.features[0].properties.status +" "+ checkForNull(fc.features[0].properties.hurcat))
@@ -580,6 +580,8 @@ var getDetails = function(key){
                 $("#report").html(nullStormReport(fc.features[0].properties.reporturl))
                 $("#damage").html(nullDamageReport(fc.features[0].properties.damageurl))
                 $("#trackmap").html("<a href='./trackmaps/"+fc.features[0].properties.stormkey+"_map.png' target='_blank'>Track Map</a>")
+        
+                $("#print-map").html("<img class='img-fluid' src='./trackmaps/"+fc.features[0].properties.stormkey+"_map.png' alt='track map image for printing'/>")
     });
     
     pointQuery.where("stormkey = '"+key+"'");
@@ -696,4 +698,4 @@ var waypoint = new Waypoint({
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
-})
+});

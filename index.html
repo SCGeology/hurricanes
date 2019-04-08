@@ -30,7 +30,7 @@
 
     <!-- Header with Background Image -->
     <header class="header">
-        <div class="container">
+        <div class="container d-print-none">
             <div class="row text-center bg-image">
                 <div class="mx-auto my-2">
                     <h1 class="display-4 text-sm-left text-white drop-shadow" style="font-size:2.2rem;margin-bottom: -0.8rem;">South Carolina</h1>
@@ -38,9 +38,12 @@
                 </div>
             </div>
         </div>
+        <div class="container d-none d-print-block text-center my-5">
+            <h1>South Carolina Hurricanes and Tropical Storms</h1>
+        </div>
     </header>
 
-    <div class="container-fluid py-2">
+    <div class="container-fluid py-2 d-print-none">
         <div id="map">
             <a href="about.html" target="_blank"><button type="button" id="toggle-about" class="btn btn-light align-top map-btn" title="Find out more about this application and the data that it displays.">
                 <span class="d-none d-md-inline">About</span>
@@ -71,7 +74,7 @@
             <span id="messages"></span>
         </div>
     </div>
-
+    
     <!-- Page Content -->
     <div class="container" id="storm-search">
         
@@ -198,7 +201,7 @@
 
     <div class="container" id="storm-details-overview">
         <div class="row my-2">
-            <div class="col">
+            <div class="col d-inline-block">
                 <h3><span id="storm-cat"></span> <span id="storm-name"></span> - <span id="storm-year"></span></h3>
             </div>
         </div>
@@ -222,7 +225,13 @@
                     <span id="trackmap"></span> | <span id="report"></span><span id="damage"></span>
                 </div>
             </div>
-            <div class="ml-4"><a href="about.html" target="_blank">See the About page</a> for more detailed descriptions of these data fields.</div>
+            <div class="ml-4">
+                <p class="lead my-1 d-print-none"><a href="#" onclick="window.print();return false;"><b>Print</b> <i class="fas fa-print mx-1"></i></a> storm summary. See the <a href="about.html" target="_blank">About page <i class="fas fa-question-circle mx-1"></i></a> for more detailed descriptions of these data fields.</p>
+            </div>
+        </div>
+        <!-- track map for print layout -->
+        <div id="print-map" class="d-none d-print-block mt-5">
+            <!--<img class="img-fluid" src="trackmaps/AL011852_map.png"/>-->
         </div>
     </div>
 
@@ -263,7 +272,7 @@
                 <tbody></tbody>
             </table>
         </div>
-        <div class="row d-none mt-4" id="dt-row">
+        <div class="row d-none d-print-none mt-4" id="dt-row">
             <h4 class="ml-2">Storm Advisories</h4>
             <table class="table table-striped" id="details-table">
                 <thead>
