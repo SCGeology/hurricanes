@@ -26,17 +26,13 @@ var checkForNull = function(invalue){
     }
 }
 
-var checkDateNull = function(invalue){
-    if (invalue == null){
+var checkForDateNull = function(inValDate) {
+    if (inValDate == null){
         return ""
     } else {
-        d = new Date(invalue)
-        return d.getMonth() + "/" + d.getDate();
+        return inValDate.substring(0,5)
     }
 }
-
-//~~~ NEW QUERY AND FUNCTION FOR PUSHING PRE-1851 DATA TO THE tableData ARRAY. 
-// THIS WILL MAKE PRE-1851 DATA SHOW UP IN TABLE BECAUSE tableData IS USED TO MAKE DATA TABLES TABLE.
 
 var makeStormTable = function(){
     rt = $('#results-table').DataTable({
@@ -115,7 +111,7 @@ postQuery.run(function(error,fc,response){
             "MAXCAT":fc.features[i].properties.status+" "+checkForNull(fc.features[i].properties.hurcat),
             "MINPRES":fc.features[i].properties.minpres,
             "MAXWIND":fc.features[i].properties.maxwind,
-            "SCDATES":checkDateNull(fc.features[i].properties.scstartdate) + " - " + checkDateNull(fc.features[i].properties.scenddate),
+            "SCDATES":checkForDateNull(fc.features[i].properties.scstartdate_txt) + " - " + checkForDateNull(fc.features[i].properties.scenddate_txt),
             "SCCAT":fc.features[i].properties.scstatus+" "+checkForNull(fc.features[i].properties.schurcat),            
             "COMMENTS":fc.features[i].properties.comments
 
@@ -125,7 +121,7 @@ postQuery.run(function(error,fc,response){
 });
 
 //load data table data from REST service
-//QUERY POST STORMS
+//QUERY PRE STORMS
 var preQuery = L.esri.query({
     url:predata
 }).returnGeometry(false);
@@ -137,7 +133,7 @@ preQuery.run(function(error,fc,response){
             //"KEY":feature.properties.stormkey,
             "NAME":fc.features[i].properties.stormkey,
             "YEAR":fc.features[i].properties.stormyear,
-            "SCDATES":checkDateNull(fc.features[i].properties.scstarddate) + " - " + checkDateNull(fc.features[i].properties.scenddate),
+            "SCDATES":checkForDateNull(fc.features[i].properties.scstartdate) + " - " + checkForDateNull(fc.features[i].properties.scenddate),
             "SCCAT":fc.features[i].properties.status,
             "LANDFALL":fc.features[i].properties.landfalls,
             "COMMENTS":fc.features[i].properties.comments
@@ -146,31 +142,3 @@ preQuery.run(function(error,fc,response){
     }
     makePreTable()
 });
-
-$('a[href^="#"]').on('click',function (e) {
-	    e.preventDefault();
-
-	    var target = this.hash;
-	    var $target = $(target);
-
-	    $('html, body').stop().animate({
-	        'scrollTop': $target.offset().top
-	    }, 900, 'swing', function () {
-	        window.location.hash = target;
-	    });
-});  
-
-
-//OTHER SMALL PIECES OF FUNCTIONALITY
-
-var waypoint = new Waypoint({
-  element: document.getElementById('table-container'),
-  handler: function() {
-      $("#sticky-buttons").toggleClass("no-vis");
-  },
-    offset:-70
-});
-
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})

@@ -6,8 +6,6 @@ Need to figure out why side icon for details gets stuck farther up whenever the 
 TO BE DISCUSSED or do later
 ---------------
 have map select row in table, table row selection make popup? 
-download data / get to services
-make icons for landfalls or records, highlight on map?
 
 */
 var map = L.map('map', {
@@ -63,9 +61,6 @@ var checkForDateNull = function(inValDate) {
         return inValDate.substring(0,5)
     }
 }
-
-//~~~ NEW QUERY AND FUNCTION FOR PUSHING PRE-1851 DATA TO THE tableData ARRAY. 
-// THIS WILL MAKE PRE-1851 DATA SHOW UP IN TABLE BECAUSE tableData IS USED TO MAKE DATA TABLES TABLE.
 
 var oef = function(feature,layer){
     tableData.push({
@@ -259,8 +254,6 @@ var updateTable = function(table){
     table.rows.add(tableData).draw();
 }
 
-//~~~ ADD SEPARATE FUNCTION TO FILTER PRE-1851 DATA, USING THE EXISTING FUNCTIONS ABOVE, AND PASSING RESULTS TO THE FUNCTION BELOW.
-
 var runFilters = function(){
     
     console.log(getTornadoes());
@@ -268,8 +261,6 @@ var runFilters = function(){
     var exp = [getYearRange(),"(", getCatList(),")",getLandfall(),getTornadoes()].join(' ').replace('"','')
     
     query.where(exp).returnGeometry(false);
-    
-    //~~~ WILL REQUIRE AN EXTRA QUERY TO PUSH PRE-1851 TABLE DATA USING RESULTS OF FUNCTION ABOVE.
     
     query.run(function(error,fc,response){
         if (fc == null || fc.features.length == 0) {
@@ -612,10 +603,8 @@ var getDetailsMap = function(){
     getDetails(mapClickKey); 
 };
 
-var stormReset = function (){
+var stormReset = function (keepOrReset){
     
-    stormTracks.setWhere();
-    stormTracksClick.setWhere();
     map.setView([31.044741, -70.804940],4);
     stormTracks.setStyle({
         opacity:0.8
@@ -623,31 +612,30 @@ var stormReset = function (){
     rt.clear();
     //indicates that there is not a selected row - for track highlighting on table row click - see table.on(click) function
     selected = 0
-    //reset years
-    $('#startyear').val(1851);
-    $('#endyear').val(2017);
-    //reset categories
-    $("#storm-cat-group input:checkbox").prop('checked',true);
-    $("#lfsc-check").prop('checked',false);
-    $("#tornadoesNone").prop("checked", true);
-    $("#cat-filter-select").val(1);
     
-    runFilters();
+    if (keepOrReset == "reset"){
+        
+        stormTracks.setWhere();
+        stormTracksClick.setWhere();
+        
+        //reset years
+        $('#startyear').val(1851);
+        $('#endyear').val(2017);
+        //reset categories
+        $("#storm-cat-group input:checkbox").prop('checked',true);
+        $("#lfsc-check").prop('checked',false);
+        $("#tornadoesNone").prop("checked", true);
+        $("#cat-filter-select").val(1);
+        
+        runFilters();
+        
+    } else if (keepOrReset == "keep") {
+
+        runFilters();
+    }
 }
 
-$("#continue-back").on('click',function(){
-    
-    stormPoints.setWhere("stormkey = ''");
-    
-    //map.removeLayer(stormPoints);
-    
-    //trackHighlight.setWhere("stormkey = ''");
-    stormTracksClick.bindPopup(popup);
-    
-    dt.destroy();
-    
-    stormReset();
-    
+var resetUI = function(){
     $("#to-filter").removeClass("disabled");
     $(".storm-btn").prop("disabled", true);
     
@@ -665,11 +653,37 @@ $("#continue-back").on('click',function(){
     $("#toggle-legend").attr("data-target","#trackline-legend-modal");
     
     $("#storm-details-overview").slideToggle("slow");
+}
+
+$("#continue-back").on('click',function(){
+    
+    stormPoints.setWhere("stormkey = ''");
+    
+    stormTracksClick.bindPopup(popup);
+    
+    dt.destroy();
+    
+    stormReset("reset");
+    resetUI();    
     
 });
     
+$("#continue-back-keep").on('click',function(){
+    
+    stormPoints.setWhere("stormkey = ''");
+    
+    stormTracksClick.bindPopup(popup);
+    
+    dt.destroy();
+    
+    stormReset("keep");
+    resetUI();
+    
+});
+
+
 $("#continue-clear").on('click', function(){
-    stormReset();
+    stormReset("reset");
 });
 
 $('a[href^="#"]').on('click',function (e) {

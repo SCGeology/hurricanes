@@ -64,7 +64,7 @@
             </button>
 
             <button type="button" id="back-to-tracks" class="btn btn-primary map-btn d-none" data-toggle="modal" data-target="#back-modal">
-                <span class="d-none d-md-inline">Back to All Storms</span>
+                <span class="d-none d-md-inline">Back to Storm Search</span>
                 <i class="fas fa-undo-alt ml-md-2" title="Go back to viewing all storms, removing current storm data."></i>
                 <span class="sr-only">Go back to viewing all storms, removing current storm data from view.</span>
             </button>
@@ -444,17 +444,19 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="backToAllStormsLabel">Back to All Storms</h5>
+                    <h5 class="modal-title" id="backToAllStormsLabel">Back to Storm Search</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <p>The storm details that you are currently viewing will be lost if you continue back to viewing all storms. </p>
+                    <p>If you had filters applied to the storm search, you can choose to keep previous filters, or reset filters to view all storms.</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Don't Go Back</button>
-                    <button type="button" id="continue-back" class="btn btn-outline-danger" data-dismiss="modal">Continue Back <i class="fas fa-undo-al" aria-hidden></i></button>
+                    <button type="button" class="btn btn-outline-primary float-left" data-dismiss="modal">Don't Go Back</button>
+                    <button type="button" id="continue-back-keep" class="btn btn-outline-danger" data-dismiss="modal">Keep Filters</button>
+                    <button type="button" id="continue-back" class="btn btn-outline-danger" data-dismiss="modal">Reset Filters</button>
                 </div>
             </div>
         </div>
