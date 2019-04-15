@@ -1,11 +1,5 @@
 /*
 THIS JS IS TO CREATE THE SIMPLER TABLE VERSION OF THE APPLICATION
-
-STEPS:
-query feature layer and pre-1851 table using query function from esriLeaflet
-return all features without geometry
-put in to data table
-
 */
 
 var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes_Public/FeatureServer/1"
@@ -34,6 +28,24 @@ var checkForDateNull = function(inValDate) {
     }
 }
 
+var makeReportsMarkup = function(reportsdata){
+    var trackmapMarkup = ' <a href="./trackmaps/'+reportsdata[1]+'_map.png" target="_blank" title="Track map for storm '+reportsdata[1]+'">Track Map</a>'
+    if (reportsdata[2] != null){
+        var reportMarkup = ' | <a href="'+reportsdata[2]+'" target="_blank" title="Storm report for storm '+reportsdata[1]+'">Storm Report</a>'
+    } else{
+        var reportMarkup = ''
+    }
+    if (reportsdata[3] != null){
+        var damageMarkup = ' | <a href="'+reportsdata[3]+'" target="_blank" title="Damage report for storm '+reportsdata[1]+'">Damage Report</a>'
+    } else {
+        var damageMarkup = ''
+    }
+    
+    var finalMarkup = reportsdata[0]+trackmapMarkup+reportMarkup+damageMarkup
+    
+    return finalMarkup;
+}
+
 var makeStormTable = function(){
     rt = $('#results-table').DataTable({
         language:{
@@ -44,7 +56,7 @@ var makeStormTable = function(){
             infoEmpty: "_TOTAL_ storms"
         },
         //select:true,
-        pagingType:'simple',
+        paging:false,
         data: tableData,
         order: [[ 1, "desc" ]],
         responsive:true,
@@ -57,16 +69,21 @@ var makeStormTable = function(){
             {data: 'MAXWIND'},
             {data: 'SCCAT'},
             {data: 'SCDATES', width:"12%", orderable:false},
-            {data: 'COMMENTS', orderable:false}
+            {data: 'COMMENTS', 
+                orderable:false,
+                render: function(data,type,row,meta){
+                    data = makeReportsMarkup(data)
+                    
+                    return data
+                }
+            }
         ],
         //rowId:'KEY',
-        pageLength:25,
         dom: "<'#t-search.row'<'col-sm-8'f><'col-sm-4'i>>t<'row'<'col-sm-3'l><'col-sm-4'p>>"
     });
 };
 
 var makePreTable = function(){
-    console.log(preTableData)
     pt = $('#pre-table').DataTable({
         language:{
             search:"Search",
@@ -76,7 +93,7 @@ var makePreTable = function(){
             infoEmpty: "_TOTAL_ storms"
         },
         //select:true,
-        pagingType:'simple',
+        paging:false,
         data: preTableData,
         order: [[ 1, "desc" ]],
         responsive:true,
@@ -90,7 +107,6 @@ var makePreTable = function(){
             {data: 'COMMENTS', orderable:false}
         ],
         //rowId:'KEY',
-        pageLength:25,
         dom: "<'#p-search.row'<'col-sm-8'f><'col-sm-4'i>>t<'row'<'col-sm-3'l><'col-sm-4'p>>"
     });
 };
@@ -113,10 +129,10 @@ postQuery.run(function(error,fc,response){
             "MAXWIND":fc.features[i].properties.maxwind,
             "SCDATES":checkForDateNull(fc.features[i].properties.scstartdate_txt) + " - " + checkForDateNull(fc.features[i].properties.scenddate_txt),
             "SCCAT":fc.features[i].properties.scstatus+" "+checkForNull(fc.features[i].properties.schurcat),            
-            "COMMENTS":fc.features[i].properties.comments
-
+            "COMMENTS":[fc.features[i].properties.comments, fc.features[i].properties.stormkey, fc.features[i].properties.reporturl, fc.features[i].properties.damageurl]
         })
     }
+
     makeStormTable()
 });
 
@@ -127,7 +143,6 @@ var preQuery = L.esri.query({
 }).returnGeometry(false);
 
 preQuery.run(function(error,fc,response){   
-    console.log(fc)
     for (var i = 0; i < fc.features.length; i++){
         preTableData.push({
             //"KEY":feature.properties.stormkey,
@@ -142,3 +157,24 @@ preQuery.run(function(error,fc,response){
     }
     makePreTable()
 });
+
+$('a[href^="#"]').on('click',function (e) {
+	    e.preventDefault();
+
+	    var target = this.hash;
+	    var $target = $(target);
+
+	    $('html, body').stop().animate({
+	        'scrollTop': $target.offset().top
+	    }, 900, 'swing', function () {
+	        window.location.hash = target;
+	    });
+});  
+
+$(window).scroll(function() {
+                if ($(this).scrollTop() > 200) {
+                    $('#backup:hidden').stop(true, true).fadeIn();
+                } else {
+                    $('#backup').stop(true, true).fadeOut();
+                }
+            });

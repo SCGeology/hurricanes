@@ -1,4 +1,5 @@
 /*!
+ * MODIFIED BY SCDNR STATE CLIMATE OFFICE FROM...
  * Start Bootstrap - Busines Frontpage (https://startbootstrap.com/template-overviews/business-frontpage)
  * Copyright 2013-2017 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-business-frontpage/blob/master/LICENSE)
@@ -51,7 +52,7 @@
     z-index: 1000;
 }
 #toggle-legend {
-    bottom:67px;
+    bottom:18%;
     min-width: 32px;
 }
 #toggle-about {
@@ -196,6 +197,18 @@
     color:white;
 }
 
+#backup{
+    padding:5px 10px 5px 10px;
+    bottom:30px;
+    right:0px;
+    margin-right:-5px;
+    background-color:#fff;
+    border-radius: 3px;
+    position: fixed;
+    border:1px solid gray;
+    display: none;
+}
+
 /*div table css*/
 .divTable{
 	display: table;
@@ -277,4 +290,8 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     p, h1,h2,h3,h4,h5{
         color: #000 !important;
     }
+}
+/*width fix for year input boxes on firefox*/
+.form-inline .form-control {
+    max-width: 110px;
 }

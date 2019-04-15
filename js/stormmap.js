@@ -136,6 +136,12 @@ var query = L.esri.query({
     url:data
 });
 
+//set min and max dates for filters
+var mindate = 1851
+var maxdate = new Date().getFullYear()-1
+$('#startyear').val(mindate).attr("max",maxdate-1).attr("min",mindate).attr("value", mindate);
+$('#endyear').val(maxdate).attr("max",maxdate).attr("min",mindate+1).attr("value", maxdate);
+
 var makeResultTable = function(){
     rt = $('#results-table').DataTable({
         language:{
@@ -256,7 +262,7 @@ var updateTable = function(table){
 
 var runFilters = function(){
     
-    console.log(getTornadoes());
+    //console.log(getTornadoes());
     
     var exp = [getYearRange(),"(", getCatList(),")",getLandfall(),getTornadoes()].join(' ').replace('"','')
     
@@ -313,8 +319,8 @@ $("#apply-filter").on('click', function(){
 });
 
 $("#reset").on('click', function(){
-    $('#startyear').val(1850);
-    $('#endyear').val(2017);
+    $('#startyear').val(mindate);
+    $('#endyear').val(maxdate);
 });
 
 //TABLE SELECTION INTERACTION WITH MAP
@@ -356,12 +362,15 @@ $("#results-table").on( 'click', 'td', function () {
 //this keeps from confusion between keys set in the map and the table
 var mapClickKey
 
-stormTracksClick.on('click', function(e) { 
-    mapClickKey = e.layer.feature.properties.stormkey
-    stormKey = mapClickKey
-    stormTracks.setStyle(highlightStyle)
-    rt.rows().deselect();
-});
+function clickTracks_On() {
+    stormTracksClick.on('click', function(e) { 
+        mapClickKey = e.layer.feature.properties.stormkey
+        stormKey = mapClickKey
+        stormTracks.setStyle(highlightStyle)
+        rt.rows().deselect();
+    });
+}    
+clickTracks_On()
 
 map.on('popupclose', function(e){
     stormTracks.setStyle({
@@ -432,7 +441,7 @@ var stormPoints = L.esri.featureLayer({
     
 stormPoints.bindTooltip(function(layer){
     return '<div> \
-    Date and Time: '+ layer.feature.properties.datetime_est_text +'<br> \
+    Date and Time (EST): '+ layer.feature.properties.datetime_est_text +'<br> \
     Status: '+layer.feature.properties.status+' '+checkForNull(layer.feature.properties.hurcat)+'<br> \
     Wind: '+layer.feature.properties.wind+'<br> \
     Pressure: '+checkForNull(layer.feature.properties.pressure)+'<br>\
@@ -512,6 +521,7 @@ var getDetails = function(key){
     
     map.closePopup();
     
+    stormTracksClick.off('click');
     stormTracksClick.unbindPopup();
     
     stormPoints.addTo(map);
@@ -610,6 +620,8 @@ var stormReset = function (keepOrReset){
         opacity:0.8
     });
     rt.clear();
+    
+    clickTracks_On()
     //indicates that there is not a selected row - for track highlighting on table row click - see table.on(click) function
     selected = 0
     
@@ -619,8 +631,8 @@ var stormReset = function (keepOrReset){
         stormTracksClick.setWhere();
         
         //reset years
-        $('#startyear').val(1851);
-        $('#endyear').val(2017);
+        $('#startyear').val(mindate);
+        $('#endyear').val(maxdate);
         //reset categories
         $("#storm-cat-group input:checkbox").prop('checked',true);
         $("#lfsc-check").prop('checked',false);

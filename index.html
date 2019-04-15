@@ -47,31 +47,30 @@
         <div id="map">
             <a href="about.html" target="_blank"><button type="button" id="toggle-about" class="btn btn-light align-top map-btn" title="Find out more about this application and the data that it displays.">
                 <span class="d-none d-md-inline">About</span>
-                <i class="fas fa-question ml-md-2" title="Find out more information about this application."></i>
-                <span class="sr-only">Find out more information about this application.</span>
+                <i class="fas fa-question ml-md-2" aria-hidden></i>
+                
             </button></a>
 
             <button type="button" id="toggle-legend" class="btn btn-light align-top map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
                 <span class="d-none d-md-inline">Map Legend</span>
-                <i class="fas fa-bars ml-md-2" title="Display the legend for the current map symbols."></i>
-                <span class="sr-only">Display the legend for the current map symbols.</span>
+                <i class="fas fa-bars ml-md-2" aria-hidden></i>
+                
             </button>
 
             <button type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">
                 <span class="d-none d-md-inline">Filter Storms</span>
-                <i id="filter-icon" class="fas fa-filter ml-md-2" title="Display storm filters"></i>
-                <span class="sr-only">Display storm filters</span>
+                <i id="filter-icon" class="fas fa-filter ml-md-2" aria-hidden></i>
+                
             </button>
 
             <button type="button" id="back-to-tracks" class="btn btn-primary map-btn d-none" data-toggle="modal" data-target="#back-modal">
                 <span class="d-none d-md-inline">Back to Storm Search</span>
-                <i class="fas fa-undo-alt ml-md-2" title="Go back to viewing all storms, removing current storm data."></i>
-                <span class="sr-only">Go back to viewing all storms, removing current storm data from view.</span>
+                <i class="fas fa-undo-alt ml-md-2" aria-hidden></i>
+                
             </button>
         </div>
         <div id="message-div" class="mb-1 p-1">
             <span id="no-track" class="mx-lg-5 lead">A table-only view of these data, along with storms prior to 1851, can be found in the <a href="table-view.html" class="white-link" target="_blank">Table View.</a></span>
-            <span id="messages"></span>
         </div>
     </div>
     
@@ -90,11 +89,11 @@
                         <form class="form-inline mb-1">
                             <div class="form-group m-1">
                                 <label for="startyear" class="mr-2">Start Year</label>
-                                <input type="number" class="form-control" id="startyear" min="1851" max="2018" maxlength="4" size="4" value="1851" title="Start year for filtering by range of years.">
+                                <input type="number" class="form-control" id="startyear" min="" max="" maxlength="4" size="4" value="" title="Start year for filtering by range of years.">
                             </div>
                             <div class="form-group m-1">
                                 <label for="endyear" class="mr-3">End Year</label>
-                                <input type="number" class="form-control" id="endyear" min="1851" max="2018" maxlength="4" size="4" value="2018" title="End year for filtering by range of years.">
+                                <input type="number" class="form-control" id="endyear" min="" max="" maxlength="4" size="4" value="" title="End year for filtering by range of years.">
                             </div>
                         </form>
                     </fieldset>
@@ -226,7 +225,7 @@
                 </div>
             </div>
             <div class="ml-4">
-                <p class="lead my-1 d-print-none"><a href="#" onclick="window.print();return false;"><b>Print</b> <i class="fas fa-print mx-1"></i></a> storm summary. See the <a href="about.html" target="_blank">About page <i class="fas fa-question-circle mx-1"></i></a> for more detailed descriptions of these data fields.</p>
+                <p class="lead my-1 d-print-none"><a href="#" onclick="window.print();return false;"><b>Print</b> <i class="fas fa-print mx-1" aria-hidden></i></a> storm summary. See the <a href="about.html" target="_blank">About page <i class="fas fa-question-circle mx-1" aria-hidden></i></a> for more detailed descriptions of these data fields.</p>
             </div>
         </div>
         <!-- track map for print layout -->
@@ -278,7 +277,7 @@
                 <thead>
                     <tr>
                         <th>sortdate</th>
-                        <th>Date &amp; Time</th>
+                        <th>Date &amp; Time (EST)</th>
                         <th>Status</th>
                         <th class="not-mobile">Wind</th>
                         <th class="not-mobile">Pressure</th>
@@ -329,7 +328,7 @@
                     <h5>Searching the Table</h5>
                     <p>Storms can be searched by name, year, or any keywords found in the table. For example, typing "flood" in the search box will return all storms that have "flood" somewhere in the description. This option does not filter the map.</p>
                     <h5>Table View</h5>
-                    <p>Storm data can be viewed in a table-only application, along with storms prior to 1851, in the <a href="table-view.html" target="_blank">Table View.</a></p>
+                    <p>Storm data can be viewed in a table-only web page, along with storms prior to 1851, in the <a href="table-view.html" target="_blank">Table View.</a> The Table View is less interactive and may be easier to navigate for some users. </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>

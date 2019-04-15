@@ -43,28 +43,29 @@
     
     <div class="container mb-3 mt-4" id="table-view">
         <h2>Table View</h2>
-        <p class="h4">Select storms <a href="#pre-table">prior to 1852</a> or storms from <a href="#results-table">1852 to present</a>.</p>
-        <p>Storms from 1852 to present can be found in the <a href="index.html">Map View</a>.<br>
-        Find out more <a href="about.html">about</a> the data in this application.</p>
+        <p class="h4">Select storms <a href="#pre-table" title="Scroll to table that includes storms prior to the year 1852.">prior to 1852</a> or storms from <a href="#results-table" title="Scroll to table that includes storms from the year 1852 to the present.">1852 to present</a>.</p>
+        <p>Storms from 1852 to present can be found in the <a href="index.html" title="Go to the Map View application.">Map View</a>.<br>
+        Find out more <a href="about.html" title="Go to the About page.">about</a> the data in this application.</p>
     </div>
     
     <div id="table-container" class="container mb-3 mt-4">
         <div class="row my-4" id="pt-row">
             
             <div>
-            <h3>Storms prior to 1852</h3>
+            <h3>Storms prior to 1852.</h3>
             <p>These storms do not have track data and are not in the Map View.</p>
             </div>
             
             <table class="table table-striped" id="pre-table">
+                <caption>Hurricanes and tropical storms that have impacted South Carolina prior to 1852.</caption>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Year</th>
-                        <th>SC Impacts</th>
-                        <th>SC Cat</th>
-                        <th>Landfall</th>
-                        <th>Storm Comments</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">SC Impacts</th>
+                        <th scope="col">SC Cat</th>
+                        <th scope="col">Landfall</th>
+                        <th scope="col">Storm Comments</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -78,16 +79,17 @@
             <p>Track data for these storms (from HURDAT2) can be viewed in the Map View.</p>
             </div>
             <table class="table table-striped" id="results-table">
+                <caption>Hurricanes and tropical storms that have impacted South Carolina from 1852 until present.</caption>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Year</th>
-                        <th>Max Cat</th>
-                        <th>Min Pres</th>
-                        <th>Max Wind</th>
-                        <th>SC Cat</th>
-                        <th class="not-mobile">SC Impacts</th>
-                        <th class="not-mobile">Storm Comments</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Max Cat</th>
+                        <th scope="col">Min Pres</th>
+                        <th scope="col">Max Wind</th>
+                        <th scope="col"v>SC Cat</th>
+                        <th scope="col" class="not-mobile">SC Impacts</th>
+                        <th scope="col" class="not-mobile">Storm Comments</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -95,6 +97,13 @@
         </div>
 
     </div>
+    
+    <a href="#table-view">
+        <div id="backup">
+            Back to Top
+            <span class="sr-only">Go back to top of page.</span>
+        </div>
+    </a>
 
     <!-- Footer -->
     <footer class="py-5 bg-dark">
