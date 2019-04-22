@@ -273,7 +273,9 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 #report, #damage {
     border-radius:3px;
 }
-
+footer a {
+    color:deepskyblue;
+}
 /*some print stuff*/
 #print-map{
     text-align:center;

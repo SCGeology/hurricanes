@@ -58,7 +58,7 @@
                     <li>Name - This column includes a unique identifier for storms prior to 1852. No official names were given to storms prior to 1852. </li>
                     <li>Year - the year in which the storm occured. </li>
                     <li>SC Impacts - estimated dates of impacts to South Carolina, in eastern standard time. </li>
-                    <li>SC Cat - estimated storm category during impacts to South Carolina.</li>
+                    <li>SC Cat - estimated storm category during impacts to South Carolina. Status and category abbreviations can be found in the <a href="about.html#status" target="_blank">Status section </a> of the About page.</li>
                     <li>Landfall - estimated landfall location.</li>
                     <li>Storm Comments - brief statement about the storm's impact on South Carolina. Links to other official reports and track map images are included in this column. </li>
                 </ul>
@@ -70,8 +70,8 @@
                     <tr>
                         <th scope="col">Name</th>
                         <th scope="col">Year</th>
-                        <th scope="col">SC Impacts</th>
-                        <th scope="col">SC Cat</th>
+                        <th scope="col"><abbr title="South Carolina">SC</abbr> Impacts</th>
+                        <th scope="col"><abbr title="South Carolina">SC</abbr> Cat</th>
                         <th scope="col">Landfall</th>
                         <th scope="col">Storm Comments</th>
                     </tr>
@@ -89,10 +89,10 @@
                 <ul>
                     <li>Name - official name of given to the storm by the National Hurricane Center. Storms not given an official name are listed as 'UNNAMED'. </li>
                     <li>Year - the year in which the storm occured. </li>
-                    <li>Max Cat - the maximum category, defined by the <a href="https://www.nhc.noaa.gov/aboutsshws.php">Saffir Simpson Wind Scale</a> of the storm over the storm's entire duration.</li>
+                    <li>Max Cat - the maximum category, defined by the <a href="https://www.nhc.noaa.gov/aboutsshws.php">Saffir Simpson Wind Scale</a> of the storm over the storm's entire duration. Status and category abbreviations can be found in the <a href="about.html#status" target="_blank">Status section </a> of the About page.</li>
                     <li>Min Pres - minimum pressure, in millibars, over the entire duration of the storm.</li>
                     <li>Max Wind - maximum wind speed, in miles per hour, over the entire duration of the storm.</li>
-                    <li>SC Cat - estimated storm category during impacts to South Carolina.</li>
+                    <li>SC Cat - estimated storm category during impacts to South Carolina. Status and category abbreviations can be found in the <a href="about.html#status" target="_blank">Status section </a> of the About page.</li>
                     <li>SC Impacts - estimated dates of impacts to South Carolina, in eastern standard time. </li>
                     <li>Storm Comments - brief statement about the storm's impact on South Carolina. Links to other official reports and track map images are included in this column. </li>
                 </ul>
@@ -106,8 +106,8 @@
                         <th scope="col">Max Cat</th>
                         <th scope="col">Min Pres</th>
                         <th scope="col">Max Wind</th>
-                        <th scope="col"v>SC Cat</th>
-                        <th scope="col" class="not-mobile">SC Impacts</th>
+                        <th scope="col"v><abbr title="South Carolina">SC</abbr> Cat</th>
+                        <th scope="col" class="not-mobile"><abbr title="South Carolina">SC</abbr> Impacts</th>
                         <th scope="col" class="not-mobile">Storm Comments</th>
                     </tr>
                 </thead>
@@ -127,16 +127,26 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
-            <div>
-                <p class="m-0 text-white mb-3">South Carolina State Climate Office<br>
-                South Carolina Department of Natural Resources<br>
+            <div class="row">
+                <div class="col-lg-6">
+                    <p class="m-0 text-white mb-3">South Carolina State Climate Office<br>
+                    South Carolina Department of Natural Resources<br>
                     Land, Water, and Conservation Division<br>
                         State Climate Office<br>
                         P.O. Box 167<br>
                         Columbia, SC 29202<br>
                         <a href="http://dnr.sc.gov/climate/sco">dnr.sc.gov/climate/sco</a>
-                    </p>
-                <img style="width:100px;height:auto;" src="images/dnr-logo.gif" alt="scdnr logo" />
+                        </p>
+                    <img style="width:100px;height:auto;" src="images/dnr-logo.gif" alt="scdnr logo" />
+                </div>
+                <div class="col-lg-6 text-white mt-4 mt-lg-0">
+                    <h5>Links to other South Carolina Hurricane Resources</h5>
+                    <ul>
+                        <li><a href="pdfs/SCHurricanesExecutiveSummary.pdf">Executive Summary of South Carolina Hurricanes</a> - South Carolina State Climate Office</li>
+                        <li><a href="https://www.scemd.org/prepare/types-of-disasters/hurricanes/">Hurricane Preparedness</a> - South Carolina Emergency Management Division </li>
+                        <li><a href="https://www.nhc.noaa.gov/">National Oceanic and Atmospheric Association, National Hurricane Center</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div id="mobile-buffer" class="d-block d-lg-none" style="height:100px;"></div>

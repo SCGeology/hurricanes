@@ -117,27 +117,27 @@
                         <div role="group" aria-labelledby="cat-label" id="storm-cat-group" class="form-group mb-0">
                             <div class="form-check form-check-inline cat-check">
                                 <input class="form-check-input" checked type="checkbox" name="inlineRadioOptions" value="" title="Tropical storm category." id="sc-cat-ts" />
-                                <label class="form-check-label" for="cat-ts">TS</label>
+                                <label class="form-check-label" for="cat-ts"><abbr title="tropical storm">TS</abbr></label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
                                 <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="1" title="Category 1 storm." id="cat-1" />
-                                <label class="form-check-label" for="cat-1">Cat 1</label>
+                                <label class="form-check-label" for="cat-1"><abbr title="category one">Cat 1</abbr></label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
                                 <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="2" title="Category 2 storm." id="cat-2" />
-                                <label class="form-check-label" for="cat-2">Cat 2</label>
+                                <label class="form-check-label" for="cat-2"><abbr title="category two">Cat 2</abbr></label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
                                 <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="3" title="Category 3 storm." id="cat-3" />
-                                <label class="form-check-label" for="cat-3">Cat 3</label>
+                                <label class="form-check-label" for="cat-3"><abbr title="category 3">Cat 3</abbr></label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
                                 <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="4" title="Category 4 storm." id="cat-4" />
-                                <label class="form-check-label" for="cat-4">Cat 4</label>
+                                <label class="form-check-label" for="cat-4"><abbr title="category 4">Cat 4</abbr></label>
                             </div>
                             <div class="form-check form-check-inline cat-check">
                                 <input class="form-check-input hu" checked type="checkbox" name="inlineRadioOptions" value="5" title="Category 5 storm." id="cat-5" />
-                                <label class="form-check-label" for="cat-5">Cat 5</label>
+                                <label class="form-check-label" for="cat-5"><abbr title="category 5">Cat 5</abbr></label>
                             </div>
                         </div>
                     </form>
@@ -209,14 +209,14 @@
                 <h4>Storm Summary</h4>
                 <h5 class="detail-header">Formation Date</h5> <span id="form-date"></span>
                 <h5 class="detail-header">Max Category</h5> <span id="max-cat"></span>
-                <h5 class="detail-header">Max Wind</h5> <span id="max-wind"></span> mph 
+                <h5 class="detail-header">Max Wind</h5> <span id="max-wind"></span> <abbr title="miles per hour">mph</abbr> 
                 <h5 class="detail-header">Min Pressure</h5> <span id="min-pres"></span> millibars
                 <h5 class="detail-header h5">Landfall Locations</h5> <span id="lf-loc"></span>
             </div>
             <div class="col-lg-6 py-2 m-2 details-col" id="sc-impacts">
                 <h4>South Carolina Impacts</h4>
-                <h5 class="detail-header h5">SC Impacts Dates</h5> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
-                <h5 class="detail-header h5">SC Impacts Category</h5> <span id="sc-cat"></span>
+                <h5 class="detail-header h5"><abbr title="South Carolina">SC</abbr> Impacts Dates</h5> <span id="sc-date-st"></span> - <span id="sc-date-end"></span>
+                <h5 class="detail-header h5"><abbr title="South Carolina">SC</abbr> Impacts Category</h5> <span id="sc-cat"></span>
                 <h5 class="detail-header h5">Comments</h5>
                 <p><span id="comments"></span> <span id="tornadoes"></span></p>
                 <h5 class="detail-header h5">Reports</h5>
@@ -225,7 +225,7 @@
                 </div>
             </div>
             <div class="ml-4">
-                <p class="lead my-1 d-print-none"><a href="#" onclick="window.print();return false;"><b>Print</b> <i class="fas fa-print mx-1" aria-hidden></i></a> storm summary. See the <a href="about.html" target="_blank">About page <i class="fas fa-question-circle mx-1" aria-hidden></i></a> for more detailed descriptions of these data fields.</p>
+                <p class="lead my-1 d-print-none"><a href="#" onclick="window.print();return false;"><b>Print</b> <i class="fas fa-print mx-1" aria-hidden></i></a> storm summary. See the <a href="about.html" target="_blank">About page <i class="fas fa-question-circle mx-1" aria-hidden></i></a> for more detailed descriptions of these data fields. Status abbreviations can be found in the <a href="about.html#status" target="_blank">Status section </a> of the About page.</p>
             </div>
         </div>
         <!-- track map for print layout -->
@@ -261,7 +261,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Year</th>
-                        <th class="not-mobile">SC Impacts</th>
+                        <th class="not-mobile"><abbr title="South Carolina">SC</abbr> Impacts</th>
                         <!--
                         <th>SC Cat</th>
                         <th>Max Cat</th> -->
@@ -277,7 +277,7 @@
                 <thead>
                     <tr>
                         <th>sortdate</th>
-                        <th>Date &amp; Time (EST)</th>
+                        <th>Date &amp; Time (<abbr title="eastern standard time">EST</abbr>)</th>
                         <th>Status</th>
                         <th class="not-mobile">Wind</th>
                         <th class="not-mobile">Pressure</th>
@@ -503,16 +503,26 @@
     <!-- Footer -->
     <footer class="py-5 bg-dark">
         <div class="container">
-            <div>
-                <p class="m-0 text-white mb-3">South Carolina State Climate Office<br>
-                South Carolina Department of Natural Resources<br>
+            <div class="row">
+                <div class="col-lg-6">
+                    <p class="m-0 text-white mb-3">South Carolina State Climate Office<br>
+                    South Carolina Department of Natural Resources<br>
                     Land, Water, and Conservation Division<br>
                         State Climate Office<br>
                         P.O. Box 167<br>
                         Columbia, SC 29202<br>
                         <a href="http://dnr.sc.gov/climate/sco">dnr.sc.gov/climate/sco</a>
-                    </p>
-                <img style="width:100px;height:auto;" src="images/dnr-logo.gif" alt="scdnr logo" />
+                        </p>
+                    <img style="width:100px;height:auto;" src="images/dnr-logo.gif" alt="scdnr logo" />
+                </div>
+                <div class="col-lg-6 text-white mt-4 mt-lg-0">
+                    <h5>Links to other South Carolina Hurricane Resources</h5>
+                    <ul>
+                        <li><a href="pdfs/SCHurricanesExecutiveSummary.pdf">Executive Summary of South Carolina Hurricanes</a> - South Carolina State Climate Office</li>
+                        <li><a href="https://www.scemd.org/prepare/types-of-disasters/hurricanes/">Hurricane Preparedness</a> - South Carolina Emergency Management Division </li>
+                        <li><a href="https://www.nhc.noaa.gov/">National Oceanic and Atmospheric Association, National Hurricane Center</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div id="mobile-buffer" class="d-block d-lg-none" style="height:100px;"></div>
