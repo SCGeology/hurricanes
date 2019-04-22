@@ -443,8 +443,8 @@ stormPoints.bindTooltip(function(layer){
     return '<div> \
     Date and Time (EST): '+ layer.feature.properties.datetime_est_text +'<br> \
     Status: '+layer.feature.properties.status+' '+checkForNull(layer.feature.properties.hurcat)+'<br> \
-    Wind: '+layer.feature.properties.wind+'<br> \
-    Pressure: '+checkForNull(layer.feature.properties.pressure)+'<br>\
+    Wind (mph): '+(layer.feature.properties.wind*1.15078).toFixed(0)+'<br> \
+    Pressure (mb): '+checkForNull(layer.feature.properties.pressure)+'<br>\
     </div>'
 });
 

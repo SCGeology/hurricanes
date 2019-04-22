@@ -126,7 +126,7 @@ postQuery.run(function(error,fc,response){
             "YEAR":fc.features[i].properties.stormyear,
             "MAXCAT":fc.features[i].properties.status+" "+checkForNull(fc.features[i].properties.hurcat),
             "MINPRES":fc.features[i].properties.minpres,
-            "MAXWIND":fc.features[i].properties.maxwind,
+            "MAXWIND":(fc.features[i].properties.maxwind*1.15078).toFixed(0),
             "SCDATES":checkForDateNull(fc.features[i].properties.scstartdate_txt) + " - " + checkForDateNull(fc.features[i].properties.scenddate_txt),
             "SCCAT":fc.features[i].properties.scstatus+" "+checkForNull(fc.features[i].properties.schurcat),            
             "COMMENTS":[fc.features[i].properties.comments, fc.features[i].properties.stormkey, fc.features[i].properties.reporturl, fc.features[i].properties.damageurl]

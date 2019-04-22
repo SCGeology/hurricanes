@@ -43,9 +43,8 @@
     
     <div class="container mb-3 mt-4" id="table-view">
         <h2>Table View</h2>
-        <p class="h4">Select storms <a href="#pre-table" title="Scroll to table that includes storms prior to the year 1852.">prior to 1852</a> or storms from <a href="#results-table" title="Scroll to table that includes storms from the year 1852 to the present.">1852 to present</a>.</p>
-        <p>Storms from 1852 to present can be found in the <a href="index.html" title="Go to the Map View application.">Map View</a>.<br>
-        Find out more <a href="about.html" title="Go to the About page.">about</a> the data in this application.</p>
+        <p class="h4">Select storms <a href="#pt-row" title="Scroll to table that includes storms prior to the year 1852.">prior to 1852</a> or storms from <a href="#rt-row" title="Scroll to table that includes storms from the year 1852 to the present.">1852 to present</a>.</p>
+        <p>Storms from 1852 to present can be found in the <a href="index.html" title="Go to the Map View application.">Map View</a>.
     </div>
     
     <div id="table-container" class="container mb-3 mt-4">
@@ -53,7 +52,16 @@
             
             <div>
             <h3>Storms prior to 1852.</h3>
-            <p>These storms do not have track data and are not in the Map View.</p>
+            <p>These storms do not have track data and are not in the Map View. Find out more <a href="about.html" title="Go to the About page.">about</a> the data in this table.</p>
+                <h4>Column definitions and units of measure in this table:</h4>
+                <ul>
+                    <li>Name - This column includes a unique identifier for storms prior to 1852. No official names were given to storms prior to 1852. </li>
+                    <li>Year - the year in which the storm occured. </li>
+                    <li>SC Impacts - estimated dates of impacts to South Carolina, in eastern standard time. </li>
+                    <li>SC Cat - estimated storm category during impacts to South Carolina.</li>
+                    <li>Landfall - estimated landfall location.</li>
+                    <li>Storm Comments - brief statement about the storm's impact on South Carolina. Links to other official reports and track map images are included in this column. </li>
+                </ul>
             </div>
             
             <table class="table table-striped" id="pre-table">
@@ -76,7 +84,18 @@
 
             <div>
             <h3>Storms 1852 to present.</h3>
-            <p>Track data for these storms (from HURDAT2) can be viewed in the Map View.</p>
+            <p>Track data for these storms (from HURDAT2) can be viewed in the Map View. Find out more <a href="about.html" title="Go to the About page.">about</a> the data in this table.</p>
+            <h4>Column definitions and units of measure in this table:</h4>
+                <ul>
+                    <li>Name - official name of given to the storm by the National Hurricane Center. Storms not given an official name are listed as 'UNNAMED'. </li>
+                    <li>Year - the year in which the storm occured. </li>
+                    <li>Max Cat - the maximum category, defined by the <a href="https://www.nhc.noaa.gov/aboutsshws.php">Saffir Simpson Wind Scale</a> of the storm over the storm's entire duration.</li>
+                    <li>Min Pres - minimum pressure, in millibars, over the entire duration of the storm.</li>
+                    <li>Max Wind - maximum wind speed, in miles per hour, over the entire duration of the storm.</li>
+                    <li>SC Cat - estimated storm category during impacts to South Carolina.</li>
+                    <li>SC Impacts - estimated dates of impacts to South Carolina, in eastern standard time. </li>
+                    <li>Storm Comments - brief statement about the storm's impact on South Carolina. Links to other official reports and track map images are included in this column. </li>
+                </ul>
             </div>
             <table class="table table-striped" id="results-table">
                 <caption>Hurricanes and tropical storms that have impacted South Carolina from 1852 until present.</caption>
