@@ -38,7 +38,7 @@
     padding:0.2em 0 0.2em 0.5em;;
 }
 .white-link {
-    color:#00ffff;
+    color:deepskyblue;
     text-decoration: none;
 }
 .white-link:hover{
@@ -137,7 +137,9 @@
 #storm-details-sticky{
     top: 50px;
 }
-
+#info-icon-sticky{
+    padding: 0px 1px;
+}
 .no-vis{
     display: none;
 }
@@ -152,7 +154,7 @@
 .details-col {
     border:1px solid #aaa;
 }
-.details-col h4{
+.details-col h3{
     color:#fff;
     background-color:#2e445b;
     padding:0.3rem;
@@ -184,7 +186,7 @@
     text-align: center;
 }
 .legend-table{
-    background-color:#1e3556;
+    background-color:#0c1521;
     color:white;
     border-radius: 5px;
 }
@@ -273,9 +275,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 #report, #damage {
     border-radius:3px;
 }
-footer a {
-    color:deepskyblue;
-}
+
 /*some print stuff*/
 #print-map{
     text-align:center;

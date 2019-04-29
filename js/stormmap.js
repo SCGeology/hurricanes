@@ -19,10 +19,7 @@ var map = L.map('map', {
     ]
 }).setView([31.044741, -70.804940],4);
 
-var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-    noWrap:true
-}).addTo(map);
+var satellite = L.esri.basemapLayer("ImageryFirefly").addTo(map);
 
 var scoutline = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SCOutline/FeatureServer/0"
 
@@ -86,27 +83,27 @@ var trackStyle = function(feature){
       switch (feature.properties.hurcat) {
         case 1:
           c = c1;
-          w = 1.2
+          w = 1.4
           break;
         case 2:
           c = c2;
-              w = 1.4
+              w = 1.6
           break;
         case 3:
           c = c3;
-              w = 1.6
+              w = 1.8
           break;
         case 4:
           c = c4;
-              w = 1.8
+              w = 2.0
           break;
         case 5:
           c = c5;
-              w = 2
+              w = 2.2
           break;      
         default:
           c = ct;
-              w = 1.2;
+              w = 1.4;
               d = "8 3"
       }
       return {color: c, opacity: 0.8, weight: w, dashArray:d};
@@ -232,7 +229,7 @@ var getYearRange = function(){
 }
 
 var getLandfall = function(){
-    if ($("#lfsc-check").is(":checked")){
+    if ($("#lfsc-yes").is(":checked")){
         return "AND sclandfall = 'y'"
     }
 }
@@ -331,7 +328,7 @@ var highlightStyle = function(feature){
           o = 1;
           break;    
         default:
-          o = 0.12      
+          o = 0.07      
       }
       return {opacity: o};
     }
@@ -635,7 +632,7 @@ var stormReset = function (keepOrReset){
         $('#endyear').val(maxdate);
         //reset categories
         $("#storm-cat-group input:checkbox").prop('checked',true);
-        $("#lfsc-check").prop('checked',false);
+        $("#lfsc-no").prop('checked',true);
         $("#tornadoesNone").prop("checked", true);
         $("#cat-filter-select").val(1);
         
@@ -722,6 +719,11 @@ var waypoint = new Waypoint({
     offset:-70
 });
 
+$("#map-sticky").on('click', function(){
+    $("#to-map").triggerHandler('click');
+});
+
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 });
+
