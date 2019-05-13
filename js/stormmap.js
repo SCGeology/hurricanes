@@ -149,7 +149,8 @@ var makeResultTable = function(){
             infoEmpty: "_TOTAL_ storms"
         },
         select:true,
-        pagingType:'simple',
+        paging:false,
+        scrollY:300,
         data: tableData,
         order: [[ 1, "desc" ]],
         responsive:true,
@@ -345,12 +346,14 @@ $("#results-table").on( 'click', 'td', function () {
         oldKey = stormKey
         stormTracks.setStyle(highlightStyle);
         $(".storm-btn").prop("disabled", false);
+        $('.dataTables_scrollBody').css("overflow","hidden");
         selected = 1
     } else {
         stormTracks.setStyle({
             opacity:0.8
         });
         $(".storm-btn").prop("disabled", true);
+        $('.dataTables_scrollBody').css("overflow","auto");
         selected = 0
     } 
 });
