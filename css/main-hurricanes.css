@@ -114,12 +114,9 @@
 #mobile-icon-bar a:hover {
     color: #2e445b; /* Add a hover color */
 }
-
-#close-filters{
-    position: absolute;
-    top:10px;
-    right:10px;
-}
+.border-bottom .btn {
+    width:133px;
+} 
 
 #sticky-buttons{
     position: fixed;

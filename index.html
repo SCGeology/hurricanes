@@ -20,6 +20,8 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/solid.css" integrity="sha384-HTDlLIcgXajNzMJv5hiW5s2fwegQng6Hi+fN6t5VAcwO/9qbg2YEANIyKBlqLsiT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/fontawesome.css" integrity="sha384-8WwquHbb2jqa7gKWSoAwbJBV2Q+/rQRss9UXL5wlvXOZfSodONmVnifo/+5xJIWX" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="vendor/gestureHandling/leaflet-gesture-handling.min.css" type="text/css">
 
     <!-- Custom styles for this template -->
     <link href="css/main-hurricanes.css" rel="stylesheet">
@@ -201,6 +203,7 @@
             <div class="col-lg-10 ml-lg-5 my-2">
                 <button id="apply-filter" class="btn btn-outline-success m-2">Apply Filters <i class="fas fa-check-circle" aria-hidden></i></button>
                 <button id="clear-filter" class="btn btn-outline-danger m-2" data-toggle="modal" data-target="#clear-filters-modal">Clear Filters <i class="fas fa-times-circle" aria-hidden></i></button>
+                <button id="close-filters" class="btn btn-outline-dark m-2">Close Filters <i class="fas fa-chevron-up" aria-hidden></i></button>
             </div>
         </div>
     </div>
@@ -254,7 +257,9 @@
                 </h2>
                 <p class="m-0">from the map or the table below. </p>
             </div>
+
             <div class="col-sm-6 text-sm-right">
+                <!--<button id="clear-select-btn" class="d-none btn btn-outline-danger btn-lg align-top m-1" title="unselect storm">Unselect Storm</button>-->
                 <button id="storm-details-btn" class="btn btn-primary btn-lg align-top m-1 storm-btn details-btn" title="Select a storm from the table below to view the track on the map and get storm details." disabled>Storm Details <i aria-hidden class="fas fa-info-circle" aria-hidden></i></button>
 
                 <!-- sticky buttons for mobile scroll -->
@@ -556,6 +561,8 @@
     crossorigin=""></script>
 
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.16/fh-3.1.3/r-2.2.1/sc-1.4.4/sl-1.2.5/datatables.min.js"></script>
+    
+    <script src="vendor/gestureHandling/leaflet-gesture-handling.min.js"></script>
 
     <script src="vendor/waypoints/noframework.waypoints.min.js"></script>
 

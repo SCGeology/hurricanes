@@ -13,6 +13,7 @@ var map = L.map('map', {
     wheelPxPerZoomLevel:100,
     maxZoom: 10,
     minZoom: 3,
+    gestureHandling:true,
     maxBounds: [
         [70.77, -174.67],
         [-12.89, 90.37]
@@ -151,6 +152,7 @@ var makeResultTable = function(){
         select:true,
         paging:false,
         scrollY:300,
+        //scroller:true,
         data: tableData,
         order: [[ 1, "desc" ]],
         responsive:true,
@@ -186,8 +188,7 @@ var popup = function(layer){
     Dates in SC: '+checkForDateNull(layer.feature.properties.scstartdate_txt)+' - '+checkForDateNull(layer.feature.properties.scenddate_txt)+'<br> \
     Max Wind: '+(layer.feature.properties.maxwind*1.15078).toFixed(0) + ' mph<br> \
     Min Pressure: '+checkForNull(layer.feature.properties.minpres)+ ' mb<br>\
-    Max Category: '+checkForNull(layer.feature.properties.status)+" "+checkForNull(layer.feature.properties.hurcat)+ '<br> \
-    <button class="btn btn-sm btn-primary mt-2" onclick="getDetailsMap()">Get Storm Details <i class="fas fa-info-circle"></i></button></div>'
+    Max Category: '+checkForNull(layer.feature.properties.status)+" "+checkForNull(layer.feature.properties.hurcat)
 };
 
 stormTracksClick.bindPopup(popup);
@@ -322,6 +323,7 @@ $("#reset").on('click', function(){
 });
 
 //TABLE SELECTION INTERACTION WITH MAP
+//~~~PROBABLY NEED TO REWORK THIS LOGIC~~~//
 
 var highlightStyle = function(feature){
       switch (feature.properties.stormkey) {
@@ -337,15 +339,18 @@ var highlightStyle = function(feature){
 var stormKey
 var oldKey
 var selected = 0
+var trackSelected = 0
 
 // set storm key on table row click 
 $("#results-table").on( 'click', 'td', function () {
     stormKey = rt.row( this ).id();
+    //alert(stormKey)
     map.closePopup();
-    if (oldKey != stormKey || oldKey == stormKey && selected == 0){
+    if (stormKey != oldKey || stormKey == oldKey && selected == 0){
         oldKey = stormKey
         stormTracks.setStyle(highlightStyle);
         $(".storm-btn").prop("disabled", false);
+        $("#clear-select-btn").removeClass("d-none")
         $('.dataTables_scrollBody').css("overflow","hidden");
         selected = 1
     } else {
@@ -353,7 +358,9 @@ $("#results-table").on( 'click', 'td', function () {
             opacity:0.8
         });
         $(".storm-btn").prop("disabled", true);
+        rt.search("").draw()
         $('.dataTables_scrollBody').css("overflow","auto");
+        
         selected = 0
     } 
 });
@@ -365,9 +372,16 @@ var mapClickKey
 function clickTracks_On() {
     stormTracksClick.on('click', function(e) { 
         mapClickKey = e.layer.feature.properties.stormkey
+        mapClickName = e.layer.feature.properties.stormname
+        mapClickYear = e.layer.feature.properties.stormyear
         stormKey = mapClickKey
         stormTracks.setStyle(highlightStyle)
-        rt.rows().deselect();
+        //THIS WORKS, BUT NOW NEED TO MAKE THE BIG STORM DETAILS BUTTON ACTIVE, TOO. 
+        $(".storm-btn").prop("disabled", false)
+        rt.row("#"+mapClickKey).select()
+        rt.search(mapClickName+" "+mapClickYear ).draw()
+        selected = 1
+        
     });
 }    
 clickTracks_On()
@@ -376,12 +390,23 @@ map.on('popupclose', function(e){
     stormTracks.setStyle({
         opacity:0.8
     });
+    rt.rows().deselect();
+    $('.dataTables_scrollBody').css("overflow","auto");
+    $(".storm-btn").prop("disabled", true);
+    rt.rows({selected:true}).deselect()
+    rt.search("").draw()
+    selected = 0
 });
 
 $("#to-filter").on('click', function(){
     if ( ! $("#storm-search").is(":visible")){
         $("#toggle-filters").triggerHandler('click');
     }
+});
+
+$("#close-filters").on('click', function(){
+    $("#toggle-filters").triggerHandler('click');
+    $("#to-map").triggerHandler('click');
 });
 
 var icons = {
