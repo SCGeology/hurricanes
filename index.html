@@ -59,30 +59,30 @@
             <div id="about-panel">
                 <div class="about-link pb-1">
                     <a href="about.html" class="white-link" title="Find out more about this application and the data that it displays.">
-                    <span class="d-none d-md-inline ">About</span>
-                    <i class="fas fa-question ml-md-2" aria-hidden></i></a>
+                    <span class="d-md-inline ">About</span>
+                    <i class="fas fa-question ml-2" aria-hidden></i></a>
                 </div>
                 <div class="about-link py-1">
                     <a href="mailto:GriffinM@dnr.sc.gov?subject=SC Hurricanes App Feedback" class="white-link" title="Provide feedback about this application. ">
-                    <span class="d-none d-md-inline ">Feedback</span>
-                    <i class="fas fa-comment ml-md-2" aria-hidden></i></a>
+                    <span class="d-md-inline ">Feedback</span>
+                    <i class="fas fa-comment ml-2" aria-hidden></i></a>
                 </div>
                 <div class="py-1">
                     <a id="toggle-legend" class="white-link" data-toggle="modal" href="#trackline-legend-modal">
-                    <span class="d-none d-md-inline">Map Legend</span>
-                    <i class="fas fa-bars ml-md-2" aria-hidden></i></a>
+                    <span class="d-md-inline">Map Legend</span>
+                    <i class="fas fa-bars ml-2" aria-hidden></i></a>
                 </div>    
             </div>
             
             <div id="filter-panel">
-                <button type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">
+                <button title="Toggle Filters" type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">
                     <span class="d-none d-md-inline">Filter Storms</span>
-                    <i id="filter-icon" class="fas fa-filter ml-md-2" aria-hidden></i>
+                    <i id="filter-icon" class="fas fa-filter ml-md-2 ml-2" aria-hidden></i>
                 </button>
 
                 <button type="button" class="btn btn-warning map-btn d-none back-to-tracks" data-toggle="modal" data-target="#back-modal">
                     <span class="d-none d-md-inline pl-3">Back to Storm Search</span>
-                    <i class="fas fa-arrow-left ml-md-2" aria-hidden></i>
+                    <i class="fas fa-arrow-left ml-md-2 ml-2" aria-hidden></i>
                 </button>
             </div>    
 
@@ -97,7 +97,9 @@
         
         <h2 class="w-50 d-inline">Storm Filters</h2>
         
-        <div class="row ml-lg-5">
+        <button title="close filters" id="top-close-filters" class="btn btn-sm btn-outline-dark m-2 float-right d-lg-none"><i class="fas fa-times" aria-hidden></i></button>
+        
+        <div class="row ml-lg-5" style="clear:both;">
             <div class="col-lg-3 m-2 pt-2 filter-col">
                 <h3 class="h4 border-bottom">Hurricane Year</h3>
                 <p id="year-label">Filter storms by range of years:</p>

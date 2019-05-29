@@ -52,9 +52,9 @@
     margin-left:-1%;
     width:180px;
     height:15%;
-    z-index: 100000;
+    z-index: 1005;
     padding:0.5%;
-    text-align: center;
+    text-align: left;
 }
 #toggle-legend {
     bottom:18%;
@@ -62,7 +62,7 @@
 }
 .map-btn{
     padding-left:10%;
-    margin-left:-10%;
+
 }
 #about-panel {
     position: absolute;
@@ -71,7 +71,7 @@
     width:110px;
     height:85px;
     background-color:rgba(20,20,20,0.5);
-    z-index: 100000;
+    z-index: 1005;
     padding:0.5%;
     text-align: center;
     border:1px solid #aaa;
@@ -83,6 +83,10 @@
     position: absolute;
     top:10px;
     left:20px;
+}
+#top-close-filters{
+    position: relative;
+    border:none;
 }
 
 #storm-search {
@@ -140,7 +144,7 @@
 .border-bottom .btn {
     width:133px;
 } 
-
+/*
 #sticky-buttons{
     position: fixed;
     top: 20px;
@@ -159,7 +163,7 @@
 }
 #info-icon-sticky{
     padding: 0px 1px;
-}
+}*/
 .no-vis{
     display: none;
 }

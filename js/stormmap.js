@@ -409,6 +409,11 @@ $("#close-filters").on('click', function(){
     $("#to-map").triggerHandler('click');
 });
 
+$("#top-close-filters").on('click', function(){
+    $("#toggle-filters").triggerHandler('click');
+    $("#to-map").triggerHandler('click');
+});
+
 var icons = {
     c1: L.icon({
       iconUrl: 'images/c1.png',
