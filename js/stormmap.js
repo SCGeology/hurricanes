@@ -561,7 +561,7 @@ var getDetails = function(key){
     $("#toggle-filters").addClass("d-none");
     $("#rt-row").addClass("d-none");
     
-    $("#back-to-tracks").removeClass("d-none");
+    $(".back-to-tracks").removeClass("d-none");
     $("#dt-row").removeClass("d-none");
     
     $("#to-filter").addClass("d-none");
@@ -681,7 +681,7 @@ var resetUI = function(){
     $("#toggle-filters").removeClass("d-none");
     $("#rt-row").removeClass("d-none");
     
-    $("#back-to-tracks").addClass("d-none");
+    $(".back-to-tracks").addClass("d-none");
     $("#dt-row").addClass("d-none");
     
     $("#to-filter").removeClass("d-none");

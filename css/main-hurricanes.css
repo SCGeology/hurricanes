@@ -38,28 +38,51 @@
     padding:0.2em 0 0.2em 0.5em;;
 }
 .white-link {
-    color:deepskyblue;
+    color:#00bfff!important;
     text-decoration: none;
 }
 .white-link:hover{
     text-decoration: underline;
     color:#fff;
 }
-.map-btn {
+#filter-panel {
     position: absolute;
-    bottom: 20px;
-    left: 2%;
-    z-index: 1000;
+    bottom:0;
+    left:0;
+    margin-left:-1%;
+    width:180px;
+    height:15%;
+    z-index: 100000;
+    padding:0.5%;
+    text-align: center;
 }
 #toggle-legend {
     bottom:18%;
     min-width: 32px;
 }
-#toggle-about {
-    top: 10px;
-    bottom:auto;
-    right:10px;
-    left:auto;
+.map-btn{
+    padding-left:10%;
+    margin-left:-10%;
+}
+#about-panel {
+    position: absolute;
+    top:0;
+    right:0;
+    width:110px;
+    height:85px;
+    background-color:rgba(20,20,20,0.5);
+    z-index: 100000;
+    padding:0.5%;
+    text-align: center;
+    border:1px solid #aaa;
+}
+.about-link{
+    border-bottom:1px solid #aaa;
+}
+#backup-back{
+    position: absolute;
+    top:10px;
+    left:20px;
 }
 
 #storm-search {

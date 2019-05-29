@@ -39,39 +39,53 @@
                     <h1 class="display-4 text-center mt-0 text-white drop-shadow">Hurricanes<span class="d-none d-sm-inline"> &amp; Tropical Storms</span></h1>
                 </div>
             </div>
+            <div id="backup-back" aria-hidden>
+                <a class="d-none back-to-tracks text-white" data-toggle="modal" href="#back-modal">
+                <i class="fas fa-arrow-left mr-md-2" aria-hidden></i><span class="d-none d-md-inline">Back</span>
+                </a>
+            </div>
         </div>
         <!--hide the header stuff up there for accessibility, use this SR only h1 -->
         <h1 class="sr-only">South Carolina Hurricanes and Tropical Storms</h1>
         <div class="container d-none d-print-block text-center my-5">
             <h1>South Carolina Hurricanes and Tropical Storms</h1>
         </div>
+        
     </header>
 
     <div class="container-fluid py-2 d-print-none">
         <span class="sr-only">A table-only view of these data, along with storms prior to 1851, can be found in the Table View page of this web application. The Table View may be more suitable for users with screen readers. <a href="table-view.html">Go to Table View</a></span>
         <div id="map">
-            <a href="about.html"><button type="button" id="toggle-about" class="btn btn-light align-top map-btn" title="Find out more about this application and the data that it displays.">
-                <span class="d-none d-md-inline">About</span>
-                <i class="fas fa-question ml-md-2" aria-hidden></i>
-                
-            </button></a>
+            <div id="about-panel">
+                <div class="about-link pb-1">
+                    <a href="about.html" class="white-link" title="Find out more about this application and the data that it displays.">
+                    <span class="d-none d-md-inline ">About</span>
+                    <i class="fas fa-question ml-md-2" aria-hidden></i></a>
+                </div>
+                <div class="about-link py-1">
+                    <a href="mailto:GriffinM@dnr.sc.gov?subject=SC Hurricanes App Feedback" class="white-link" title="Provide feedback about this application. ">
+                    <span class="d-none d-md-inline ">Feedback</span>
+                    <i class="fas fa-comment ml-md-2" aria-hidden></i></a>
+                </div>
+                <div class="py-1">
+                    <a id="toggle-legend" class="white-link" data-toggle="modal" href="#trackline-legend-modal">
+                    <span class="d-none d-md-inline">Map Legend</span>
+                    <i class="fas fa-bars ml-md-2" aria-hidden></i></a>
+                </div>    
+            </div>
+            
+            <div id="filter-panel">
+                <button type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">
+                    <span class="d-none d-md-inline">Filter Storms</span>
+                    <i id="filter-icon" class="fas fa-filter ml-md-2" aria-hidden></i>
+                </button>
 
-            <button type="button" id="toggle-legend" class="btn btn-light align-top map-btn" data-toggle="modal" data-target="#trackline-legend-modal">
-                <span class="d-none d-md-inline">Map Legend</span>
-                <i class="fas fa-bars ml-md-2" aria-hidden></i>
-                
-            </button>
+                <button type="button" class="btn btn-warning map-btn d-none back-to-tracks" data-toggle="modal" data-target="#back-modal">
+                    <span class="d-none d-md-inline pl-3">Back to Storm Search</span>
+                    <i class="fas fa-arrow-left ml-md-2" aria-hidden></i>
+                </button>
+            </div>    
 
-            <button type="button" id="toggle-filters" class="btn btn-primary align-top map-btn">
-                <span class="d-none d-md-inline">Filter Storms</span>
-                <i id="filter-icon" class="fas fa-filter ml-md-2" aria-hidden></i>
-                
-            </button>
-
-            <button type="button" id="back-to-tracks" class="btn btn-primary map-btn d-none" data-toggle="modal" data-target="#back-modal">
-                <span class="d-none d-md-inline">Back to Storm Search</span>
-                <i class="fas fa-undo-alt ml-md-2" aria-hidden></i>
-            </button>
         </div>
         <div id="message-div" class="mb-1 p-1">
             <span id="no-track" class="mx-lg-5 lead">A table-only view of these data, along with storms prior to 1851, can be found in the <a href="table-view.html" class="white-link">Table View.</a></span>
@@ -79,7 +93,7 @@
     </div>
     
     <!-- Page Content -->
-    <div class="container" id="storm-search">
+    <div class="container" id="storm-search">        
         
         <h2 class="w-50 d-inline">Storm Filters</h2>
         
