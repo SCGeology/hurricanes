@@ -1,0 +1,60 @@
+body {
+  color:white;
+  background-color:#0E1116;
+}
+
+.container a {
+    text-decoration:underline;
+}
+
+.container a:hover{
+    text-decoration:none;
+}
+
+a {color:#50A176 }
+
+.header-light {
+    border-bottom:1px solid #50A176;
+    padding:0.25rem;
+}
+
+
+#backup {
+    text-align: center;
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    height:53px;
+    width:45px;
+    line-height: 1em;
+    border-radius:2px;
+    background-color:#aaa;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(20,20,20,0.5);
+    display: none;
+    opacity: 0.8;
+    color:#222;
+}
+#backup:hover {box-shadow:0 0 0 0;}
+
+
+#dnr-logo{
+    width:125px;
+    height: auto;
+}
+
+footer{
+    color:white;
+	background-color:#50A176
+}
+footer a{
+    color:white;
+    text-decoration: underline;
+}
+footer a:hover{
+    color:gray;
+}
+
+.img-thumbnail {
+    height:180px;
+}
