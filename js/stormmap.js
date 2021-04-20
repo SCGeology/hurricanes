@@ -181,6 +181,9 @@ var getUrlParam = function(){
         var param = stormParam.get('storm')
         console.log("has it") 
 
+        stormKey = param
+        stormTracks.setStyle(highlightStyle);
+        
         getDetails(param);
 
         }; 
