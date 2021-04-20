@@ -173,12 +173,28 @@ var makeResultTable = function(){
 
 var initialLoad = 0
 
+//~~~ URL PARAMETERS ~~~
+var getUrlParam = function(){
+    let stormParam = new URLSearchParams(window.location.search)
+
+    if (stormParam.has('storm')) {
+        var param = stormParam.get('storm')
+        console.log("has it") 
+
+        getDetails(param);
+
+        }; 
+};   
+
 //initial data table 
 stormTracks.on('load', function(e){
-    if (initialLoad ==0){
+    if (initialLoad == 0){        
         makeResultTable()
+        
+        getUrlParam()
+        
         initialLoad = 1
-    }
+    }     
 });
 
 var popup = function(layer){
@@ -613,6 +629,8 @@ var getDetails = function(key){
                 $("#trackmap").html("<a href='./trackmaps/"+fc.features[0].properties.stormkey+"_map.png' target='_blank'>Track Map</a>")
         
                 $("#print-map").html("<img class='img-fluid' src='./trackmaps/"+fc.features[0].properties.stormkey+"_map.png' alt='track map image for printing'/>")
+        
+                $("#stormlink").text("https://scgeology.github.io/hurricanes/?storm="+key)
     });
     
     pointQuery.where("stormkey = '"+key+"'");
@@ -631,6 +649,20 @@ var getDetails = function(key){
         location.href = "#map";
     });
     
+}
+
+function copyLink(element){
+    
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+    
+    $("#clicktocopy").text('COPIED!');
+    setTimeout(function(){
+        $("#clicktocopy").text("Click to Copy")
+    }, 3000);
 }
 
 $(".details-btn").on('click',function(){
