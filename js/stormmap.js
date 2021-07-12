@@ -24,6 +24,8 @@ var satellite = L.esri.basemapLayer("ImageryFirefly").addTo(map);
 
 var scoutline = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SCOutline/FeatureServer/0"
 
+var sccounties = "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_Counties_Generalized/FeatureServer/0"
+
 var outline = L.esri.featureLayer({
     url: scoutline,
     simplifyFactor: 0.5,
@@ -36,6 +38,19 @@ var outline = L.esri.featureLayer({
     
 }).addTo(map);
 
+
+var counties = L.esri.featureLayer({
+    url: sccounties,
+    simplifyFactor: 0.2,
+    shadow: 'shadowPane',
+    minZoom:9,
+    style: {
+        weight:2,
+        opacity:0.4,
+        color:'white',
+        fill:false
+    }
+}).addTo(map);
 
 var data = "https://services.arcgis.com/acgZYxoN5Oj8pDLa/arcgis/rest/services/SC_Hurricanes_Public/FeatureServer/1"
 
@@ -529,7 +544,7 @@ var nullStormReport = function(inValue){
     if (inValue == null){
         return ""
     } else {
-        return '<a href="'+inValue+'" target="_blank">Storm Report</a>'
+        return ' | &nbsp;<a href="'+inValue+'" target="_blank">Storm Report</a>'
     }
 }
 
@@ -538,6 +553,14 @@ var nullDamageReport = function(inValue){
         return ""
     } else {
         return ' | &nbsp;<a href="'+inValue+'" target="_blank">Damage Report</a>'
+    }
+}
+
+var nullNOAAReport = function(inValue){
+    if (inValue == null){
+        return ""
+    } else {
+        return ' | &nbsp;<a href="'+inValue+'" target="_blank">NOAA Report</a>'
     }
 }
 
@@ -623,12 +646,13 @@ var getDetails = function(key){
                 $("#sc-cat").text(fc.features[0].properties.scstatus+" "+ checkForNull(fc.features[0].properties.schurcat))
                 $("#max-wind").text((fc.features[0].properties.maxwind*1.15078).toFixed(0))
                 $("#min-pres").text(fc.features[0].properties.minpres)
-                $("#comments").text(fc.features[0].properties.comments)
+                $("#comments").text(fc.features[0].properties.comments_long)
         
                 $("#tornadoes").text(nullTornadoes(fc.features[0].properties.sctornadoes))
         
                 $("#report").html(nullStormReport(fc.features[0].properties.reporturl))
                 $("#damage").html(nullDamageReport(fc.features[0].properties.damageurl))
+                $("#noaa").html(nullNOAAReport(fc.features[0].properties.noaaurl))
                 $("#trackmap").html("<a href='./trackmaps/"+fc.features[0].properties.stormkey+"_map.png' target='_blank'>Track Map</a>")
         
                 $("#print-map").html("<img class='img-fluid' src='./trackmaps/"+fc.features[0].properties.stormkey+"_map.png' alt='track map image for printing'/>")
@@ -730,6 +754,8 @@ var resetUI = function(){
     $("#toggle-legend").attr("data-target","#trackline-legend-modal");
     
     $("#storm-details-overview").slideToggle("slow");
+    
+    $('.dataTables_scrollBody').css("overflow","auto");
 }
 
 $("#continue-back").on('click',function(){

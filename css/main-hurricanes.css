@@ -276,7 +276,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     font-size: 16px;
   }
 }
-#report, #damage, #trackmap {
+#report, #damage, #trackmap, #noaa {
     font-size:1.2rem;
 }
 .btn.btn-primary[disabled].storm-btn {
@@ -296,7 +296,7 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
 .drop-shadow {
     text-shadow: 1px 1px 4px #444;
 }
-#report, #damage {
+#report, #damage, #trackmap, #noaa {
     border-radius:3px;
 }
 
